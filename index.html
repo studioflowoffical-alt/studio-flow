@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090914">
+<title>Studio Flow — Your Music Studio</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #090914;
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+  padding-bottom: 90px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 18px;
+}
+
+.logo {
+  font-size: 21px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.logo span {
+  color: #a78bfa;
+}
+
+.profile {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #211b3b;
+  border: 1px solid #a78bfa;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+}
+
+main {
+  max-width: 650px;
+  margin: auto;
+  padding: 0 17px;
+}
+
+.hero {
+  background: linear-gradient(135deg, #21143c, #111a30);
+  border: 1px solid #373052;
+  border-radius: 23px;
+  padding: 25px 20px;
+  margin-bottom: 27px;
+}
+
+.tag {
+  color: #c4b5fd;
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+h1 {
+  font-size: 32px;
+  line-height: 1.2;
+  margin: 15px 0 12px;
+}
+
+h1 span {
+  color: #b8a1ff;
+}
+
+p {
+  color: #aaa8bd;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.hero-button {
+  margin-top: 20px;
+  background: #a78bfa;
+  color: #100b20;
+  border: none;
+  padding: 14px 19px;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.section-title {
+  font-size: 20px;
+  margin: 27px 0 15px;
+}
+
+.section-description {
+  margin-top: -7px;
+  margin-bottom: 17px;
+}
+
+.studio-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13px;
+}
+
+.card {
+  background: #141421;
+  border: 1px solid #29283b;
+  border-radius: 17px;
+  padding: 17px 14px;
+  min-height: 155px;
+  cursor: pointer;
+  text-align: left;
+  color: white;
+  width: 100%;
+  transition: border-color .2s;
+}
+
+.card:active {
+  border-color: #a78bfa;
+}
+
+.icon {
+  width: 43px;
+  height: 43px;
+  display: grid;
+  place-items: center;
+  background: #28203f;
+  border-radius: 13px;
+  font-size: 23px;
+  margin-bottom: 15px;
+}
+
+.card h3 {
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+
+.card p {
+  font-size: 12px;
+}
+
+.wide {
+  grid-column: 1 / -1;
+  min-height: auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.wide .icon {
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.wide .text {
+  flex: 1;
+}
+
+.coming {
+  background: #29213e;
+  color: #c4b5fd;
+  border: 1px solid #58447b;
+  padding: 6px 9px;
+  border-radius: 8px;
+  font-size: 9px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.protection {
+  margin-top: 23px;
+  background: #10251f;
+  border: 1px solid #245340;
+  border-radius: 15px;
+  padding: 17px;
+  display: flex;
+  gap: 12px;
+}
+
+.protection strong {
+  font-size: 13px;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.protection p {
+  font-size: 12px;
+  color: #a7c9b9;
+}
+
+.status {
+  margin-top: 23px;
+  padding: 17px;
+  border-radius: 15px;
+  background: #141421;
+  border: 1px solid #29283b;
+}
+
+.status h3 {
+  font-size: 15px;
+  margin-bottom: 7px;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #11111d;
+  border-top: 1px solid #29283b;
+  display: flex;
+  justify-content: space-around;
+  padding: 12px 5px calc(12px + env(safe-area-inset-bottom));
+  z-index: 10;
+}
+
+footer button {
+  background: none;
+  border: none;
+  color: #89879e;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+footer button span {
+  display: block;
+  font-size: 21px;
+  margin-bottom: 5px;
+}
+
+footer button.active {
+  color: #b8a1ff;
+}
+
+audio {
+  width: 100%;
+  margin-top: 13px;
+}
+
+#message {
+  margin-top: 15px;
+  padding: 13px;
+  border-radius: 12px;
+  background: #211b3b;
+  color: #e2d9ff;
+  font-size: 13px;
+  display: none;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 360px) {
+  h1 {
+    font-size: 27px;
+  }
+
+  .card {
+    padding: 13px 10px;
+  }
+
+  .coming {
+    font-size: 8px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">STUDIO <span>FLOW</span> 🎵</div>
+  <div class="profile">🎤</div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div class="tag">YOUR MUSIC. YOUR SOUND.</div>
+    <h1>Turn your voice into <span>something amazing.</span></h1>
+    <p>Record your vocals, find your sound, create beats and prepare your music for the world.</p>
+    <button class="hero-button" onclick="showMessage('Welcome to your music studio! Choose a tool below to get started.')">
+      Enter Your Studio →
+    </button>
+  </section>
+
+  <h2 class="section-title">Your Studio</h2>
+  <p class="section-description">Everything you need to start your next song.</p>
+
+  <section class="studio-grid">
+
+    <button class="card" onclick="startRecording()">
+      <div class="icon">🎙️</div>
+      <h3>Record Voice</h3>
+      <p>Record your vocals using your phone microphone.</p>
+    </button>
+
+    <button class="card" onclick="document.getElementById('audioFile').click()">
+      <div class="icon">📁</div>
+      <h3>Import Audio</h3>
+      <p>Choose a recording or song from your phone.</p>
+    </button>
+
+    <button class="card" onclick="showMessage('AI Beat generation will be connected to a real AI service. The price will be set by the Studio Flow admin. No free trial.')">
+      <div class="icon">🎹</div>
+      <h3>AI Beat</h3>
+      <p>Create a beat to match your style and sound.</p>
+    </button>
+
+    <button class="card" onclick="showMessage('Mastering will be connected to a real audio service. Payment must be confirmed before mastering begins.')">
+      <div class="icon">🎚️</div>
+      <h3>Master My Song</h3>
+      <p>Prepare your song for a cleaner, balanced sound.</p>
+    </button>
+
+    <button class="card wide" onclick="showMessage('Music Launcher is coming soon. Official music distribution will be added after the studio features are completed.')">
+      <div class="icon">🌍</div>
+      <div class="text">
+        <h3>Music Launcher</h3>
+        <p>Prepare to release your music on supported platforms.</p>
+      </div>
+      <span class="coming">COMING SOON</span>
+    </button>
+
+  </section>
+
+  <section class="protection">
+    <div style="font-size:25px;">🛡️</div>
+    <div>
+      <strong>Your Voice. Your Identity.</strong>
+      <p>Studio Flow is designed to preserve your original vocal performance. Your voice should not be replaced by AI.</p>
+    </div>
+  </section>
+
+  <section class="status">
+    <h3>🎧 Your Audio</h3>
+    <p id="audioStatus">Import a song or record your voice to get started.</p>
+    <audio id="audioPlayer" controls hidden></audio>
+    <button id="recordButton" class="hero-button" hidden onclick="stopRecording()">Stop Recording</button>
+    <button id="downloadButton" class="hero-button" hidden onclick="downloadRecording()">Download Recording</button>
+  </section>
+
+  <input type="file" id="audioFile" accept="audio/*" hidden>
+
+  <div id="message" role="status"></div>
+
+</main>
+
+<footer>
+  <button class="active" onclick="showMessage('You are on the Studio Flow home page.')">
+    <span>⌂</span>Home
+  </button>
+  <button onclick="showMessage('Your recording studio tools are above.')">
+    <span>🎙️</span>Studio
+  </button>
+  <button onclick="showMessage('Music Launcher is coming soon.')">
+    <span>♫</span>Music
+  </button>
+  <button onclick="showMessage('Your profile and account settings will be connected when account setup is added.')">
+    <span>◉</span>Profile
+  </button>
+</footer>
+
+<script>
+let recorder;
+let recordedChunks = [];
+let recordingUrl = null;
+let audioStream = null;
+
+function showMessage(text) {
+  const box = document.getElementById('message');
+  box.textContent = text;
+  box.style.display = 'block';
+  box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+document.getElementById('audioFile').addEventListener('change', function(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const player = document.getElementById('audioPlayer');
+  player.src = URL.createObjectURL(file);
+  player.hidden = false;
+
+  document.getElementById('audioStatus').textContent =
+    'Selected: ' + file.name + '. You can listen to it below.';
+
+  showMessage('Your audio is ready to preview on this device.');
+});
+
+async function startRecording() {
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder) {
+    showMessage('Recording needs microphone permission and a secure HTTPS page. We will test it after the page is hosted.');
+    return;
+  }
+
+  try {
+    audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    recordedChunks = [];
+
+    recorder = new MediaRecorder(audioStream);
+
+    recorder.ondataavailable = function(event) {
+      if (event.data.size > 0) recordedChunks.push(event.data);
+    };
+
+    recorder.onstop = function() {
+      const blob = new Blob(recordedChunks, {
+        type: recorder.mimeType || 'audio/webm'
+      });
+
+      if (recordingUrl) URL.revokeObjectURL(recordingUrl);
+      recordingUrl = URL.createObjectURL(blob);
+
+      const player = document.getElementById('audioPlayer');
+      player.src = recordingUrl;
+      player.hidden = false;
+
+      document.getElementById('audioStatus').textContent =
+        'Recording complete. Listen to your original voice below.';
+
+      document.getElementById('downloadButton').hidden = false;
+
+      if (audioStream) {
+        audioStream.getTracks().forEach(track => track.stop());
+        audioStream = null;
+      }
+
+      showMessage('Recording finished. You can listen to or download your recording.');
+    };
+
+    recorder.start();
+
+    document.getElementById('recordButton').hidden = false;
+    document.getElementById('audioStatus').textContent = 'Recording in progress...';
+    showMessage('Recording started. Tap Stop Recording when you finish.');
+  } catch (error) {
+    showMessage('Microphone access was not granted. Allow microphone permission and try again.');
+  }
+}
+
+function stopRecording() {
+  if (recorder && recorder.state !== 'inactive') {
+    recorder.stop();
+  }
+  document.getElementById('recordButton').hidden = true;
+}
+
+function downloadRecording() {
+  if (!recordingUrl) return;
+
+  const link = document.createElement('a');
+  link.href = recordingUrl;
+  link.download = 'studio-flow-recording.webm';
+  link.click();
+}
+</script>
+
+</body>
+</html>
