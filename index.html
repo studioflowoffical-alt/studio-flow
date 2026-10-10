@@ -3,536 +3,555 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#10101b">
 <title>Studio Flow</title>
 
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#10101b;color:#fff;font-family:Arial,sans-serif}
-button,input,textarea{font:inherit}
-button{cursor:pointer}
-.hidden{display:none!important}
-header{padding:20px;background:#171726;border-bottom:1px solid #303047}
-.brand{font-size:25px;font-weight:bold;color:#b8a0ff}
-.brand span{color:#fff}
-.container{max-width:800px;margin:auto;padding:20px}
-.card{background:#1b1b2d;border:1px solid #34344c;border-radius:18px;padding:20px;margin:15px 0}
-h1,h2,h3{margin-top:0}
-p{color:#c7c7d9;line-height:1.6}
-button{border:0;border-radius:12px;padding:13px 16px;font-weight:bold}
-.primary{background:#a78bfa;color:#171323}
-.secondary{background:#303047;color:white}
-.danger{background:#582d3b;color:white}
-input,textarea{width:100%;padding:14px;border:1px solid #42425b;background:#11111e;color:white;border-radius:10px;margin:8px 0 15px}
-label{font-size:14px;color:#d4d4e6}
-.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-.actions button{flex:1}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.feature{background:#25253b;border:1px solid #3b3b56;border-radius:15px;padding:17px;text-align:left;color:white;min-height:115px}
-.feature strong{display:block;font-size:17px;margin:9px 0}
-.feature small{color:#c4c4d7}
-.badge{color:#60a5fa;font-size:20px;margin-left:5px}
-.notice{background:#29253c;border-radius:12px;padding:13px;color:#ddd2ff;font-size:14px;line-height:1.6}
-nav{position:fixed;bottom:0;left:0;right:0;background:#171726;border-top:1px solid #34344c;display:flex;justify-content:space-around;padding:10px 2px calc(10px + env(safe-area-inset-bottom));z-index:5}
-nav button{background:transparent;color:#c8c8dc;padding:9px 6px;font-size:12px;flex:1}
-nav button.active{color:#b8a0ff}
-main{padding-bottom:100px}
-.big{font-size:35px;margin-bottom:8px}
-.center{text-align:center}
-.filelabel{display:block;background:#303047;padding:14px;border-radius:12px;text-align:center;margin:12px 0;cursor:pointer}
-audio{width:100%;margin-top:12px}
-#toast{position:fixed;top:15px;left:5%;width:90%;background:#343047;padding:14px;border-radius:12px;z-index:10;display:none}
-footer{text-align:center;color:#8f8fa8;font-size:12px;padding:25px}
-@media(max-width:420px){.container{padding:14px}.card{padding:16px}.grid{gap:8px}.feature{padding:12px}}
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #090b12;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+header {
+  padding: 20px;
+  background: #111522;
+  border-bottom: 1px solid #252a3a;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  color: #8c9dff;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+main {
+  max-width: 650px;
+  margin: auto;
+  padding: 20px;
+}
+
+h1, h2, h3 {
+  margin-top: 10px;
+}
+
+p {
+  color: #b8bfd0;
+  line-height: 1.6;
+}
+
+.card {
+  background: #151a29;
+  border: 1px solid #292f43;
+  border-radius: 16px;
+  padding: 20px;
+  margin: 16px 0;
+}
+
+input, select {
+  width: 100%;
+  padding: 14px;
+  margin: 8px 0;
+  background: #0b0e17;
+  color: white;
+  border: 1px solid #343b51;
+  border-radius: 9px;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  margin: 7px 0;
+  border: 0;
+  border-radius: 10px;
+  background: #8393ff;
+  color: #080b14;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: #252c40;
+  color: white;
+  border: 1px solid #414a64;
+}
+
+button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.small {
+  font-size: 12px;
+}
+
+.badge {
+  display: inline-block;
+  background: #202b49;
+  color: #aab7ff;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+nav {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 20px;
+}
+
+nav button {
+  font-size: 12px;
+}
+
+footer {
+  text-align: center;
+  color: #7e879c;
+  padding: 25px;
+}
 </style>
 </head>
 
 <body>
 
 <header>
-  <div class="brand">🎵 STUDIO <span>FLOW</span></div>
-  <div style="font-size:12px;color:#aaa;margin-top:5px">Your music. Your sound.</div>
+  <div class="logo">🎵 Studio Flow</div>
+  <button id="logoutButton"
+    class="secondary hidden"
+    style="width:auto;margin:0"
+    onclick="logout()">Sign Out</button>
 </header>
 
-<div id="toast"></div>
-
 <main>
+
 <!-- WELCOME -->
-<section id="welcome" class="container">
-  <div class="card center" style="padding:35px 20px">
-    <div class="big">🎧</div>
+<section id="welcome">
+  <div class="card">
+    <span class="badge">YOUR MUSIC. YOUR SOUND.</span>
     <h1>Welcome to Studio Flow</h1>
-    <p>Create music, record your voice, import songs and prepare your sound for mastering.</p>
-    <div class="actions">
-      <button class="primary" onclick="showAuth('signup')">Create Account</button>
-      <button class="secondary" onclick="showAuth('login')">Sign In</button>
-    </div>
-    <p style="font-size:12px;margin-top:20px">You must sign in to use Studio Flow. Guest access is not available.</p>
+    <p>Record your voice, work with beats, and prepare your music.</p>
+    <button onclick="showAuth('signup')">Create Account</button>
+    <button class="secondary" onclick="showAuth('login')">Sign In</button>
   </div>
 </section>
 
-<!-- AUTH -->
-<section id="auth" class="container hidden">
+<!-- AUTHENTICATION DEMO -->
+<section id="auth" class="hidden">
   <div class="card">
     <h2 id="authTitle">Create Account</h2>
+
     <form id="authForm">
-      <div id="nameField">
-        <label>Display name</label>
-        <input id="displayName" autocomplete="name" placeholder="Your name" required>
-      </div>
-      <label>Email address</label>
-      <input id="email" type="email" autocomplete="email" placeholder="you@example.com" required>
-      <label>Password</label>
-      <input id="password" type="password" autocomplete="current-password" minlength="8" placeholder="At least 8 characters" required>
-      <button class="primary" id="authSubmit" type="submit" style="width:100%">Create Account</button>
+      <input id="name" placeholder="Your name" autocomplete="name">
+      <input id="email" type="email" placeholder="Your email"
+        required autocomplete="email">
+      <input id="password" type="password"
+        placeholder="Your password" required
+        autocomplete="current-password">
+
+      <button id="authSubmit" type="submit">Create Account</button>
     </form>
-    <p id="authNote">Your account service will be connected to Supabase.</p>
-    <button class="secondary" style="width:100%" onclick="showPage('welcome')">Back</button>
-    <p class="notice">Account security is not active in this prototype. Connect Supabase before allowing real users to register.</p>
+
+    <p id="authMessage" class="small"></p>
+
+    <button class="secondary" onclick="showWelcome()">Back</button>
   </div>
 </section>
 
 <!-- HOME -->
-<section id="home" class="container hidden">
-  <h1>Welcome to Studio Flow 🎵</h1>
-  <p>Your music journey starts here.</p>
-
+<section id="home" class="hidden">
   <div class="card">
-    <h2>What would you like to do?</h2>
-    <div class="grid">
-      <button class="feature" onclick="openStudio()">
-        🎙️<strong>Record Music</strong><small>Record your own voice</small>
-      </button>
-      <button class="feature" onclick="openStudio()">
-        📁<strong>Import Audio</strong><small>Choose music from your phone</small>
-      </button>
-      <button class="feature" onclick="showPage('beats')">
-        🥁<strong>Studio Flow Go</strong><small>Beat creation</small>
-      </button>
-      <button class="feature" onclick="showPage('reels')">
-        🎬<strong>Studio Flow Reel</strong><small>Music videos and reels</small>
-      </button>
-      <button class="feature" onclick="showPage('mymusic')">
-        🎵<strong>My Music</strong><small>Your recordings</small>
-      </button>
-      <button class="feature" onclick="showPage('profile')">
-        👤<strong>My Profile</strong><small>Your personal settings</small>
-      </button>
-    </div>
+    <span class="badge">MUSIC LAUNCHING · COMING SOON</span>
+    <h1 id="greeting">Welcome to Studio Flow</h1>
+    <p>Your music journey starts here.</p>
   </div>
 
   <div class="card">
-    <h2>🚀 Music Launching</h2>
-    <p>Prepare to share your music with the world.</p>
-    <div class="notice">COMING SOON — Music launching is not available yet.</div>
+    <h2>🎙️ Studio</h2>
+    <p>Record your voice or choose an audio file from your phone.</p>
+    <button onclick="showScreen('studio')">Open Studio</button>
   </div>
+
+  <div class="card">
+    <h2>🎹 Studio Flow Go</h2>
+    <p>Explore beat creation options.</p>
+    <button onclick="showScreen('beats')">Open Beat Studio</button>
+  </div>
+
+  <div class="card">
+    <h2>🎬 Studio Flow Reel</h2>
+    <p>AI video creation will be connected in a future update.</p>
+    <button onclick="alert('AI video generation is not connected yet.')">
+      Open Reel
+    </button>
+  </div>
+
+  <div class="card">
+    <h2>🎧 My Music</h2>
+    <p>View the audio you have imported during this session.</p>
+    <button onclick="showScreen('music')">Open My Music</button>
+  </div>
+
+  <div class="card">
+    <h2>👤 Profile</h2>
+    <p id="profileName"></p>
+    <button onclick="showScreen('profile')">Open Profile</button>
+  </div>
+
+  <nav>
+    <button onclick="showScreen('home')">Home</button>
+    <button onclick="showScreen('studio')">Studio</button>
+    <button onclick="showScreen('beats')">Beats</button>
+  </nav>
 </section>
 
 <!-- STUDIO -->
-<section id="studio" class="container hidden">
-  <button class="secondary" onclick="showPage('home')">← Home</button>
-  <h1 style="margin-top:20px">🎙️ Music Studio</h1>
-  <p>Record your voice or import an audio file from your phone.</p>
-
+<section id="studio" class="hidden">
   <div class="card">
-    <h2>1. Import your audio</h2>
-    <label class="filelabel">
-      📁 Choose audio from my phone
-      <input id="audioFile" type="file" accept="audio/*" hidden>
-    </label>
-    <div id="audioName"></div>
-    <audio id="audioPlayer" controls class="hidden"></audio>
-  </div>
+    <h2>🎙️ Music Studio</h2>
+    <p>Import your own audio from your phone.</p>
 
-  <div class="card">
-    <h2>2. Record your voice</h2>
-    <p>Your recording will use your natural voice. No automatic voice cloning or replacement.</p>
-    <div class="actions">
-      <button class="primary" id="recordBtn" onclick="startRecording()">🎙️ Start Recording</button>
-      <button class="secondary" id="stopBtn" onclick="stopRecording()" disabled>Stop</button>
-    </div>
-    <audio id="recordPlayer" controls class="hidden"></audio>
-    <button id="downloadRecording" class="secondary hidden" style="width:100%;margin-top:12px" onclick="downloadRecording()">Download Recording</button>
-    <p id="recordStatus"></p>
-  </div>
+    <input id="audioFile" type="file" accept="audio/*">
 
-  <div class="card">
-    <h2>3. Master My Song</h2>
-    <p>Pay separately for every song you want the AI to master.</p>
-    <p>The planned AI analysis will identify likely genres, such as Afrobeat, rap, gospel, R&B and Amapiano.</p>
-    <div class="notice">PAY PER SONG • NO MONTHLY MASTERING SUBSCRIPTION</div>
-    <button class="primary" style="width:100%;margin-top:15px" onclick="requestMastering()">Continue to Payment →</button>
-    <p style="font-size:12px">Payment and AI mastering must be connected before real transactions can take place.</p>
+    <audio id="audioPlayer" controls class="hidden"
+      style="width:100%;margin-top:12px"></audio>
+
+    <button onclick="startRecording()">Start Recording</button>
+    <button class="secondary" onclick="stopRecording()">Stop Recording</button>
+
+    <p id="recordStatus">Recording requires microphone permission.</p>
+
+    <button onclick="showScreen('master')">Master My Song</button>
+    <button class="secondary" onclick="showScreen('home')">Back Home</button>
   </div>
 </section>
 
-<!-- PAYMENT -->
-<section id="payment" class="container hidden">
-  <button class="secondary" onclick="showPage('studio')">← Back to Studio</button>
-  <div class="card" style="margin-top:20px">
-    <h1>💳 Mastering Payment</h1>
-    <p>Each song has its own mastering payment.</p>
-    <label>Song name</label>
-    <input id="songTitle" placeholder="Enter the name of your song">
-    <label>Mastering price (₦)</label>
-    <input id="songPrice" type="number" min="1" placeholder="Price will be set by the owner">
-    <div class="notice">No payment will be collected on this demo screen. The real payment provider must be connected and the payment verified securely before mastering starts.</div>
-    <button class="primary" style="width:100%;margin-top:15px" onclick="paymentNotice()">Proceed to Secure Payment</button>
-  </div>
-</section>
+<!-- BEAT CHOICES -->
+<section id="beats" class="hidden">
+  <div class="card">
+    <h2>🎹 Beat Studio</h2>
+    <p>Choose what you want to do.</p>
 
-<!-- BEATS -->
-<section id="beats" class="container hidden">
-  <button class="secondary" onclick="showPage('home')">← Home</button>
-  <div class="card" style="margin-top:20px">
-    <h1>🥁 Studio Flow Go</h1>
-    <p>Beat creation will be available here.</p>
-    <button class="primary" style="width:100%" onclick="makeDemoBeat()">Generate Demo Rhythm</button>
+    <button onclick="generateBeat()">🎹 Generate a Beat for Me</button>
+
+    <button class="secondary" onclick="chooseBeatFile()">
+      📱 Import Beat from My Phone
+    </button>
+
+    <input id="beatFile" type="file" accept="audio/*" class="hidden">
+
     <p id="beatStatus"></p>
-    <audio id="beatPlayer" controls class="hidden"></audio>
-    <p class="notice">This demo rhythm is not AI-generated music. A real beat-generation service must be connected for full functionality.</p>
-  </div>
-</section>
 
-<!-- REELS -->
-<section id="reels" class="container hidden">
-  <button class="secondary" onclick="showPage('home')">← Home</button>
-  <div class="card" style="margin-top:20px">
-    <h1>🎬 Studio Flow Reel</h1>
-    <p>Share and create music videos and reels.</p>
-    <div class="notice">COMING SOON — Video creation and publishing services are not connected yet.</div>
+    <button class="secondary" onclick="showScreen('home')">Back Home</button>
   </div>
 </section>
 
 <!-- MY MUSIC -->
-<section id="mymusic" class="container hidden">
-  <button class="secondary" onclick="showPage('home')">← Home</button>
-  <div class="card" style="margin-top:20px">
-    <h1>🎵 My Music</h1>
-    <p>Your recordings and imported songs appear in the studio while you work.</p>
-    <p>Cloud storage and a permanent music library will require a database and file storage service.</p>
-    <button class="primary" style="width:100%" onclick="openStudio()">Open Music Studio</button>
+<section id="music" class="hidden">
+  <div class="card">
+    <h2>🎧 My Music</h2>
+    <p id="musicMessage">Your imported music will appear here.</p>
+    <button onclick="showScreen('studio')">Import Audio</button>
+    <button class="secondary" onclick="showScreen('home')">Back Home</button>
   </div>
 </section>
 
 <!-- PROFILE -->
-<section id="profile" class="container hidden">
-  <button class="secondary" onclick="showPage('home')">← Home</button>
-  <div class="card center" style="margin-top:20px">
-    <div id="avatar" style="width:100px;height:100px;border-radius:50%;background:#343047;margin:0 auto 15px;display:flex;align-items:center;justify-content:center;font-size:40px">👤</div>
-    <h2><span id="profileName">Creator</span><span id="verifiedBadge" class="badge hidden" title="Verified owner">●</span></h2>
-    <p id="profileEmail"></p>
-    <p>No followers or following counts.</p>
-  </div>
+<section id="profile" class="hidden">
   <div class="card">
-    <h2>Profile Settings</h2>
-    <label>Display name</label>
-    <input id="editName" placeholder="Your display name">
-    <label>Choose profile picture</label>
-    <input id="profilePhoto" type="file" accept="image/*">
-    <button class="primary" style="width:100%" onclick="saveProfile()">Save Profile</button>
-  </div>
-  <div class="card">
-    <h2>Account</h2>
-    <button class="secondary" style="width:100%;margin-bottom:10px" onclick="logout()">Sign Out</button>
-    <button class="danger" style="width:100%" onclick="deleteAccount()">Delete Account</button>
-    <p class="notice">Account deletion must be connected to Supabase before this can securely delete a real account.</p>
-  </div>
-  <div id="ownerPanel" class="card hidden">
-    <h2>🔐 Owner Controls</h2>
-    <p>Private admin features belong here, including financial settings and the owner wallet.</p>
-    <div class="notice">The real owner dashboard must use secure server-side role checks. Hiding this panel in the browser alone is not security.</div>
+    <h2>👤 My Profile</h2>
+    <p id="profileDetails"></p>
+
+    <label for="displayName">Display name</label>
+    <input id="displayName" placeholder="Your display name">
+
+    <button onclick="saveProfile()">Save Profile</button>
+    <button class="secondary" onclick="showScreen('home')">Back Home</button>
   </div>
 </section>
+
+<!-- MASTERING AND PAYMENT -->
+<section id="master" class="hidden">
+  <div class="card">
+    <h2>🎵 Master My Song</h2>
+
+    <p>Prepare your song for AI mastering.</p>
+
+    <p><strong>Pay for each song you want mastered.</strong></p>
+
+    <p id="paymentPrice">
+      The mastering price will be displayed here when payment is connected.
+    </p>
+
+    <button onclick="showScreen('payment')">Continue to Payment</button>
+
+    <p class="small">
+      AI mastering and payment processing are not connected yet.
+    </p>
+
+    <button class="secondary" onclick="showScreen('studio')">Back to Studio</button>
+  </div>
+</section>
+
+<!-- PAYMENT PLACEHOLDER -->
+<section id="payment" class="hidden">
+  <div class="card">
+    <h2>💳 Pay for Mastering</h2>
+
+    <p>Choose your preferred payment method.</p>
+
+    <button disabled>Pay with Debit Card</button>
+    <button class="secondary" disabled>Pay with Bank Transfer</button>
+
+    <p>
+      Secure payment processing will be connected through a payment
+      provider. No payment can be made from this screen yet.
+    </p>
+
+    <p class="small">
+      Do not send money manually or enter your bank password here.
+    </p>
+
+    <button class="secondary" onclick="showScreen('master')">Go Back</button>
+  </div>
+</section>
+
 </main>
 
-<nav id="navbar" class="hidden">
-  <button class="active" data-page="home" onclick="showPage('home')">🏠<br>Home</button>
-  <button data-page="beats" onclick="showPage('beats')">🥁<br>Go</button>
-  <button data-page="studio" onclick="openStudio()">🎙️<br>Studio</button>
-  <button data-page="mymusic" onclick="showPage('mymusic')">🎵<br>My Music</button>
-  <button data-page="profile" onclick="showPage('profile')">👤<br>Profile</button>
-</nav>
-
-<footer>Studio Flow • Your music, your sound.</footer>
+<footer>
+  Studio Flow · Your Music, Your Sound
+</footer>
 
 <script>
 const $ = id => document.getElementById(id);
-let authMode = 'signup';
+
 let currentUser = null;
-let selectedAudioURL = null;
-let recordedBlob = null;
-let recorder = null;
-let audioChunks = [];
-let recordingStream = null;
+let audioURL = null;
+let mediaRecorder = null;
+let recordedChunks = [];
 
-function toast(message){
-  $('toast').textContent = message;
-  $('toast').style.display = 'block';
-  setTimeout(() => $('toast').style.display = 'none', 3500);
+function hideAll() {
+  [
+    'welcome', 'auth', 'home', 'studio', 'beats',
+    'music', 'profile', 'master', 'payment'
+  ].forEach(id => $(id).classList.add('hidden'));
 }
 
-function showPage(page){
-  if(!['welcome','auth'].includes(page) && !currentUser){
-    showPage('welcome');
-    return;
+function showScreen(id) {
+  hideAll();
+  $(id).classList.remove('hidden');
+  window.scrollTo(0, 0);
+}
+
+function showWelcome() {
+  showScreen('welcome');
+}
+
+let authMode = 'signup';
+
+function showAuth(mode) {
+  authMode = mode;
+  $('authTitle').textContent =
+    mode === 'signup' ? 'Create Account' : 'Sign In';
+
+  $('authSubmit').textContent =
+    mode === 'signup' ? 'Create Account' : 'Sign In';
+
+  $('name').classList.toggle('hidden', mode === 'login');
+  $('authMessage').textContent = '';
+
+  showScreen('auth');
+}
+
+function getUsers() {
+  try {
+    return JSON.parse(localStorage.getItem('sf_demo_users') || '{}');
+  } catch {
+    return {};
   }
-  document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));
-  $(page).classList.remove('hidden');
-  $('navbar').classList.toggle('hidden',!currentUser);
-  document.querySelectorAll('nav button').forEach(b=>{
-    b.classList.toggle('active',b.dataset.page===page);
-  });
-  window.scrollTo(0,0);
 }
 
-function showAuth(mode){
-  authMode=mode;
-  $('authTitle').textContent=mode==='signup'?'Create Account':'Sign In';
-  $('authSubmit').textContent=mode==='signup'?'Create Account':'Sign In';
-  $('nameField').classList.toggle('hidden',mode==='login');
-  $('displayName').required=mode==='signup';
-  $('authNote').textContent='Real account authentication must be connected to Supabase.';
-  $('password').autocomplete=mode==='signup'?'new-password':'current-password';
-  showPage('auth');
-}
+$('authForm').addEventListener('submit', event => {
+  event.preventDefault();
 
-/*
- DEMO ONLY:
- This localStorage account system is not secure authentication.
- Connect Supabase Auth before launching publicly.
-*/
-$('authForm').addEventListener('submit',async e=>{
-  e.preventDefault();
-  const email=$('email').value.trim().toLowerCase();
-  const password=$('password').value;
-  const name=$('displayName').value.trim() || email.split('@')[0];
-  const accounts=JSON.parse(localStorage.getItem('sf_demo_accounts')||'{}');
+  const email = $('email').value.trim().toLowerCase();
+  const password = $('password').value;
+  const users = getUsers();
 
-  if(authMode==='signup'){
-    if(accounts[email]){
-      toast('An account with this email already exists.');
+  if (authMode === 'signup') {
+    const name = $('name').value.trim();
+
+    if (!name) {
+      $('authMessage').textContent = 'Please enter your name.';
       return;
     }
-    accounts[email]={name,password};
-    localStorage.setItem('sf_demo_accounts',JSON.stringify(accounts));
-  }else{
-    if(!accounts[email] || accounts[email].password!==password){
-      toast('Demo sign-in failed. Check your details.');
+
+    if (users[email]) {
+      $('authMessage').textContent =
+        'An account with this email already exists.';
       return;
     }
+
+    users[email] = { name, password };
+
+    localStorage.setItem('sf_demo_users', JSON.stringify(users));
+
+    currentUser = { email, name };
+
+  } else {
+    if (!users[email] || users[email].password !== password) {
+      $('authMessage').textContent =
+        'Email or password is incorrect.';
+      return;
+    }
+
+    currentUser = {
+      email,
+      name: users[email].name
+    };
   }
 
-  currentUser={email,name};
-  localStorage.setItem('sf_demo_session',JSON.stringify(currentUser));
-  updateProfile();
-  showPage('home');
+  $('password').value = '';
+  updateHome();
 });
 
-function updateProfile(){
-  if(!currentUser)return;
-  $('profileName').textContent=currentUser.name;
-  $('profileEmail').textContent=currentUser.email;
-  $('editName').value=currentUser.name;
-  $('avatar').textContent=(currentUser.name[0]||'U').toUpperCase();
+function updateHome() {
+  if (!currentUser) return;
 
-  // DEMO DISPLAY ONLY. This is NOT a secure owner verification.
-  // Real owner status must be assigned in Supabase on the server.
-  const isOwner=currentUser.email==='owner@example.com';
-  $('verifiedBadge').classList.toggle('hidden',!isOwner);
-  $('ownerPanel').classList.toggle('hidden',!isOwner);
+  $('greeting').textContent = 'Welcome, ' + currentUser.name;
+  $('profileName').textContent = currentUser.name;
+  $('profileDetails').textContent = currentUser.email;
+  $('displayName').value = currentUser.name;
+
+  $('logoutButton').classList.remove('hidden');
+
+  showScreen('home');
 }
 
-function saveProfile(){
-  if(!currentUser)return;
-  const name=$('editName').value.trim();
-  if(!name){toast('Please enter a display name.');return}
-  currentUser.name=name;
-  localStorage.setItem('sf_demo_session',JSON.stringify(currentUser));
-  const accounts=JSON.parse(localStorage.getItem('sf_demo_accounts')||'{}');
-  if(accounts[currentUser.email]){
-    accounts[currentUser.email].name=name;
-    localStorage.setItem('sf_demo_accounts',JSON.stringify(accounts));
-  }
-  updateProfile();
-  toast('Demo profile updated.');
+function logout() {
+  currentUser = null;
+  $('logoutButton').classList.add('hidden');
+  showScreen('welcome');
 }
 
-$('profilePhoto').addEventListener('change',e=>{
-  const file=e.target.files[0];
-  if(!file)return;
-  if(!file.type.startsWith('image/')){toast('Choose an image.');return}
-  const reader=new FileReader();
-  reader.onload=()=>{
-    $('avatar').innerHTML='';
-    const img=document.createElement('img');
-    img.src=reader.result;
-    img.style.cssText='width:100%;height:100%;object-fit:cover;border-radius:50%';
-    $('avatar').appendChild(img);
-  };
-  reader.readAsDataURL(file);
-});
+function saveProfile() {
+  const name = $('displayName').value.trim();
 
-function logout(){
-  currentUser=null;
-  localStorage.removeItem('sf_demo_session');
-  showPage('welcome');
-  toast('You have signed out of this demo.');
+  if (!name || !currentUser) return;
+
+  const users = getUsers();
+  users[currentUser.email].name = name;
+
+  localStorage.setItem('sf_demo_users', JSON.stringify(users));
+
+  currentUser.name = name;
+  updateHome();
 }
 
-function deleteAccount(){
-  if(!currentUser)return;
-  if(!confirm('Delete this demo account from this browser?'))return;
-  const accounts=JSON.parse(localStorage.getItem('sf_demo_accounts')||'{}');
-  delete accounts[currentUser.email];
-  localStorage.setItem('sf_demo_accounts',JSON.stringify(accounts));
-  logout();
-  toast('Demo account removed from this browser.');
-}
+$('audioFile').addEventListener('change', event => {
+  const file = event.target.files[0];
 
-function openStudio(){
-  showPage('studio');
-}
+  if (!file) return;
 
-$('audioFile').addEventListener('change',e=>{
-  const file=e.target.files[0];
-  if(!file)return;
-  if(!file.type.startsWith('audio/')){
-    toast('Please select an audio file.');
-    return;
-  }
-  if(selectedAudioURL)URL.revokeObjectURL(selectedAudioURL);
-  selectedAudioURL=URL.createObjectURL(file);
-  $('audioPlayer').src=selectedAudioURL;
+  if (audioURL) URL.revokeObjectURL(audioURL);
+
+  audioURL = URL.createObjectURL(file);
+
+  $('audioPlayer').src = audioURL;
   $('audioPlayer').classList.remove('hidden');
-  $('audioName').textContent='Selected: '+file.name;
-  toast('Audio imported. It has not been mastered.');
+
+  $('musicMessage').textContent =
+    'Selected audio: ' + file.name;
 });
 
-async function startRecording(){
-  try{
-    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
-      toast('Recording needs a supported browser and a secure connection.');
-      return;
-    }
-    recordingStream=await navigator.mediaDevices.getUserMedia({audio:true});
-    audioChunks=[];
-    recorder=new MediaRecorder(recordingStream);
-    recorder.ondataavailable=e=>{
-      if(e.data.size)audioChunks.push(e.data);
-    };
-    recorder.onstop=()=>{
-      recordedBlob=new Blob(audioChunks,{type:recorder.mimeType||'audio/webm'});
-      $('recordPlayer').src=URL.createObjectURL(recordedBlob);
-      $('recordPlayer').classList.remove('hidden');
-      $('downloadRecording').classList.remove('hidden');
-      $('recordStatus').textContent='Recording ready. Your original voice has not been intentionally altered.';
-      recordingStream.getTracks().forEach(t=>t.stop());
-      recordingStream=null;
-    };
-    recorder.start();
-    $('recordBtn').disabled=true;
-    $('stopBtn').disabled=false;
-    $('recordStatus').textContent='Recording...';
-  }catch(err){
-    toast('Microphone access was not granted or is unavailable.');
-  }
+function chooseBeatFile() {
+  $('beatFile').click();
 }
 
-function stopRecording(){
-  if(recorder && recorder.state!=='inactive')recorder.stop();
-  $('recordBtn').disabled=false;
-  $('stopBtn').disabled=true;
+$('beatFile').addEventListener('change', event => {
+  const file = event.target.files[0];
+
+  if (!file) return;
+
+  $('beatStatus').textContent =
+    'Selected beat: ' + file.name +
+    '. Open Studio to play your imported audio.';
+});
+
+function generateBeat() {
+  $('beatStatus').textContent =
+    'Beat generation is a planned feature. Real beat generation will be connected next.';
 }
 
-function downloadRecording(){
-  if(!recordedBlob)return;
-  const url=URL.createObjectURL(recordedBlob);
-  const a=document.createElement('a');
-  a.href=url;
-  a.download='studio-flow-recording.webm';
-  a.click();
-  setTimeout(()=>URL.revokeObjectURL(url),1000);
-}
-
-function requestMastering(){
-  const file=$('audioFile').files[0];
-  if(!file && !recordedBlob){
-    toast('Record a song or import audio first.');
+async function startRecording() {
+  if (!navigator.mediaDevices ||
+      !navigator.mediaDevices.getUserMedia) {
+    $('recordStatus').textContent =
+      'Microphone recording requires a secure HTTPS connection.';
     return;
   }
-  $('songTitle').value=file?file.name.replace(/\.[^.]+$/,''):'My Recording';
-  $('songPrice').value='';
-  showPage('payment');
-}
 
-function paymentNotice(){
-  toast('Secure payment is not connected yet. No money has been charged.');
-}
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: true
+    });
 
-function makeDemoBeat(){
-  // Basic synthesized rhythm demonstration, not AI music.
-  try{
-    const ctx=new (window.AudioContext||window.webkitAudioContext)();
-    let step=0;
-    const bpm=100;
-    const interval=60000/bpm/2;
-    $('beatStatus').textContent='Playing a short demo rhythm...';
-    $('beatPlayer').classList.add('hidden');
+    recordedChunks = [];
+    mediaRecorder = new MediaRecorder(stream);
 
-    function kick(time){
-      const osc=ctx.createOscillator();
-      const gain=ctx.createGain();
-      osc.type='sine';
-      osc.frequency.setValueAtTime(130,time);
-      osc.frequency.exponentialRampToValueAtTime(40,time+0.12);
-      gain.gain.setValueAtTime(0.8,time);
-      gain.gain.exponentialRampToValueAtTime(0.001,time+0.15);
-      osc.connect(gain);gain.connect(ctx.destination);
-      osc.start(time);osc.stop(time+0.16);
-    }
+    mediaRecorder.ondataavailable = event => {
+      if (event.data.size > 0) recordedChunks.push(event.data);
+    };
 
-    function hat(time){
-      const osc=ctx.createOscillator();
-      const gain=ctx.createGain();
-      osc.type='square';
-      osc.frequency.value=8000;
-      gain.gain.setValueAtTime(0.08,time);
-      gain.gain.exponentialRampToValueAtTime(0.001,time+0.035);
-      osc.connect(gain);gain.connect(ctx.destination);
-      osc.start(time);osc.stop(time+0.04);
-    }
+    mediaRecorder.onstop = () => {
+      const blob = new Blob(recordedChunks, {
+        type: mediaRecorder.mimeType || 'audio/webm'
+      });
 
-    const start=ctx.currentTime+0.05;
-    const timer=setInterval(()=>{
-      if(step>=32){
-        clearInterval(timer);
-        $('beatStatus').textContent='Demo rhythm finished. This is not an exported AI beat.';
-        ctx.close();
-        return;
-      }
-      const t=start+step*interval/1000;
-      if(step%4===0)kick(t);
-      if(step%2===0)hat(t);
-      step++;
-    },interval);
-  }catch(e){
-    toast('Your browser could not start the demo rhythm.');
+      if (audioURL) URL.revokeObjectURL(audioURL);
+
+      audioURL = URL.createObjectURL(blob);
+
+      $('audioPlayer').src = audioURL;
+      $('audioPlayer').classList.remove('hidden');
+
+      $('recordStatus').textContent =
+        'Recording finished. You can listen to your audio.';
+
+      stream.getTracks().forEach(track => track.stop());
+    };
+
+    mediaRecorder.start();
+
+    $('recordStatus').textContent = 'Recording your voice...';
+
+  } catch (error) {
+    $('recordStatus').textContent =
+      'Microphone permission was denied or recording is unavailable.';
   }
 }
 
-// Restore the temporary demo session on this device.
-try{
-  currentUser=JSON.parse(localStorage.getItem('sf_demo_session')||'null');
-}catch(e){
-  currentUser=null;
+function stopRecording() {
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
+    mediaRecorder.stop();
+    $('recordStatus').textContent = 'Finishing recording...';
+  }
 }
-if(currentUser){
-  updateProfile();
-  showPage('home');
-}else{
-  showPage('welcome');
-}
+
+// No real payments, wallet balances, or withdrawals are simulated.
+showWelcome();
 </script>
 
 </body>
