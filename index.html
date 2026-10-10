@@ -3,18 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#080b14">
+<meta name="theme-color" content="#090d18">
 <title>Studio Flow</title>
 
 <style>
 :root {
-  --bg: #080b14;
-  --card: #111827;
-  --card2: #172033;
-  --blue: #72a7ff;
-  --text: #ffffff;
-  --muted: #9ca9bf;
-  --border: #273247;
+  --bg: #090d18;
+  --card: #121a2b;
+  --card2: #18243a;
+  --blue: #83b4ff;
+  --white: #ffffff;
+  --muted: #9eabc0;
+  --border: #28364e;
 }
 
 * {
@@ -23,13 +23,13 @@
 
 body {
   margin: 0;
+  color: var(--white);
   background: var(--bg);
-  color: var(--text);
   font-family: Arial, sans-serif;
-  padding-bottom: 85px;
+  padding-bottom: 82px;
 }
 
-button, input {
+button, input, select {
   font: inherit;
 }
 
@@ -41,14 +41,14 @@ button {
   display: none !important;
 }
 
-/* WELCOME AND LOGIN */
+/* LOGIN */
 
 .auth {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 22px;
+  padding: 20px;
 }
 
 .auth-box {
@@ -58,52 +58,49 @@ button {
 }
 
 .logo {
-  width: 65px;
-  height: 65px;
-  margin: 0 auto 12px;
-  border-radius: 50%;
+  height: 66px;
+  width: 66px;
   border: 2px solid var(--blue);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 27px;
-  box-shadow: 0 0 22px #477fff33;
+  border-radius: 50%;
+  margin: 0 auto 14px;
+  display: grid;
+  place-items: center;
+  font-size: 29px;
 }
 
-h1 {
-  font-size: 27px;
+.auth-box h1 {
+  font-size: 28px;
   margin: 8px 0;
 }
 
-.subtitle {
+.muted {
   color: var(--muted);
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.6;
 }
 
 .field {
   width: 100%;
-  padding: 14px;
   margin-top: 12px;
-  border-radius: 12px;
+  padding: 13px;
   border: 1px solid var(--border);
+  border-radius: 11px;
   background: var(--card);
   color: white;
-  outline: none;
 }
 
 .primary, .secondary {
   width: 100%;
   padding: 13px;
-  border-radius: 12px;
-  border: none;
   margin-top: 12px;
+  border: 0;
+  border-radius: 11px;
   font-weight: bold;
 }
 
 .primary {
   background: var(--blue);
-  color: #08101e;
+  color: #09101c;
 }
 
 .secondary {
@@ -112,22 +109,16 @@ h1 {
   color: white;
 }
 
-.message {
-  color: #ffb5b5;
-  font-size: 13px;
-  margin-top: 12px;
-}
-
-/* MAIN APP */
+/* HEADER */
 
 header {
-  height: 68px;
-  padding: 0 17px;
+  height: 63px;
+  padding: 0 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background: #0c1220;
   border-bottom: 1px solid var(--border);
-  background: #0b101c;
   position: sticky;
   top: 0;
   z-index: 5;
@@ -137,170 +128,126 @@ header {
   display: flex;
   align-items: center;
   gap: 9px;
-  font-weight: bold;
   font-size: 19px;
+  font-weight: bold;
 }
 
-.brand-icon {
+.brand-mark {
   color: var(--blue);
-  font-size: 25px;
+  font-size: 26px;
 }
 
-.avatar {
-  width: 37px;
-  height: 37px;
+.header-profile {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border);
   border-radius: 50%;
+  color: white;
   background: var(--card2);
-  border: 1px solid var(--blue);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
+
+/* PAGES */
 
 main {
-  max-width: 650px;
+  max-width: 620px;
+  padding: 17px 13px;
   margin: auto;
-  padding: 18px 14px;
 }
 
-.welcome {
-  margin-bottom: 20px;
+.page-title {
+  font-size: 22px;
+  margin: 5px 0 6px;
 }
 
-.welcome h2 {
-  margin: 0 0 7px;
-  font-size: 23px;
-}
-
-.welcome p {
-  margin: 0;
-  font-size: 13px;
+.page-description {
   color: var(--muted);
-  line-height: 1.5;
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 0 0 17px;
 }
 
-/* SMALL TWO-COLUMN HOME BOXES */
+.page {
+  min-height: 65vh;
+}
+
+/* TWO-COLUMN SMALL BOXES */
 
 .grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 11px;
+  gap: 10px;
 }
 
-.tile {
+.box {
   min-width: 0;
-  min-height: 112px;
-  padding: 13px 11px;
+  min-height: 105px;
+  padding: 12px;
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 15px;
-  color: white;
+  border-radius: 13px;
   text-align: left;
-  transition: border-color .2s, transform .2s;
+  color: white;
 }
 
-.tile:active {
+.box:active {
   transform: scale(.98);
 }
 
-.tile:hover {
+.box:hover {
   border-color: var(--blue);
 }
 
-.tile-icon {
-  width: 35px;
-  height: 35px;
-  background: #233451;
-  border-radius: 11px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 19px;
-  margin-bottom: 10px;
+.box-icon {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  background: var(--card2);
+  border-radius: 9px;
+  font-size: 18px;
+  margin-bottom: 9px;
 }
 
-.tile-title {
-  font-size: 14px;
+.box-title {
+  font-size: 13px;
   font-weight: bold;
   margin-bottom: 5px;
-}
-
-.tile-desc {
-  font-size: 11px;
-  line-height: 1.4;
-  color: var(--muted);
-}
-
-.badge {
-  display: inline-block;
-  color: var(--blue);
-  font-size: 10px;
-  margin-top: 5px;
-}
-
-/* PAGE PANELS */
-
-.panel {
-  background: var(--card);
-  border: 1px solid var(--border);
-  padding: 17px;
-  border-radius: 15px;
-  margin-top: 15px;
-}
-
-.panel h3 {
-  margin-top: 0;
-}
-
-.section-title {
-  font-size: 19px;
-  margin: 8px 0 14px;
-}
-
-.back {
-  background: transparent;
-  color: var(--blue);
-  border: none;
-  padding: 5px 0 15px;
-}
-
-.file-input {
-  display: block;
-  width: 100%;
-  padding: 12px 0;
-  color: var(--muted);
-}
-
-audio {
-  width: 100%;
-  margin-top: 12px;
-}
-
-.status {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.6;
   overflow-wrap: anywhere;
 }
 
+.box-description {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.coming {
+  display: inline-block;
+  color: var(--blue);
+  font-size: 9px;
+  margin-top: 6px;
+}
+
+/* BOTTOM MENU */
+
 .bottom-nav {
   position: fixed;
-  z-index: 10;
-  bottom: 0;
   left: 0;
+  bottom: 0;
   width: 100%;
-  min-height: 67px;
-  padding: 8px 5px calc(8px + env(safe-area-inset-bottom));
+  min-height: 66px;
+  padding: 7px 4px calc(7px + env(safe-area-inset-bottom));
   display: flex;
   justify-content: space-around;
   background: #0c1220;
   border-top: 1px solid var(--border);
+  z-index: 10;
 }
 
-.nav-btn {
+.nav-button {
   flex: 1;
+  border: 0;
   background: transparent;
-  border: none;
   color: var(--muted);
   display: flex;
   flex-direction: column;
@@ -310,40 +257,70 @@ audio {
   font-size: 10px;
 }
 
-.nav-btn span {
+.nav-icon {
   font-size: 21px;
+  line-height: 1.1;
 }
 
-.nav-btn.active {
+.nav-button.active {
   color: var(--blue);
 }
 
-.small-button {
-  background: var(--card2);
+/* INNER PANELS */
+
+.panel {
+  padding: 14px;
+  background: var(--card);
   border: 1px solid var(--border);
-  color: white;
-  border-radius: 10px;
-  padding: 10px 12px;
+  border-radius: 13px;
+  margin-bottom: 12px;
 }
 
-.note {
-  font-size: 12px;
+.panel h3 {
+  font-size: 15px;
+  margin: 0 0 8px;
+}
+
+.back-button {
+  border: 0;
+  padding: 5px 0 15px;
+  color: var(--blue);
+  background: transparent;
+}
+
+.file-input {
+  width: 100%;
+  padding: 10px 0;
   color: var(--muted);
-  line-height: 1.6;
+  font-size: 12px;
 }
 
-@media (min-width: 600px) {
-  main {
-    padding: 25px 20px;
+audio, video {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.notice {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.danger {
+  background: #44202a;
+  color: white;
+  border: 1px solid #713544;
+}
+
+@media (min-width: 500px) {
+  .box {
+    min-height: 115px;
+    padding: 14px;
   }
 
-  .tile {
-    min-height: 125px;
-    padding: 16px;
-  }
-
-  .tile-title {
-    font-size: 15px;
+  .box-title {
+    font-size: 14px;
   }
 }
 </style>
@@ -351,53 +328,49 @@ audio {
 
 <body>
 
-<!-- SIGN IN / CREATE ACCOUNT -->
+<!-- SIGN-IN SCREEN -->
 
-<section id="auth" class="auth">
+<section id="authScreen" class="auth">
   <div class="auth-box">
     <div class="logo">🎙️</div>
-    <h1>Studio Flow</h1>
-    <p class="subtitle">Your music. Your sound. Your studio.</p>
+    <h1>STUDIO FLOW</h1>
+    <p class="muted">Your Music. Your Sound. Your Future.</p>
 
-    <div id="authFields">
-      <input id="displayName" class="field hidden"
-        placeholder="Your display name">
+    <input id="accountName" class="field hidden"
+      placeholder="Your display name">
 
-      <input id="email" class="field"
-        type="email" placeholder="Email address"
-        autocomplete="email">
+    <input id="accountEmail" class="field"
+      type="email" placeholder="Email address">
 
-      <input id="password" class="field"
-        type="password" placeholder="Password"
-        autocomplete="current-password">
+    <input id="accountPassword" class="field"
+      type="password" placeholder="Password">
 
-      <button id="authAction" class="primary"
-        onclick="authenticate()">Sign In</button>
+    <button id="authSubmit" class="primary"
+      onclick="authenticate()">Sign In</button>
 
-      <button id="switchAuth" class="secondary"
-        onclick="toggleAuth()">Create Account</button>
+    <button id="authSwitch" class="secondary"
+      onclick="switchAuth()">Create Account</button>
 
-      <p id="authMessage" class="message"></p>
-    </div>
+    <p id="authMessage" class="notice"></p>
 
-    <p class="note">
-      Preview version. Do not use a real password here.
+    <p class="notice">
+      Preview only. Real authentication must be connected before public use.
     </p>
   </div>
 </section>
 
-<!-- APP HEADER -->
+<!-- MAIN APPLICATION -->
 
-<div id="app" class="hidden">
+<div id="application" class="hidden">
 
 <header>
   <div class="brand">
-    <span class="brand-icon">◉</span>
+    <span class="brand-mark">◉</span>
     <span>Studio Flow</span>
   </div>
-  <button class="avatar" onclick="showPage('profile')" aria-label="My profile">
-    👤
-  </button>
+
+  <button class="header-profile"
+    onclick="openPage('profile')" aria-label="Open profile">👤</button>
 </header>
 
 <main>
@@ -405,495 +378,694 @@ audio {
 <!-- HOME -->
 
 <section id="homePage" class="page">
-  <div class="welcome">
-    <h2 id="greeting">Welcome to Studio Flow</h2>
-    <p>Everything you need to create and manage your music.</p>
+  <h2 class="page-title" id="welcomeTitle">Welcome to Studio Flow</h2>
+  <p class="page-description">
+    Create your sound. Record, import, and master your music.
+  </p>
+
+  <div class="grid">
+
+    <button class="box" onclick="openPage('record')">
+      <div class="box-icon">🎙️</div>
+      <div class="box-title">Record Voice</div>
+      <div class="box-description">Record your own voice.</div>
+    </button>
+
+    <button class="box" onclick="openPage('import')">
+      <div class="box-icon">📁</div>
+      <div class="box-title">Import Audio</div>
+      <div class="box-description">Choose audio from your phone.</div>
+    </button>
+
+    <button class="box" onclick="openPage('beat')">
+      <div class="box-icon">🎧</div>
+      <div class="box-title">AI Beat</div>
+      <div class="box-description">Create or import a beat.</div>
+    </button>
+
+    <button class="box" onclick="openPage('master')">
+      <div class="box-icon">✨</div>
+      <div class="box-title">Master My Song</div>
+      <div class="box-description">Prepare your song for mastering.</div>
+    </button>
+
+    <button class="box" onclick="openPage('launcher')">
+      <div class="box-icon">🚀</div>
+      <div class="box-title">Music Launcher</div>
+      <div class="box-description">Music release tools.</div>
+      <span class="coming">COMING SOON</span>
+    </button>
+
+    <button class="box" onclick="openPage('reel')">
+      <div class="box-icon">🎬</div>
+      <div class="box-title">Studio Flow Reel</div>
+      <div class="box-description">Preview a music video.</div>
+    </button>
+
+  </div>
+</section>
+
+<!-- STUDIO TAB -->
+
+<section id="studioPage" class="page hidden">
+  <h2 class="page-title">🎙️ Studio</h2>
+  <p class="page-description">
+    Your recording and beat-making tools.
+  </p>
+
+  <div class="grid">
+
+    <button class="box" onclick="openPage('record')">
+      <div class="box-icon">🎤</div>
+      <div class="box-title">Record Voice</div>
+      <div class="box-description">Record with your microphone.</div>
+    </button>
+
+    <button class="box" onclick="openPage('import')">
+      <div class="box-icon">📁</div>
+      <div class="box-title">Import Audio</div>
+      <div class="box-description">Select a song from your phone.</div>
+    </button>
+
+    <button class="box" onclick="openPage('beat')">
+      <div class="box-icon">🎧</div>
+      <div class="box-title">AI Beat</div>
+      <div class="box-description">Choose your beat option.</div>
+    </button>
+
+    <button class="box" onclick="openPage('master')">
+      <div class="box-icon">✨</div>
+      <div class="box-title">Master My Song</div>
+      <div class="box-description">Prepare a song for mastering.</div>
+    </button>
+
+  </div>
+</section>
+
+<!-- MUSIC TAB -->
+
+<section id="musicPage" class="page hidden">
+  <h2 class="page-title">🎵 My Music</h2>
+  <p class="page-description">
+    Import, listen to, and manage your music on this device.
+  </p>
+
+  <div class="grid">
+
+    <button class="box" onclick="openPage('import')">
+      <div class="box-icon">📂</div>
+      <div class="box-title">Import Music</div>
+      <div class="box-description">Choose an audio file.</div>
+    </button>
+
+    <button class="box" onclick="openPage('beat')">
+      <div class="box-icon">🎧</div>
+      <div class="box-title">My Beats</div>
+      <div class="box-description">Import a beat from your phone.</div>
+    </button>
+
+    <button class="box" onclick="openPage('master')">
+      <div class="box-icon">✨</div>
+      <div class="box-title">Master My Song</div>
+      <div class="box-description">Prepare your next song.</div>
+    </button>
+
+    <button class="box" onclick="openPage('reel')">
+      <div class="box-icon">🎬</div>
+      <div class="box-title">Music Videos</div>
+      <div class="box-description">Preview a video file.</div>
+    </button>
+
+  </div>
+
+  <div class="panel" style="margin-top:14px">
+    <h3>Selected Music</h3>
+    <p id="musicStatus" class="notice">
+      No music selected yet.
+    </p>
+    <audio id="musicPlayer" class="hidden" controls></audio>
+  </div>
+</section>
+
+<!-- PROFILE TAB -->
+
+<section id="profilePage" class="page hidden">
+  <h2 class="page-title">👤 My Profile</h2>
+  <p class="page-description">
+    Your account, personal settings, and app options.
+  </p>
+
+  <div class="panel">
+    <div class="logo">👤</div>
+    <label class="notice" for="profileName">Display name</label>
+    <input id="profileName" class="field"
+      placeholder="Your display name">
+    <button class="primary" onclick="saveProfile()">Update Profile</button>
+    <p id="profileMessage" class="notice"></p>
   </div>
 
   <div class="grid">
 
-    <button class="tile" onclick="showPage('studio')">
-      <div class="tile-icon">🎙️</div>
-      <div class="tile-title">Studio</div>
-      <div class="tile-desc">Record your voice and work with audio.</div>
+    <button class="box" onclick="showSettings()">
+      <div class="box-icon">⚙️</div>
+      <div class="box-title">Settings</div>
+      <div class="box-description">Manage app preferences.</div>
     </button>
 
-    <button class="tile" onclick="showPage('mymusic')">
-      <div class="tile-icon">🎵</div>
-      <div class="tile-title">My Music</div>
-      <div class="tile-desc">Choose and listen to your music files.</div>
-    </button>
-
-    <button class="tile" onclick="showPage('go')">
-      <div class="tile-icon">🎧</div>
-      <div class="tile-title">Studio Flow Go</div>
-      <div class="tile-desc">Explore your music workspace.</div>
-    </button>
-
-    <button class="tile" onclick="showPage('reel')">
-      <div class="tile-icon">🎬</div>
-      <div class="tile-title">Studio Flow Reel</div>
-      <div class="tile-desc">Your music video workspace.</div>
-    </button>
-
-    <button class="tile" onclick="showPage('profile')">
-      <div class="tile-icon">👤</div>
-      <div class="tile-title">My Profile</div>
-      <div class="tile-desc">Manage your display name and account.</div>
-    </button>
-
-    <button class="tile" onclick="showPage('launching')">
-      <div class="tile-icon">🚀</div>
-      <div class="tile-title">Music Launching</div>
-      <div class="tile-desc">Prepare for your music release.</div>
-      <span class="badge">COMING SOON</span>
+    <button class="box" onclick="showAbout()">
+      <div class="box-icon">ℹ️</div>
+      <div class="box-title">About Studio Flow</div>
+      <div class="box-description">Learn about the app.</div>
     </button>
 
   </div>
-</section>
 
-<!-- STUDIO -->
-
-<section id="studioPage" class="page hidden">
-  <button class="back" onclick="showPage('home')">← Back to Home</button>
-  <h2 class="section-title">🎙️ Studio</h2>
-
-  <div class="panel">
-    <h3>Record Your Voice</h3>
-    <p class="status">Allow microphone access when your browser asks.</p>
-    <button class="primary" id="recordButton" onclick="toggleRecording()">
-      Start Recording
+  <div id="settingsPanel" class="panel hidden" style="margin-top:12px">
+    <h3>Settings</h3>
+    <p class="notice">App display and account options.</p>
+    <button class="secondary" onclick="toggleAppearance()">
+      Change Display Appearance
     </button>
-    <audio id="recordingPlayback" controls class="hidden"></audio>
-    <p id="recordStatus" class="status"></p>
-  </div>
-
-  <div class="panel">
-    <h3>Import Audio</h3>
-    <input class="file-input" id="studioFile" type="file"
-      accept="audio/*" onchange="loadStudioAudio(event)">
-    <audio id="studioAudio" controls class="hidden"></audio>
-    <button class="primary" onclick="showPage('beat')">Continue to Beat Options</button>
-  </div>
-
-  <div class="panel">
-    <h3>Master My Song</h3>
-    <p class="status">Choose your song, then continue to the payment screen.</p>
-    <button class="primary" onclick="showPage('master')">Master My Song</button>
-  </div>
-</section>
-
-<!-- BEAT OPTIONS -->
-
-<section id="beatPage" class="page hidden">
-  <button class="back" onclick="showPage('studio')">← Back to Studio</button>
-  <h2 class="section-title">🎵 Beat Studio</h2>
-  <p class="status">Choose how you want to get your beat.</p>
-
-  <div class="panel">
-    <div class="tile-icon">✨</div>
-    <h3>Generate a Beat for Me</h3>
-    <p class="status">AI beat generation will be available when the AI service is connected.</p>
-    <button class="primary" onclick="beatNotice()">
-      Generate a Beat for Me
+    <button class="secondary" onclick="showPage('profile')">
+      Close Settings
     </button>
   </div>
 
-  <div class="panel">
-    <div class="tile-icon">📁</div>
-    <h3>Import Beat from My Phone</h3>
-    <input id="beatFile" class="file-input" type="file"
-      accept="audio/*" onchange="importBeat(event)">
-    <p id="beatStatus" class="status">Choose an audio beat from your phone.</p>
-    <audio id="beatAudio" controls class="hidden"></audio>
-  </div>
-</section>
-
-<!-- MY MUSIC -->
-
-<section id="mymusicPage" class="page hidden">
-  <button class="back" onclick="showPage('home')">← Back to Home</button>
-  <h2 class="section-title">🎵 My Music</h2>
-
-  <div class="panel">
-    <h3>Choose Music from Your Phone</h3>
-    <input id="musicFile" class="file-input" type="file"
-      accept="audio/*" onchange="loadMyMusic(event)">
-    <p id="musicStatus" class="status">Your selected audio will appear here.</p>
-    <audio id="musicAudio" controls class="hidden"></audio>
-  </div>
-</section>
-
-<!-- STUDIO FLOW GO -->
-
-<section id="goPage" class="page hidden">
-  <button class="back" onclick="showPage('home')">← Back to Home</button>
-  <h2 class="section-title">🎧 Studio Flow Go</h2>
-  <div class="panel">
-    <p class="status">
-      Your music workspace. Recording and audio tools are available in Studio.
+  <div id="aboutPanel" class="panel hidden" style="margin-top:12px">
+    <h3>About Studio Flow</h3>
+    <p class="notice">
+      Studio Flow is designed to help you record, import, and manage music.
+      Some online features require additional secure services.
     </p>
-    <button class="primary" onclick="showPage('studio')">Open Studio</button>
-  </div>
-</section>
-
-<!-- REEL -->
-
-<section id="reelPage" class="page hidden">
-  <button class="back" onclick="showPage('home')">← Back to Home</button>
-  <h2 class="section-title">🎬 Studio Flow Reel</h2>
-  <div class="panel">
-    <h3>Choose a Video</h3>
-    <input class="file-input" type="file" accept="video/*"
-      onchange="previewVideo(event)">
-    <video id="videoPreview" controls class="hidden"
-      style="width:100%;border-radius:12px;margin-top:12px"></video>
-    <p class="status">Video sharing and publishing need a connected service.</p>
-  </div>
-</section>
-
-<!-- PROFILE -->
-
-<section id="profilePage" class="page hidden">
-  <button class="back" onclick="showPage('home')">← Back to Home</button>
-  <h2 class="section-title">👤 My Profile</h2>
-
-  <div class="panel">
-    <div class="logo">👤</div>
-    <label for="profileName" class="status">Display name</label>
-    <input id="profileName" class="field" placeholder="Your display name">
-    <button class="primary" onclick="saveProfile()">Save Profile</button>
-    <p id="profileStatus" class="status"></p>
   </div>
 
-  <div class="panel">
+  <div class="panel" style="margin-top:12px">
     <h3>Account</h3>
     <button class="secondary" onclick="logout()">Sign Out</button>
   </div>
 </section>
 
-<!-- MUSIC LAUNCHING -->
+<!-- RECORDING PAGE -->
 
-<section id="launchingPage" class="page hidden">
-  <button class="back" onclick="showPage('home')">← Back to Home</button>
-  <h2 class="section-title">🚀 Music Launching</h2>
+<section id="recordPage" class="page hidden">
+  <button class="back-button" onclick="goBack()">← Back</button>
+  <h2 class="page-title">🎙️ Record Voice</h2>
+  <p class="page-description">
+    Record using your phone microphone.
+  </p>
+
   <div class="panel">
-    <p class="status">Music release tools are coming soon.</p>
+    <h3>Microphone Recorder</h3>
+    <button id="recordButton" class="primary"
+      onclick="toggleRecording()">Start Recording</button>
+    <p id="recordStatus" class="notice"></p>
+    <audio id="recordPlayer" controls class="hidden"></audio>
+  </div>
+
+  <div class="panel">
+    <h3>Import Audio</h3>
+    <input class="file-input" type="file" accept="audio/*"
+      onchange="loadAudio(event,'recordImportPlayer','recordImportStatus')">
+    <p id="recordImportStatus" class="notice"></p>
+    <audio id="recordImportPlayer" controls class="hidden"></audio>
   </div>
 </section>
 
-<!-- MASTERING -->
+<!-- IMPORT PAGE -->
 
-<section id="masterPage" class="page hidden">
-  <button class="back" onclick="showPage('studio')">← Back to Studio</button>
-  <h2 class="section-title">✨ Master My Song</h2>
+<section id="importPage" class="page hidden">
+  <button class="back-button" onclick="goBack()">← Back</button>
+  <h2 class="page-title">📁 Import Audio</h2>
+  <p class="page-description">
+    Select an audio file stored on your phone.
+  </p>
+
   <div class="panel">
     <h3>Choose Your Song</h3>
-    <input id="masterFile" class="file-input" type="file"
-      accept="audio/*" onchange="chooseMasterFile(event)">
-    <p id="masterStatus" class="status">Select an audio file to continue.</p>
-    <audio id="masterAudio" controls class="hidden"></audio>
-    <button class="primary" onclick="showPage('payment')">Continue to Payment</button>
+    <input id="importFile" class="file-input"
+      type="file" accept="audio/*" onchange="importMusic(event)">
+    <p id="importStatus" class="notice"></p>
+    <audio id="importPlayer" controls class="hidden"></audio>
+  </div>
+
+  <div class="panel">
+    <h3>What would you like to do next?</h3>
+    <button class="primary" onclick="openPage('beat')">
+      Continue to Beat Options
+    </button>
+    <button class="secondary" onclick="openPage('master')">
+      Master My Song
+    </button>
   </div>
 </section>
 
-<!-- PAYMENT -->
+<!-- BEAT PAGE -->
 
-<section id="paymentPage" class="page hidden">
-  <button class="back" onclick="showPage('master')">← Back</button>
-  <h2 class="section-title">💳 Pay for Your Song</h2>
+<section id="beatPage" class="page hidden">
+  <button class="back-button" onclick="goBack()">← Back</button>
+  <h2 class="page-title">🎧 AI Beat</h2>
+  <p class="page-description">
+    Choose how you want to get your beat.
+  </p>
+
+  <div class="grid">
+    <button class="box" onclick="generateBeat()">
+      <div class="box-icon">✨</div>
+      <div class="box-title">Generate a Beat for Me</div>
+      <div class="box-description">AI beat generation.</div>
+    </button>
+
+    <button class="box" onclick="document.getElementById('beatFile').click()">
+      <div class="box-icon">📂</div>
+      <div class="box-title">Import Beat from My Phone</div>
+      <div class="box-description">Choose an existing beat.</div>
+    </button>
+  </div>
+
+  <input id="beatFile" class="hidden" type="file"
+    accept="audio/*" onchange="importBeat(event)">
+
+  <div class="panel" style="margin-top:13px">
+    <p id="beatStatus" class="notice">
+      Select one of the two options above.
+    </p>
+    <audio id="beatPlayer" controls class="hidden"></audio>
+  </div>
+</section>
+
+<!-- MASTER PAGE -->
+
+<section id="masterPage" class="page hidden">
+  <button class="back-button" onclick="goBack()">← Back</button>
+  <h2 class="page-title">✨ Master My Song</h2>
+  <p class="page-description">
+    Mastering is intended to be paid for individually, per song.
+  </p>
 
   <div class="panel">
-    <h3>Pay Per Song</h3>
-    <p class="status">
-      Your price and secure payment methods must be configured before payments can be accepted.
+    <h3>Choose Your Song</h3>
+    <input id="masterFile" class="file-input"
+      type="file" accept="audio/*" onchange="selectMasterSong(event)">
+    <p id="masterStatus" class="notice">
+      Select the audio file you want to prepare.
+    </p>
+    <audio id="masterPlayer" controls class="hidden"></audio>
+  </div>
+
+  <div class="panel">
+    <h3>Payment</h3>
+    <p class="notice">
+      Secure payments and AI mastering are not connected in this version.
+      No payment will be taken.
     </p>
     <button class="primary" onclick="paymentNotice()">Pay Now</button>
-    <p class="note">
-      Payments are not connected in this preview. No money will be charged.
-      Do not enter bank details here.
+  </div>
+</section>
+
+<!-- LAUNCHER PAGE -->
+
+<section id="launcherPage" class="page hidden">
+  <button class="back-button" onclick="goBack()">← Back to Home</button>
+  <h2 class="page-title">🚀 Music Launcher</h2>
+  <div class="panel">
+    <h3>Coming Soon</h3>
+    <p class="notice">
+      Music release tools will be added in a future update.
+    </p>
+  </div>
+</section>
+
+<!-- REEL PAGE -->
+
+<section id="reelPage" class="page hidden">
+  <button class="back-button" onclick="goBack()">← Back</button>
+  <h2 class="page-title">🎬 Studio Flow Reel</h2>
+
+  <div class="panel">
+    <h3>Preview a Video</h3>
+    <input class="file-input" type="file" accept="video/*"
+      onchange="previewVideo(event)">
+    <video id="videoPlayer" class="hidden" controls></video>
+    <p class="notice">
+      This lets you preview a local video. Online publishing needs a connected service.
     </p>
   </div>
 </section>
 
 </main>
 
-<!-- BOTTOM NAVIGATION -->
+<!-- PERMANENT BOTTOM MENU -->
 
-<nav class="bottom-nav" aria-label="Main navigation">
-  <button class="nav-btn active" data-page="home" onclick="showPage('home')">
-    <span>⌂</span>Home
+<nav class="bottom-nav" aria-label="Main menu">
+  <button class="nav-button active" data-tab="home"
+    onclick="openPage('home')">
+    <span class="nav-icon">🏠</span>
+    Home
   </button>
 
-  <button class="nav-btn" data-page="studio" onclick="showPage('studio')">
-    <span>🎙️</span>Studio
+  <button class="nav-button" data-tab="studio"
+    onclick="openPage('studio')">
+    <span class="nav-icon">🎙️</span>
+    Studio
   </button>
 
-  <button class="nav-btn" data-page="mymusic" onclick="showPage('mymusic')">
-    <span>🎵</span>My Music
+  <button class="nav-button" data-tab="music"
+    onclick="openPage('music')">
+    <span class="nav-icon">🎵</span>
+    Music
   </button>
 
-  <button class="nav-btn" data-page="profile" onclick="showPage('profile')">
-    <span>👤</span>Profile
+  <button class="nav-button" data-tab="profile"
+    onclick="openPage('profile')">
+    <span class="nav-icon">👤</span>
+    Profile
   </button>
 </nav>
 
 </div>
 
 <script>
-let isCreatingAccount = false;
-let mediaRecorder = null;
-let recordedChunks = [];
-let microphoneStream = null;
+let creatingAccount = false;
+let previousPage = 'home';
+let recorder = null;
+let recorderStream = null;
+let chunks = [];
 
-function toggleAuth() {
-  isCreatingAccount = !isCreatingAccount;
+function switchAuth() {
+  creatingAccount = !creatingAccount;
 
-  document.getElementById("displayName").classList.toggle(
-    "hidden", !isCreatingAccount
-  );
+  document.getElementById('accountName')
+    .classList.toggle('hidden', !creatingAccount);
 
-  document.getElementById("authAction").textContent =
-    isCreatingAccount ? "Create Account" : "Sign In";
+  document.getElementById('authSubmit').textContent =
+    creatingAccount ? 'Create Account' : 'Sign In';
 
-  document.getElementById("switchAuth").textContent =
-    isCreatingAccount ? "Already have an account? Sign In" : "Create Account";
+  document.getElementById('authSwitch').textContent =
+    creatingAccount ? 'Back to Sign In' : 'Create Account';
 
-  document.getElementById("password").autocomplete =
-    isCreatingAccount ? "new-password" : "current-password";
-
-  document.getElementById("authMessage").textContent = "";
+  document.getElementById('authMessage').textContent = '';
 }
 
 function authenticate() {
-  const email = document.getElementById("email").value.trim().toLowerCase();
-  const password = document.getElementById("password").value;
-  const name = document.getElementById("displayName").value.trim();
-  const message = document.getElementById("authMessage");
+  const email = document.getElementById('accountEmail')
+    .value.trim().toLowerCase();
+  const password = document.getElementById('accountPassword').value;
+  const name = document.getElementById('accountName').value.trim();
+  const message = document.getElementById('authMessage');
 
-  if (!email || !password || !email.includes("@")) {
-    message.textContent = "Enter a valid email and password.";
+  if (!email || !email.includes('@') || password.length < 6) {
+    message.textContent = 'Enter a valid email and password of at least 6 characters.';
     return;
   }
 
-  if (password.length < 6) {
-    message.textContent = "Password must have at least 6 characters.";
-    return;
-  }
-
-  let accounts = {};
+  let users = {};
   try {
-    accounts = JSON.parse(localStorage.getItem("sf_demo_accounts") || "{}");
-  } catch (error) {
-    accounts = {};
+    users = JSON.parse(localStorage.getItem('sf_users') || '{}');
+  } catch (e) {
+    users = {};
   }
 
-  if (isCreatingAccount) {
+  if (creatingAccount) {
     if (!name) {
-      message.textContent = "Enter your display name.";
+      message.textContent = 'Enter your display name.';
       return;
     }
 
-    if (accounts[email]) {
-      message.textContent = "This email already exists. Please sign in.";
+    if (users[email]) {
+      message.textContent = 'This email already exists. Please sign in.';
       return;
     }
 
-    // Preview only: never store real passwords this way.
-    accounts[email] = { name: name };
-    localStorage.setItem("sf_demo_accounts", JSON.stringify(accounts));
-    localStorage.setItem("sf_demo_user", email);
-    localStorage.setItem("sf_demo_name", name);
-    enterApp();
-    return;
-  }
+    /*
+      Preview only. This is not secure account authentication.
+      Do not use real passwords. Connect Supabase Auth before public use.
+    */
+    users[email] = { name: name };
+    localStorage.setItem('sf_users', JSON.stringify(users));
+    localStorage.setItem('sf_name', name);
+    localStorage.setItem('sf_email', email);
+  } else {
+    if (!users[email]) {
+      message.textContent = 'Account not found on this device. Create an account first.';
+      return;
+    }
 
-  if (!accounts[email]) {
-    message.textContent = "Account not found on this device. Create an account first.";
-    return;
+    localStorage.setItem('sf_name', users[email].name || 'Artist');
+    localStorage.setItem('sf_email', email);
   }
-
-  // This preview does not verify passwords securely.
-  // Real authentication must use Supabase Auth.
-  localStorage.setItem("sf_demo_user", email);
-  localStorage.setItem(
-    "sf_demo_name", accounts[email].name || email.split("@")[0]
-  );
 
   enterApp();
 }
 
 function enterApp() {
-  document.getElementById("auth").classList.add("hidden");
-  document.getElementById("app").classList.remove("hidden");
+  document.getElementById('authScreen').classList.add('hidden');
+  document.getElementById('application').classList.remove('hidden');
 
-  const name = localStorage.getItem("sf_demo_name") || "Artist";
-  document.getElementById("greeting").textContent = "Welcome, " + name;
-  document.getElementById("profileName").value = name;
+  const name = localStorage.getItem('sf_name') || 'Artist';
 
-  showPage("home");
+  document.getElementById('welcomeTitle').textContent =
+    'Welcome, ' + name;
+
+  document.getElementById('profileName').value = name;
+
+  openPage('home');
 }
 
-function logout() {
-  localStorage.removeItem("sf_demo_user");
-  document.getElementById("app").classList.add("hidden");
-  document.getElementById("auth").classList.remove("hidden");
-  document.getElementById("email").value = "";
-  document.getElementById("password").value = "";
-  document.getElementById("authMessage").textContent = "";
+function openPage(page) {
+  const current = document.querySelector('.page:not(.hidden)');
+
+  if (current) {
+    previousPage = current.id.replace('Page', '');
+  }
+
+  document.querySelectorAll('.page').forEach(section => {
+    section.classList.add('hidden');
+  });
+
+  const target = document.getElementById(page + 'Page');
+
+  if (target) {
+    target.classList.remove('hidden');
+  } else {
+    document.getElementById('homePage').classList.remove('hidden');
+    page = 'home';
+  }
+
+  const tab = ['home', 'studio', 'music', 'profile'].includes(page)
+    ? page : '';
+
+  document.querySelectorAll('.nav-button').forEach(button => {
+    button.classList.toggle('active', button.dataset.tab === tab);
+  });
+
+  window.scrollTo(0, 0);
 }
 
-function showPage(page) {
-  document.querySelectorAll(".page").forEach(section => {
-    section.classList.add("hidden");
-  });
-
-  const target = document.getElementById(page + "Page");
-  if (target) target.classList.remove("hidden");
-
-  document.querySelectorAll(".nav-btn").forEach(button => {
-    button.classList.toggle("active", button.dataset.page === page);
-  });
-
-  window.scrollTo({ top: 0, behavior: "smooth" });
+function goBack() {
+  openPage(previousPage || 'home');
 }
 
 function saveProfile() {
-  const name = document.getElementById("profileName").value.trim();
+  const name = document.getElementById('profileName').value.trim();
 
   if (!name) {
-    document.getElementById("profileStatus").textContent =
-      "Enter a display name first.";
+    document.getElementById('profileMessage').textContent =
+      'Please enter a display name.';
     return;
   }
 
-  localStorage.setItem("sf_demo_name", name);
-  document.getElementById("greeting").textContent = "Welcome, " + name;
-  document.getElementById("profileStatus").textContent = "Display name saved on this device.";
+  localStorage.setItem('sf_name', name);
+
+  document.getElementById('welcomeTitle').textContent =
+    'Welcome, ' + name;
+
+  document.getElementById('profileMessage').textContent =
+    'Profile updated on this device.';
 }
 
-function loadStudioAudio(event) {
+function logout() {
+  localStorage.removeItem('sf_email');
+  localStorage.removeItem('sf_name');
+
+  document.getElementById('application').classList.add('hidden');
+  document.getElementById('authScreen').classList.remove('hidden');
+  document.getElementById('accountPassword').value = '';
+}
+
+function showSettings() {
+  document.getElementById('settingsPanel').classList.toggle('hidden');
+  document.getElementById('aboutPanel').classList.add('hidden');
+}
+
+function showAbout() {
+  document.getElementById('aboutPanel').classList.toggle('hidden');
+  document.getElementById('settingsPanel').classList.add('hidden');
+}
+
+function toggleAppearance() {
+  const light = document.body.dataset.light !== 'true';
+
+  if (light) {
+    document.body.dataset.light = 'true';
+    document.body.style.background = '#eef3fb';
+    document.body.style.color = '#101828';
+
+    document.querySelectorAll('.box, .panel').forEach(element => {
+      element.style.background = '#ffffff';
+      element.style.color = '#101828';
+    });
+
+    alert('Light appearance enabled for this session.');
+  } else {
+    document.body.dataset.light = 'false';
+    document.body.style.background = '';
+    document.body.style.color = '';
+
+    document.querySelectorAll('.box, .panel').forEach(element => {
+      element.style.background = '';
+      element.style.color = '';
+    });
+
+    alert('Dark appearance enabled.');
+  }
+}
+
+async function toggleRecording() {
+  const button = document.getElementById('recordButton');
+  const status = document.getElementById('recordStatus');
+
+  if (recorder && recorder.state === 'recording') {
+    recorder.stop();
+    button.textContent = 'Start Recording';
+    return;
+  }
+
+  if (!navigator.mediaDevices ||
+      !navigator.mediaDevices.getUserMedia ||
+      typeof MediaRecorder === 'undefined') {
+    status.textContent =
+      'Recording is unavailable in this browser. Open the HTTPS site in Chrome and allow microphone access.';
+    return;
+  }
+
+  try {
+    recorderStream = await navigator.mediaDevices.getUserMedia({
+      audio: true
+    });
+
+    chunks = [];
+    recorder = new MediaRecorder(recorderStream);
+
+    recorder.ondataavailable = event => {
+      if (event.data.size > 0) chunks.push(event.data);
+    };
+
+    recorder.onstop = () => {
+      const blob = new Blob(chunks, {
+        type: recorder.mimeType || 'audio/webm'
+      });
+
+      const player = document.getElementById('recordPlayer');
+      player.src = URL.createObjectURL(blob);
+      player.classList.remove('hidden');
+
+      if (recorderStream) {
+        recorderStream.getTracks().forEach(track => track.stop());
+        recorderStream = null;
+      }
+
+      status.textContent = 'Recording complete. Play your recording above.';
+    };
+
+    recorder.start();
+    button.textContent = 'Stop Recording';
+    status.textContent = 'Recording… Press Stop Recording when finished.';
+  } catch (error) {
+    status.textContent =
+      'Microphone permission was not granted. Check Chrome site permissions.';
+  }
+}
+
+function loadAudio(event, playerId, statusId) {
   const file = event.target.files[0];
   if (!file) return;
 
-  const audio = document.getElementById("studioAudio");
-  audio.src = URL.createObjectURL(file);
-  audio.classList.remove("hidden");
+  const player = document.getElementById(playerId);
+  player.src = URL.createObjectURL(file);
+  player.classList.remove('hidden');
+
+  document.getElementById(statusId).textContent =
+    'Selected: ' + file.name;
 }
 
-function loadMyMusic(event) {
+function importMusic(event) {
   const file = event.target.files[0];
   if (!file) return;
 
-  const audio = document.getElementById("musicAudio");
-  audio.src = URL.createObjectURL(file);
-  audio.classList.remove("hidden");
+  const url = URL.createObjectURL(file);
 
-  document.getElementById("musicStatus").textContent =
-    "Selected: " + file.name;
+  const importPlayer = document.getElementById('importPlayer');
+  importPlayer.src = url;
+  importPlayer.classList.remove('hidden');
+
+  const musicPlayer = document.getElementById('musicPlayer');
+  musicPlayer.src = url;
+  musicPlayer.classList.remove('hidden');
+
+  document.getElementById('importStatus').textContent =
+    'Selected: ' + file.name;
+
+  document.getElementById('musicStatus').textContent =
+    'Selected: ' + file.name;
 }
 
 function importBeat(event) {
   const file = event.target.files[0];
   if (!file) return;
 
-  const audio = document.getElementById("beatAudio");
-  audio.src = URL.createObjectURL(file);
-  audio.classList.remove("hidden");
+  const player = document.getElementById('beatPlayer');
+  player.src = URL.createObjectURL(file);
+  player.classList.remove('hidden');
 
-  document.getElementById("beatStatus").textContent =
-    "Selected: " + file.name;
+  document.getElementById('beatStatus').textContent =
+    'Beat selected: ' + file.name;
 }
 
-function beatNotice() {
-  alert("AI beat generation is not connected yet. You can import a beat from your phone.");
+function generateBeat() {
+  alert(
+    'AI beat generation is not connected yet. You can import a beat from your phone.'
+  );
+}
+
+function selectMasterSong(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const player = document.getElementById('masterPlayer');
+  player.src = URL.createObjectURL(file);
+  player.classList.remove('hidden');
+
+  document.getElementById('masterStatus').textContent =
+    'Selected song: ' + file.name;
+}
+
+function paymentNotice() {
+  alert(
+    'Secure payment is not connected yet. No payment has been taken.'
+  );
 }
 
 function previewVideo(event) {
   const file = event.target.files[0];
   if (!file) return;
 
-  const video = document.getElementById("videoPreview");
-  video.src = URL.createObjectURL(file);
-  video.classList.remove("hidden");
+  const player = document.getElementById('videoPlayer');
+  player.src = URL.createObjectURL(file);
+  player.classList.remove('hidden');
 }
 
-function chooseMasterFile(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  const audio = document.getElementById("masterAudio");
-  audio.src = URL.createObjectURL(file);
-  audio.classList.remove("hidden");
-
-  document.getElementById("masterStatus").textContent =
-    "Selected: " + file.name;
-}
-
-function paymentNotice() {
-  alert("Secure payments are not connected yet. No payment has been made.");
-}
-
-async function toggleRecording() {
-  const button = document.getElementById("recordButton");
-  const status = document.getElementById("recordStatus");
-
-  if (mediaRecorder && mediaRecorder.state === "recording") {
-    mediaRecorder.stop();
-    button.textContent = "Start Recording";
-    return;
-  }
-
-  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia ||
-      typeof MediaRecorder === "undefined") {
-    status.textContent =
-      "Recording is not supported here. Open the site in a compatible browser over HTTPS.";
-    return;
-  }
-
-  try {
-    microphoneStream = await navigator.mediaDevices.getUserMedia({
-      audio: true
-    });
-
-    recordedChunks = [];
-    mediaRecorder = new MediaRecorder(microphoneStream);
-
-    mediaRecorder.ondataavailable = event => {
-      if (event.data && event.data.size > 0) {
-        recordedChunks.push(event.data);
-      }
-    };
-
-    mediaRecorder.onstop = () => {
-      const blob = new Blob(recordedChunks, {
-        type: mediaRecorder.mimeType || "audio/webm"
-      });
-
-      const audio = document.getElementById("recordingPlayback");
-      audio.src = URL.createObjectURL(blob);
-      audio.classList.remove("hidden");
-
-      if (microphoneStream) {
-        microphoneStream.getTracks().forEach(track => track.stop());
-        microphoneStream = null;
-      }
-
-      status.textContent = "Recording ready. Play it back above.";
-    };
-
-    mediaRecorder.start();
-    button.textContent = "Stop Recording";
-    status.textContent = "Recording… Tap Stop Recording when finished.";
-
-  } catch (error) {
-    status.textContent =
-      "Microphone access was not granted. Check your browser permissions.";
-  }
-}
-
-/* Restore the demo session on this device. */
-if (localStorage.getItem("sf_demo_user")) {
+/* Restore this device's preview session. */
+if (localStorage.getItem('sf_email')) {
   enterApp();
 }
 </script>
