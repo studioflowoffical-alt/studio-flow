@@ -1,0 +1,11 @@
+{
+"name": "Studio Flow",
+"short_name": "Studio Flow",
+"description": "Record, master, share and discover music.",
+"start_url": "./",
+"scope": "./",
+"display": "standalone",
+"orientation": "portrait",
+"background_color": "#0B1020",
+"theme_color": "#0B1020"
+}
