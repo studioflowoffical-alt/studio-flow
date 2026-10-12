@@ -1072,3 +1072,15 @@ if (localStorage.getItem('sf_email')) {
 
 </body>
 </html>
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+const SUPABASE_URL = "https://pjpautprizvkwnrtvxfo.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "PASTE_YOUR_KEY_HERE";
+
+window.supabase = createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+</script>
+{sb_publishable_JbO7XIATq3P2NZS01tgG_w_jDqJVAm5}
