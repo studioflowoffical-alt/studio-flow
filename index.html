@@ -766,55 +766,101 @@ function switchAuth() {
   document.getElementById('authMessage').textContent = '';
 }
 
-function authenticate() {
+async function authenticate() {
   const email = document.getElementById('accountEmail')
     .value.trim().toLowerCase();
   const password = document.getElementById('accountPassword').value;
   const name = document.getElementById('accountName').value.trim();
   const message = document.getElementById('authMessage');
+  const button = document.getElementById('authSubmit');
 
-  if (!email || !email.includes('@') || password.length < 6) {
-    message.textContent = 'Enter a valid email and password of at least 6 characters.';
+  message.textContent = '';
+
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    message.textContent = 'Please enter a valid email address.';
     return;
   }
 
-  let users = {};
+  if (!password || password.length < 6) {
+    message.textContent =
+      'Please enter a password with at least 6 characters.';
+    return;
+  }
+
+  if (creatingAccount && !name) {
+    message.textContent = 'Please enter your display name.';
+    return;
+  }
+
+  if (!window.supabase) {
+    message.textContent =
+      'Connection is not ready. Please refresh and try again.';
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = 'Please wait...';
+
   try {
-    users = JSON.parse(localStorage.getItem('sf_users') || '{}');
-  } catch (e) {
-    users = {};
+    if (creatingAccount) {
+      const { data, error } = await window.supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { name: name }
+        }
+      });
+
+      if (error) throw error;
+
+      if (!data.session) {
+        message.textContent =
+          'Account created! Please check your email to confirm your account before signing in.';
+        return;
+      }
+
+      localStorage.setItem('sf_name', name);
+      localStorage.setItem('sf_email', email);
+      enterApp();
+    } else {
+      const { data, error } =
+        await window.supabase.auth.signInWithPassword({
+          email,
+          password
+        });
+
+      if (error) {
+        if (
+          error.message.toLowerCase().includes('invalid login credentials')
+        ) {
+          message.textContent =
+            'Incorrect email or password. Check your details, or create an account if you are new.';
+        } else if (error.message.toLowerCase().includes('email not confirmed')) {
+          message.textContent =
+            'Please confirm your email before signing in.';
+        } else {
+          message.textContent =
+            'Unable to sign in right now. Please try again.';
+        }
+        return;
+      }
+
+      const userName =
+        data.user.user_metadata?.name ||
+        data.user.email ||
+        'Artist';
+
+      localStorage.setItem('sf_name', userName);
+      localStorage.setItem('sf_email', data.user.email);
+      enterApp();
+    }
+  } catch (error) {
+    message.textContent =
+      error.message || 'Something went wrong. Please try again.';
+  } finally {
+    button.disabled = false;
+    button.textContent = creatingAccount ? 'Create Account' : 'Sign In';
   }
-
-  if (creatingAccount) {
-    if (!name) {
-      message.textContent = 'Enter your display name.';
-      return;
-    }
-
-    if (users[email]) {
-      message.textContent = 'This email already exists. Please sign in.';
-      return;
-    }
-
-    /*
-      Preview only. This is not secure account authentication.
-      Do not use real passwords. Connect Supabase Auth before public use.
-    */
-    users[email] = { name: name };
-    localStorage.setItem('sf_users', JSON.stringify(users));
-    localStorage.setItem('sf_name', name);
-    localStorage.setItem('sf_email', email);
-  } else {
-    if (!users[email]) {
-      message.textContent = 'Account not found on this device. Create an account first.';
-      return;
-    }
-
-    localStorage.setItem('sf_name', users[email].name || 'Artist');
-    localStorage.setItem('sf_email', email);
-  }
-
-  enterApp();
 }
 
 function enterApp() {
