@@ -1119,11 +1119,55 @@ function previewVideo(event) {
   player.classList.remove('hidden');
 }
 
-/* Restore this device's preview session. */
-if (localStorage.getItem('sf_email')) {
-  enterApp();
+
+async function restoreSession() {
+  if (!window.supabase) return;
+
+  const { data, error } =
+    await window.supabase.auth.getSession();
+
+  if (error) {
+    console.error('Session check failed:', error.message);
+    return;
+  }
+
+  if (data.session) {
+    const user = data.session.user;
+    const name =
+      user.user_metadata?.name || user.email || 'Artist';
+
+    localStorage.setItem('sf_name', name);
+    localStorage.setItem('sf_email', user.email || '');
+
+    enterApp();
+  }
 }
+
 </script>
+
+<script type="module">
+import { createClient } from
+  "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+const SUPABASE_URL =
+  "https://pjpautprizvkwnrtvxfo.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_JbO7XIATq3P2NZS01tgG_w_jDqJVAm5";
+
+window.supabase = createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+
+window.addEventListener('load', async () => {
+  await restoreSession();
+});
+</script>
+
+</body>
+</html>
+
 
 <script type="module">
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
