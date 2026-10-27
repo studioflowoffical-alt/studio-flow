@@ -929,7 +929,16 @@ function saveProfile() {
     'Profile updated on this device.';
 }
 
-function logout() {
+async function logout() {
+  if (window.supabase) {
+    const { error } = await window.supabase.auth.signOut();
+
+    if (error) {
+      alert('Could not sign out. Please try again.');
+      return;
+    }
+  }
+
   localStorage.removeItem('sf_email');
   localStorage.removeItem('sf_name');
 
