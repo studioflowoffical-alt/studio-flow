@@ -313,40 +313,47 @@ showPanel("recoveryPanel");
 $("backToLogin").onclick =
 () => showPanel("loginPanel");
 
-$("signupForm").addEventListener("submit",async event => {
-event.preventDefault();
+$("signupForm").addEventListener("submit", async event => {
+  event.preventDefault();
 
-const button = $("signupButton");
-button.disabled = true;
-showMessage("Creating your account...");
+  const button = $("signupButton");
+  button.disabled = true;
+  showMessage("Creating your Studio Flow account...");
 
-try {
-const {data,error} = await supabase.auth.signUp({
-email:$("signupEmail").value.trim(),
-password:$("signupPassword").value,
-options:{
-data:{
-full_name:$("signupName").value.trim()
-}
-}
+  try {
+    const name = $("signupName").value.trim();
+    const email = $("signupEmail").value.trim();
+    const password = $("signupPassword").value;
+
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: name
+        }
+      }
+    });
+
+    if (error) throw error;
+
+    if (data.session) {
+      showHome(data.user);
+      return;
+    }
+
+    showPanel("loginPanel");
+    showMessage(
+      "Account created! Please sign in. Check your email if confirmation is required."
+    );
+
+  } catch (error) {
+    showMessage("Account creation failed: " + error.message);
+  } finally {
+    button.disabled = false;
+  }
 });
 
-if(error) throw error;
-
-if(data.session) {
-showHome(data.user);
-} else {
-showMessage(
-"Account created. Please sign in. If email confirmation is enabled, confirm your email first."
-);
-showPanel("loginPanel");
-}
-} catch(error) {
-showMessage(error.message);
-} finally {
-button.disabled = false;
-}
-});
 
 $("loginForm").addEventListener("submit",async event => {
 event.preventDefault();
