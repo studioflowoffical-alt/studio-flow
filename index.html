@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,461 +7,847 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#171717">
 <title>Studio Flow</title>
-<link rel="manifest" href="manifest.json">
+
 <style>
 :root {
   --bg:#171717;
-  --panel:#222;
-  --panel2:#292929;
-  --orange:#ff851b;
-  --white:#fff;
-  --muted:#aaa;
-  --border:#383838;
+  --card:#242424;
+  --card2:#303030;
+  --orange:#F59E0B;
+  --white:#ffffff;
+  --muted:#aaaaaa;
+  --border:#393939;
 }
-* {box-sizing:border-box}
-body {
+*{box-sizing:border-box}
+body{
   margin:0;
   background:var(--bg);
   color:var(--white);
   font-family:Arial,sans-serif;
+  padding-bottom:25px;
+}
+button,input{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+
+.auth{
   min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:22px;
 }
-button,input {font:inherit}
-button {cursor:pointer}
-.app {
+.auth-box{
   width:100%;
-  max-width:520px;
-  margin:auto;
-  padding:24px 20px 40px;
+  max-width:380px;
+  text-align:center;
 }
-.logo {
-  color:var(--orange);
-  font-size:29px;
-  font-weight:900;
-  letter-spacing:2px;
-  margin:18px 0 35px;
+.logo{
+  width:68px;
+  height:68px;
+  border:2px solid var(--orange);
+  border-radius:20px;
+  display:grid;
+  place-items:center;
+  margin:0 auto 15px;
+  font-size:30px;
 }
-.logo span {color:white}
-.card {
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:24px;
-}
-h1 {font-size:27px;margin:0 0 10px}
-h2 {font-size:21px}
-p {color:var(--muted);line-height:1.5}
-.field {margin:18px 0}
-label {
-  display:block;
+.auth-box h1{font-size:27px}
+.muted,.notice{
+  color:var(--muted);
   font-size:13px;
-  color:#ccc;
-  margin-bottom:8px;
+  line-height:1.6;
 }
-input {
+.field{
   width:100%;
-  padding:15px;
-  border-radius:10px;
+  padding:14px;
+  margin-top:12px;
+  border-radius:12px;
   border:1px solid var(--border);
-  background:#171717;
+  background:var(--card);
   color:white;
-  outline:none;
 }
-input:focus {border-color:var(--orange)}
-.primary {
+.primary,.secondary{
   width:100%;
-  padding:15px;
+  padding:14px;
   border:0;
-  border-radius:11px;
+  border-radius:12px;
+  margin-top:12px;
+  font-weight:bold;
+}
+.primary{
   background:var(--orange);
   color:#171717;
-  font-weight:bold;
-  margin-top:12px;
 }
-.primary:disabled {opacity:.5}
-.secondary {
-  background:var(--panel2);
+.secondary{
+  background:var(--card2);
   color:white;
   border:1px solid var(--border);
 }
-.link {
-  color:var(--orange);
+.link-button{
   background:none;
   border:0;
-  padding:12px 0;
-}
-.message {
-  font-size:14px;
-  min-height:22px;
   color:var(--orange);
-  margin-top:12px;
-  overflow-wrap:anywhere;
+  margin-top:15px;
 }
-.hidden {display:none!important}
-.welcome {
-  margin-top:30px;
-  padding:25px;
-  border-radius:18px;
-  background:linear-gradient(135deg,#292929,#1c1c1c);
-  border:1px solid var(--border);
+
+header{
+  height:65px;
+  padding:0 17px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:#202020;
+  border-bottom:1px solid var(--border);
+  position:sticky;
+  top:0;
+  z-index:10;
 }
-.welcome h1 {color:var(--orange)}
-.action {
-  display:block;
-  width:100%;
-  text-align:left;
-  background:var(--panel2);
+.brand{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:19px;
+  font-weight:bold;
+}
+.brand-icon{color:var(--orange);font-size:25px}
+.header-actions{display:flex;gap:10px}
+.header-button{
+  width:39px;
+  height:39px;
+  border-radius:50%;
   border:1px solid var(--border);
+  background:var(--card2);
   color:white;
-  padding:19px;
-  margin:13px 0;
-  border-radius:13px;
+  font-size:19px;
+  position:relative;
 }
-.action strong {display:block;margin-bottom:6px}
-.small {font-size:12px;color:var(--muted)}
+.dot{
+  position:absolute;
+  top:5px;
+  right:5px;
+  width:8px;
+  height:8px;
+  background:var(--orange);
+  border-radius:50%;
+}
+
+main{
+  width:100%;
+  max-width:600px;
+  margin:auto;
+  padding:20px 14px;
+}
+.page{min-height:70vh}
+.page-title{font-size:22px;margin:5px 0 7px}
+.page-description{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.6;
+  margin:0 0 19px;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+.box{
+  min-height:112px;
+  padding:14px;
+  text-align:left;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:17px;
+  color:white;
+}
+.box:active{transform:scale(.97)}
+.box-icon{
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  background:#393127;
+  color:var(--orange);
+  font-size:21px;
+  margin-bottom:10px;
+}
+.box-title{font-size:14px;font-weight:bold}
+.box-description{
+  font-size:11px;
+  color:var(--muted);
+  margin-top:5px;
+  line-height:1.4;
+}
+.wide{grid-column:span 2}
+.panel{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:15px;
+  margin-bottom:13px;
+}
+.panel h3{font-size:15px;margin:0 0 10px}
+.back-button{
+  background:none;
+  border:0;
+  color:var(--orange);
+  padding:8px 0 17px;
+}
+.file-input{
+  width:100%;
+  padding:10px 0;
+  color:var(--muted);
+}
+audio{width:100%;margin-top:12px}
+.notification-item{
+  padding:13px;
+  border-radius:12px;
+  background:var(--card2);
+  margin-top:10px;
+}
+.notification-item strong{font-size:13px}
+.notification-item p{
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.5;
+  margin-bottom:0;
+}
+.status{color:var(--orange);font-size:12px}
 </style>
 </head>
 
 <body>
-<main class="app">
 
-<div class="logo">STUDIO <span>FLOW</span></div>
+<!-- ACCOUNT SCREEN -->
+<section id="authScreen" class="auth">
+  <div class="auth-box">
+    <div class="logo">🎙️</div>
+    <h1>STUDIO FLOW</h1>
+    <p class="muted">Your Music. Your Sound. Your Future.</p>
 
-<section id="authScreen" class="card">
+    <input id="accountName" class="field hidden"
+      placeholder="Your name" autocomplete="name">
 
-<div id="signupPanel">
-<h1>Create your account</h1>
-<p>Welcome to Studio Flow. Create your artist account to get started.</p>
+    <input id="accountEmail" class="field"
+      type="email" placeholder="Email address" autocomplete="email">
 
-<form id="signupForm">
-<div class="field">
-<label for="signupName">Full name</label>
-<input id="signupName" type="text" autocomplete="name" required>
-</div>
+    <input id="accountPassword" class="field"
+      type="password" placeholder="Password"
+      autocomplete="current-password">
 
-<div class="field">
-<label for="signupEmail">Email address</label>
-<input id="signupEmail" type="email" autocomplete="email" required>
-</div>
+    <button id="authSubmit" class="primary"
+      onclick="authenticate()">Sign In</button>
 
-<div class="field">
-<label for="signupPassword">Password</label>
-<input id="signupPassword" type="password" minlength="8" autocomplete="new-password" required>
-</div>
+    <button id="authSwitch" class="secondary"
+      onclick="switchAuth()">Create Account</button>
 
-<button class="primary" type="submit" id="signupButton">Create account</button>
-</form>
+    <button class="link-button"
+      onclick="recoverPassword()">Forgot password?</button>
 
-<p>Already have an account?</p>
-<button class="link" id="showLogin">Sign in</button>
-</div>
-
-<div id="loginPanel" class="hidden">
-<h1>Welcome back</h1>
-<p>Sign in to continue to Studio Flow.</p>
-
-<form id="loginForm">
-<div class="field">
-<label for="loginEmail">Email address</label>
-<input id="loginEmail" type="email" autocomplete="email" required>
-</div>
-
-<div class="field">
-<label for="loginPassword">Password</label>
-<input id="loginPassword" type="password" autocomplete="current-password" required>
-</div>
-
-<button class="primary" type="submit">Sign in</button>
-</form>
-
-<button class="link" id="showRecovery">Forgot password?</button>
-<br>
-<button class="link" id="showSignup">Create an account</button>
-</div>
-
-<div id="recoveryPanel" class="hidden">
-<h1>Recover password</h1>
-<p>Enter your account email. We'll send you a password reset link.</p>
-
-<form id="recoveryForm">
-<div class="field">
-<label for="recoveryEmail">Email address</label>
-<input id="recoveryEmail" type="email" required>
-</div>
-<button class="primary" type="submit">Send recovery link</button>
-</form>
-
-<button class="link" id="backToLogin">Back to sign in</button>
-</div>
-
-<div id="newPasswordPanel" class="hidden">
-<h1>Set a new password</h1>
-<form id="newPasswordForm">
-<div class="field">
-<label for="newPassword">New password</label>
-<input id="newPassword" type="password" minlength="8" required>
-</div>
-<button class="primary" type="submit">Save new password</button>
-</form>
-</div>
-
-<div id="authMessage" class="message" role="status"></div>
+    <p id="authMessage" class="notice"></p>
+  </div>
 </section>
 
-<section id="homeScreen" class="hidden">
+<!-- MAIN APPLICATION -->
+<div id="application" class="hidden">
 
-<div class="welcome">
-<p>YOUR MUSIC. YOUR STUDIO.</p>
-<h1>Welcome to Studio Flow</h1>
-<p id="userGreeting">Your artist account is ready.</p>
-</div>
+<header>
+  <div class="brand">
+    <span class="brand-icon">◉</span>
+    <span>Studio Flow</span>
+  </div>
 
-<h2>Your Studio</h2>
+  <div class="header-actions">
+    <button class="header-button"
+      aria-label="Notifications"
+      onclick="openPage('notifications')">
+      ♡
+      <span class="dot"></span>
+    </button>
 
-<div class="action">
-<strong>Recording Studio</strong>
-<span class="small">Recording tools are not connected yet.</span>
-</div>
+    <button class="header-button"
+      aria-label="Profile"
+      onclick="openPage('profile')">👤</button>
+  </div>
+</header>
 
-<div class="action">
-<strong>AI Beat & Mastering</strong>
-<span class="small">Audio service integration is still required.</span>
-</div>
+<main>
 
-<div class="action">
-<strong>Distribute Your Music</strong>
-<span class="small">Distribution partner integration is still required.</span>
-</div>
+<!-- HOME DASHBOARD -->
+<section id="homePage" class="page">
+  <h2 class="page-title">Welcome to Studio Flow</h2>
+  <p class="page-description">
+    Your music studio. Everything you need in one place.
+  </p>
 
-<div class="action">
-<strong>Artist Profile</strong>
-<span class="small">Your account information.</span>
-</div>
+  <div class="grid">
 
-<button class="primary secondary" id="signOutButton">Sign out</button>
-<div id="homeMessage" class="message" role="status"></div>
+    <button class="box" onclick="openPage('home')">
+      <div class="box-icon">⌂</div>
+      <div class="box-title">Home</div>
+      <div class="box-description">Your main dashboard.</div>
+    </button>
+
+    <button class="box" onclick="openPage('profile')">
+      <div class="box-icon">♙</div>
+      <div class="box-title">Profile</div>
+      <div class="box-description">Your artist account.</div>
+    </button>
+
+    <button class="box" onclick="openPage('studio')">
+      <div class="box-icon">🎙️</div>
+      <div class="box-title">Studio Mic</div>
+      <div class="box-description">Record your music.</div>
+    </button>
+
+    <button class="box" onclick="openPage('music')">
+      <div class="box-icon">♫</div>
+      <div class="box-title">Music</div>
+      <div class="box-description">Your songs and beats.</div>
+    </button>
+
+    <button class="box wide"
+      onclick="openPage('distribute')">
+      <div class="box-icon">➤</div>
+      <div class="box-title">Distribute Music</div>
+      <div class="box-description">
+        Prepare your music for distribution.
+      </div>
+    </button>
+
+  </div>
 </section>
 
-<p class="small">Studio Flow · Artist account</p>
+<!-- PROFILE -->
+<section id="profilePage" class="page hidden">
+  <button class="back-button" onclick="goBack()">← Back</button>
+  <h2 class="page-title">My Profile</h2>
+  <p class="page-description">Your artist information and account.</p>
+
+  <div class="panel">
+    <div class="logo">👤</div>
+    <label class="notice" for="profileName">Artist name</label>
+    <input id="profileName" class="field"
+      placeholder="Your name">
+    <button class="primary" onclick="saveProfile()">
+      Save Profile
+    </button>
+    <p id="profileMessage" class="notice"></p>
+  </div>
+
+  <div class="panel">
+    <h3>Account</h3>
+    <p id="profileEmail" class="notice"></p>
+    <button class="secondary" onclick="logout()">Sign Out</button>
+  </div>
+</section>
+
+<!-- STUDIO MIC -->
+<section id="studioPage" class="page hidden">
+  <button class="back-button" onclick="goBack()">← Back</button>
+  <h2 class="page-title">Studio Mic</h2>
+  <p class="page-description">Record your voice and work on your sound.</p>
+
+  <div class="panel">
+    <h3>Record Voice</h3>
+    <button id="recordButton" class="primary"
+      onclick="toggleRecording()">Start Recording</button>
+    <p id="recordStatus" class="notice"></p>
+    <audio id="recordPlayer" controls class="hidden"></audio>
+  </div>
+
+  <div class="panel">
+    <h3>Import Audio</h3>
+    <input class="file-input" type="file"
+      accept="audio/*"
+      onchange="loadAudio(event,'studioPlayer','studioStatus')">
+    <p id="studioStatus" class="notice"></p>
+    <audio id="studioPlayer" controls class="hidden"></audio>
+  </div>
+
+  <button class="box wide" onclick="openPage('beat')">
+    <div class="box-icon">🎧</div>
+    <div class="box-title">Beat Options</div>
+    <div class="box-description">Continue to your beat options.</div>
+  </button>
+</section>
+
+<!-- MUSIC -->
+<section id="musicPage" class="page hidden">
+  <button class="back-button" onclick="goBack()">← Back</button>
+  <h2 class="page-title">My Music</h2>
+  <p class="page-description">Manage your music on this device.</p>
+
+  <div class="panel">
+    <h3>Import Song</h3>
+    <input class="file-input" type="file"
+      accept="audio/*" onchange="importMusic(event)">
+    <p id="musicStatus" class="notice">No song selected.</p>
+    <audio id="musicPlayer" controls class="hidden"></audio>
+  </div>
+
+  <div class="grid">
+    <button class="box" onclick="openPage('beat')">
+      <div class="box-icon">🎧</div>
+      <div class="box-title">My Beats</div>
+    </button>
+    <button class="box" onclick="openPage('master')">
+      <div class="box-icon">✨</div>
+      <div class="box-title">Master My Song</div>
+    </button>
+  </div>
+</section>
+
+<!-- DISTRIBUTE -->
+<section id="distributePage" class="page hidden">
+  <button class="back-button" onclick="goBack()">← Back</button>
+  <h2 class="page-title">Distribute Music</h2>
+  <p class="page-description">
+    Prepare your music for release on music platforms.
+  </p>
+
+  <div class="panel">
+    <h3>Music Distribution</h3>
+    <p class="notice">
+      The distribution service and release submission
+      connection are not active yet.
+    </p>
+    <p class="status">Distribution setup pending.</p>
+  </div>
+</section>
+
+<!-- NOTIFICATIONS -->
+<section id="notificationsPage" class="page hidden">
+  <button class="back-button" onclick="goBack()">← Back</button>
+  <h2 class="page-title">Notifications</h2>
+  <p class="page-description">
+    Updates about your music and Studio Flow account.
+  </p>
+
+  <div class="panel">
+    <h3>Song production alerts</h3>
+    <p class="notice">
+      When connected production is ready, an alert can
+      appear here to tell you your song is finished.
+    </p>
+    <button class="primary" onclick="enableNotifications()">
+      Enable Phone Notifications
+    </button>
+    <p id="notificationStatus" class="notice"></p>
+  </div>
+
+  <div id="notificationList">
+    <div class="notification-item">
+      <strong>Welcome to Studio Flow</strong>
+      <p>Your notification centre is ready.</p>
+    </div>
+  </div>
+</section>
+
+<!-- BEAT -->
+<section id="beatPage" class="page hidden">
+  <button class="back-button" onclick="goBack()">← Back</button>
+  <h2 class="page-title">Beat Options</h2>
+
+  <div class="grid">
+    <button class="box" onclick="generateBeat()">
+      <div class="box-icon">✨</div>
+      <div class="box-title">Generate a Beat</div>
+    </button>
+
+    <button class="box"
+      onclick="document.getElementById('beatFile').click()">
+      <div class="box-icon">📁</div>
+      <div class="box-title">Import Beat</div>
+    </button>
+  </div>
+
+  <input id="beatFile" class="hidden" type="file"
+    accept="audio/*" onchange="importBeat(event)">
+
+  <p id="beatStatus" class="notice"></p>
+  <audio id="beatPlayer" controls class="hidden"></audio>
+</section>
+
+<!-- MASTER -->
+<section id="masterPage" class="page hidden">
+  <button class="back-button" onclick="goBack()">← Back</button>
+  <h2 class="page-title">Master My Song</h2>
+
+  <div class="panel">
+    <h3>Choose Your Song</h3>
+    <input class="file-input" type="file"
+      accept="audio/*" onchange="selectMasterSong(event)">
+    <p id="masterStatus" class="notice"></p>
+    <audio id="masterPlayer" controls class="hidden"></audio>
+  </div>
+
+  <div class="panel">
+    <h3>Mastering</h3>
+    <p class="notice">
+      Secure payment and mastering processing are not connected yet.
+      No payment will be taken.
+    </p>
+  </div>
+</section>
+
+<!-- PASSWORD RESET -->
+<section id="resetPage" class="page hidden">
+  <h2 class="page-title">Create a New Password</h2>
+  <input id="newPassword" class="field"
+    type="password" placeholder="New password">
+  <button class="primary" onclick="updatePassword()">
+    Update Password
+  </button>
+  <p id="resetMessage" class="notice"></p>
+</section>
+
 </main>
+</div>
+
+<script>
+let creatingAccount=false;
+let previousPage='home';
+let recorder=null;
+let recorderStream=null;
+let chunks=[];
+
+function switchAuth(){
+  creatingAccount=!creatingAccount;
+  document.getElementById('accountName').classList.toggle(
+    'hidden',!creatingAccount
+  );
+  document.getElementById('authSubmit').textContent=
+    creatingAccount?'Create Account':'Sign In';
+  document.getElementById('authSwitch').textContent=
+    creatingAccount?'Back to Sign In':'Create Account';
+  document.getElementById('authMessage').textContent='';
+}
+
+async function authenticate(){
+  const email=document.getElementById('accountEmail')
+    .value.trim().toLowerCase();
+  const password=document.getElementById('accountPassword').value;
+  const name=document.getElementById('accountName').value.trim();
+  const message=document.getElementById('authMessage');
+  const button=document.getElementById('authSubmit');
+
+  message.textContent='';
+
+  if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    message.textContent='Enter a valid email address.';
+    return;
+  }
+  if(!password || password.length<6){
+    message.textContent='Password must contain at least 6 characters.';
+    return;
+  }
+  if(creatingAccount && !name){
+    message.textContent='Enter your name.';
+    return;
+  }
+  if(!window.supabase){
+    message.textContent='Connection is not ready. Refresh and try again.';
+    return;
+  }
+
+  button.disabled=true;
+  button.textContent='Please wait...';
+
+  try{
+    if(creatingAccount){
+      const {data,error}=await window.supabase.auth.signUp({
+        email,
+        password,
+        options:{data:{name:name}}
+      });
+      if(error) throw error;
+
+      if(!data.session){
+        message.textContent=
+          'Account created. Check your email to confirm before signing in.';
+        return;
+      }
+
+      enterApp(data.user);
+    }else{
+      const {data,error}=await window.supabase.auth.signInWithPassword({
+        email,password
+      });
+      if(error) throw error;
+      enterApp(data.user);
+    }
+  }catch(error){
+    message.textContent=error.message||'Something went wrong.';
+  }finally{
+    button.disabled=false;
+    button.textContent=creatingAccount?'Create Account':'Sign In';
+  }
+}
+
+function enterApp(user){
+  const name=user?.user_metadata?.name || user?.email || 'Artist';
+  document.getElementById('authScreen').classList.add('hidden');
+  document.getElementById('application').classList.remove('hidden');
+  document.getElementById('profileName').value=name;
+  document.getElementById('profileEmail').textContent=user?.email||'';
+  openPage('home');
+}
+
+function openPage(page){
+  const current=document.querySelector('.page:not(.hidden)');
+  if(current) previousPage=current.id.replace('Page','');
+
+  document.querySelectorAll('.page').forEach(section=>{
+    section.classList.add('hidden');
+  });
+
+  const target=document.getElementById(page+'Page');
+  if(target) target.classList.remove('hidden');
+  else document.getElementById('homePage').classList.remove('hidden');
+
+  window.scrollTo(0,0);
+}
+
+function goBack(){
+  openPage(previousPage || 'home');
+}
+
+async function saveProfile(){
+  const name=document.getElementById('profileName').value.trim();
+  const message=document.getElementById('profileMessage');
+
+  if(!name){
+    message.textContent='Enter your artist name.';
+    return;
+  }
+
+  try{
+    const {error}=await window.supabase.auth.updateUser({
+      data:{name:name}
+    });
+    if(error) throw error;
+    message.textContent='Profile name updated.';
+  }catch(error){
+    message.textContent=error.message||'Could not update profile.';
+  }
+}
+
+async function logout(){
+  const {error}=await window.supabase.auth.signOut();
+  if(error){
+    alert('Could not sign out. Please try again.');
+    return;
+  }
+  document.getElementById('application').classList.add('hidden');
+  document.getElementById('authScreen').classList.remove('hidden');
+  document.getElementById('accountPassword').value='';
+}
+
+async function recoverPassword(){
+  const email=document.getElementById('accountEmail').value.trim();
+  const message=document.getElementById('authMessage');
+
+  if(!email){
+    message.textContent='Enter your email address first.';
+    return;
+  }
+
+  try{
+    const {error}=await window.supabase.auth.resetPasswordForEmail(email,{
+      redirectTo:window.location.origin+window.location.pathname
+    });
+    if(error) throw error;
+    message.textContent='Password reset link sent. Check your email.';
+  }catch(error){
+    message.textContent=error.message||'Could not send reset email.';
+  }
+}
+
+async function updatePassword(){
+  const password=document.getElementById('newPassword').value;
+  const message=document.getElementById('resetMessage');
+
+  if(password.length<6){
+    message.textContent='Use at least 6 characters.';
+    return;
+  }
+
+  try{
+    const {error}=await window.supabase.auth.updateUser({
+      password:password
+    });
+    if(error) throw error;
+    message.textContent='Password updated successfully.';
+    openPage('home');
+  }catch(error){
+    message.textContent=error.message||'Could not update password.';
+  }
+}
+
+async function restoreSession(){
+  if(!window.supabase) return;
+
+  const {data}=await window.supabase.auth.getSession();
+  if(data?.session) enterApp(data.session.user);
+
+  window.supabase.auth.onAuthStateChange((event,session)=>{
+    if(event==='PASSWORD_RECOVERY'){
+      document.getElementById('authScreen').classList.add('hidden');
+      document.getElementById('application').classList.remove('hidden');
+      openPage('reset');
+    }
+  });
+}
+
+async function enableNotifications(){
+  const status=document.getElementById('notificationStatus');
+
+  if(!('Notification' in window)){
+    status.textContent='This browser does not support phone notifications.';
+    return;
+  }
+
+  const permission=await Notification.requestPermission();
+
+  if(permission==='granted'){
+    status.textContent='Notification permission enabled.';
+  }else{
+    status.textContent='Notification permission was not granted.';
+  }
+}
+
+/* Called when a connected production service reports a finished song.
+   Song production is not connected yet. */
+function notifySongReady(songName){
+  const title='Studio Flow';
+  const message=(songName||'Your song')+' is ready.';
+
+  const list=document.getElementById('notificationList');
+  const item=document.createElement('div');
+  item.className='notification-item';
+
+  const heading=document.createElement('strong');
+  heading.textContent='Song production complete';
+
+  const description=document.createElement('p');
+  description.textContent=message;
+
+  item.append(heading,description);
+  list.prepend(item);
+
+  if('Notification' in window && Notification.permission==='granted'){
+    new Notification(title,{body:message});
+  }
+}
+
+async function toggleRecording(){
+  const button=document.getElementById('recordButton');
+  const status=document.getElementById('recordStatus');
+
+  if(recorder && recorder.state==='recording'){
+    recorder.stop();
+    button.textContent='Start Recording';
+    return;
+  }
+
+  try{
+    recorderStream=await navigator.mediaDevices.getUserMedia({audio:true});
+    chunks=[];
+    recorder=new MediaRecorder(recorderStream);
+
+    recorder.ondataavailable=e=>{
+      if(e.data.size>0) chunks.push(e.data);
+    };
+
+    recorder.onstop=()=>{
+      const blob=new Blob(chunks,{
+        type:recorder.mimeType||'audio/webm'
+      });
+      const player=document.getElementById('recordPlayer');
+      player.src=URL.createObjectURL(blob);
+      player.classList.remove('hidden');
+
+      recorderStream.getTracks().forEach(track=>track.stop());
+      recorderStream=null;
+      status.textContent='Recording complete.';
+    };
+
+    recorder.start();
+    button.textContent='Stop Recording';
+    status.textContent='Recording...';
+  }catch(error){
+    status.textContent='Allow microphone access in Chrome to record.';
+  }
+}
+
+function loadAudio(event,playerId,statusId){
+  const file=event.target.files[0];
+  if(!file) return;
+
+  const player=document.getElementById(playerId);
+  player.src=URL.createObjectURL(file);
+  player.classList.remove('hidden');
+  document.getElementById(statusId).textContent='Selected: '+file.name;
+}
+
+function importMusic(event){
+  const file=event.target.files[0];
+  if(!file) return;
+
+  const player=document.getElementById('musicPlayer');
+  player.src=URL.createObjectURL(file);
+  player.classList.remove('hidden');
+  document.getElementById('musicStatus').textContent='Selected: '+file.name;
+}
+
+function importBeat(event){
+  const file=event.target.files[0];
+  if(!file) return;
+
+  const player=document.getElementById('beatPlayer');
+  player.src=URL.createObjectURL(file);
+  player.classList.remove('hidden');
+  document.getElementById('beatStatus').textContent='Selected: '+file.name;
+}
+
+function generateBeat(){
+  alert('AI beat generation is not connected yet.');
+}
+
+function selectMasterSong(event){
+  const file=event.target.files[0];
+  if(!file) return;
+
+  const player=document.getElementById('masterPlayer');
+  player.src=URL.createObjectURL(file);
+  player.classList.remove('hidden');
+  document.getElementById('masterStatus').textContent='Selected: '+file.name;
+}
+</script>
 
 <script type="module">
 import { createClient } from
 "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
 const SUPABASE_URL =
-"https://wqhnrsozsgyfosvzkppz.supabase.co";
+"https://wqhnrsozsgyfoszvzkppz.supabase.co";
 
 const SUPABASE_PUBLISHABLE_KEY =
 "sb_publishable_S_Jv_5K8rOME8hsqkcCMSQ_phrBXwuO";
 
-const supabase = createClient(
-SUPABASE_URL,
-SUPABASE_PUBLISHABLE_KEY
+window.supabase=createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
 );
 
-const $ = id => document.getElementById(id);
-
-const panels = [
-"signupPanel",
-"loginPanel",
-"recoveryPanel",
-"newPasswordPanel"
-];
-
-function showPanel(name) {
-panels.forEach(id => {
-$(id).classList.toggle("hidden",id !== name);
-});
-$("authMessage").textContent = "";
-}
-
-function showMessage(message,target="authMessage") {
-$(target).textContent = message;
-}
-
-function showHome(user) {
-$("authScreen").classList.add("hidden");
-$("homeScreen").classList.remove("hidden");
-
-const name =
-user?.user_metadata?.full_name ||
-user?.email ||
-"Artist";
-
-$("userGreeting").textContent =
-"Signed in as " + name;
-}
-
-function showAuth() {
-$("homeScreen").classList.add("hidden");
-$("authScreen").classList.remove("hidden");
-showPanel("loginPanel");
-}
-
-$("showLogin").onclick =
-() => showPanel("loginPanel");
-
-$("showSignup").onclick =
-() => showPanel("signupPanel");
-
-$("showRecovery").onclick = () => {
-$("recoveryEmail").value =
-$("loginEmail").value;
-showPanel("recoveryPanel");
-};
-
-$("backToLogin").onclick =
-() => showPanel("loginPanel");
-
-$("signupForm").addEventListener("submit", async event => {
-  event.preventDefault();
-
-  const button = $("signupButton");
-  button.disabled = true;
-  showMessage("Creating your Studio Flow account...");
-
-  try {
-    const name = $("signupName").value.trim();
-    const email = $("signupEmail").value.trim();
-    const password = $("signupPassword").value;
-
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          full_name: name
-        }
-      }
-    });
-
-    if (error) throw error;
-
-    if (data.session) {
-      showHome(data.user);
-      return;
-    }
-
-    showPanel("loginPanel");
-    showMessage(
-      "Account created! Please sign in. Check your email if confirmation is required."
-    );
-
-  } catch (error) {
-    showMessage("Account creation failed: " + error.message);
-  } finally {
-    button.disabled = false;
-  }
-});
-
-
-$("loginForm").addEventListener("submit",async event => {
-event.preventDefault();
-showMessage("Signing in...");
-
-try {
-const {data,error} =
-await supabase.auth.signInWithPassword({
-email:$("loginEmail").value.trim(),
-password:$("loginPassword").value
-});
-
-if(error) throw error;
-showHome(data.user);
-} catch(error) {
-showMessage(error.message);
-}
-});
-
-$("recoveryForm").addEventListener("submit",async event => {
-event.preventDefault();
-showMessage("Sending recovery email...");
-
-try {
-const {error} =
-await supabase.auth.resetPasswordForEmail(
-$("recoveryEmail").value.trim(),
-{
-redirectTo:window.location.origin +
-window.location.pathname
-}
-);
-
-if(error) throw error;
-
-showMessage(
-"Recovery link sent. Check your email."
-);
-} catch(error) {
-showMessage(error.message);
-}
-});
-
-$("newPasswordForm").addEventListener("submit",async event => {
-event.preventDefault();
-showMessage("Updating password...");
-
-try {
-const {error} = await supabase.auth.updateUser({
-password:$("newPassword").value
-});
-
-if(error) throw error;
-
-showMessage("Password updated. You can sign in now.");
-await supabase.auth.signOut();
-showPanel("loginPanel");
-} catch(error) {
-showMessage(error.message);
-}
-});
-
-$("signOutButton").onclick = async () => {
-showMessage("Signing out...","homeMessage");
-
-const {error} = await supabase.auth.signOut();
-
-if(error) {
-showMessage(error.message,"homeMessage");
-return;
-}
-
-showAuth();
-};
-
-supabase.auth.onAuthStateChange((event,session) => {
-if(event === "PASSWORD_RECOVERY") {
-$("homeScreen").classList.add("hidden");
-$("authScreen").classList.remove("hidden");
-showPanel("newPasswordPanel");
-return;
-}
-
-if(session?.user) {
-showHome(session.user);
-} else if(event === "SIGNED_OUT") {
-showAuth();
-}
-});
-
-const {data:{session},error} =
-await supabase.auth.getSession();
-
-if(error) {
-showMessage(error.message);
-} else if(session?.user) {
-showHome(session.user);
-} else {
-showAuth();
-}
-
-if("serviceWorker" in navigator) {
-window.addEventListener("load",() => {
-navigator.serviceWorker.register("./service-worker.js")
-.catch(error => console.log("Service worker:",error));
-});
-}
+window.dispatchEvent(new Event('studio-flow-ready'));
 </script>
+
+<script>
+window.addEventListener('studio-flow-ready',restoreSession);
+</script>
+
 </body>
 </html>
