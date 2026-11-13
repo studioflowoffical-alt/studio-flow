@@ -51,7 +51,42 @@ audio{width:100%;margin-top:12px}
 .notification-item p{color:var(--muted);font-size:12px;line-height:1.5;margin-bottom:0}
 .status{color:var(--orange);font-size:12px}
 
-/* Bottom navigation */
+/* Pet avatars */
+.pet-avatar{
+ width:39px;height:39px;border-radius:50%;
+ display:inline-flex;align-items:center;justify-content:center;
+ flex-shrink:0;overflow:hidden;
+ border:2px solid var(--orange);
+ background:linear-gradient(145deg,#55402a,#29221c);
+ box-shadow:0 0 0 2px #5a4022,0 3px 10px #0008;
+ font-size:23px;line-height:1;
+}
+.pet-avatar.large{
+ width:100px;height:100px;font-size:57px;
+ margin:0 auto 18px;
+ border-width:3px;
+ box-shadow:0 0 0 4px #5a4022,0 5px 18px #0009;
+}
+.pet-avatar.small{
+ width:31px;height:31px;font-size:18px;
+}
+.avatar-header{
+ padding:0;
+ display:flex;align-items:center;justify-content:center;
+ overflow:visible;
+}
+.avatar-header .pet-avatar{
+ width:31px;height:31px;font-size:19px;
+}
+.pet-nav-icon{
+ width:27px;height:27px;
+ font-size:18px;
+}
+.pet-home-icon{
+ width:38px;height:38px;
+ font-size:22px;
+}
+
 .bottom-nav{
  position:fixed;left:0;right:0;bottom:0;z-index:50;
  display:grid;grid-template-columns:repeat(4,1fr);
@@ -68,7 +103,6 @@ audio{width:100%;margin-top:12px}
 .nav-button.active{color:var(--orange)}
 .nav-button.active .nav-icon{transform:translateY(-2px)}
 
-/* iPhone-style swipe-back indicator */
 #swipeIndicator{
  position:fixed;left:0;top:45%;z-index:100;
  width:4px;height:65px;background:var(--orange);
@@ -103,7 +137,9 @@ audio{width:100%;margin-top:12px}
  <div class="brand"><span class="brand-icon">◉</span><span>Studio Flow</span></div>
  <div class="header-actions">
   <button class="header-button" aria-label="Notifications" onclick="openPage('notifications')">♡<span class="dot"></span></button>
-  <button class="header-button" aria-label="Profile" onclick="openPage('profile')">👤</button>
+  <button class="header-button avatar-header" aria-label="Profile" onclick="openPage('profile')">
+   <span id="headerPetAvatar" class="pet-avatar">🐶</span>
+  </button>
  </div>
 </header>
 
@@ -113,7 +149,10 @@ audio{width:100%;margin-top:12px}
  <p class="page-description">Your music studio. Everything you need in one place.</p>
  <div class="grid">
   <button class="box" onclick="openPage('home')"><div class="box-icon">⌂</div><div class="box-title">Home</div><div class="box-description">Your main dashboard.</div></button>
-  <button class="box" onclick="openPage('profile')"><div class="box-icon">♙</div><div class="box-title">Profile</div><div class="box-description">Your artist account.</div></button>
+  <button class="box" onclick="openPage('profile')">
+   <div id="homePetAvatar" class="box-icon pet-home-icon">🐶</div>
+   <div class="box-title">Profile</div><div class="box-description">Your artist account.</div>
+  </button>
   <button class="box" onclick="openPage('studio')"><div class="box-icon">🎙️</div><div class="box-title">Studio Mic</div><div class="box-description">Record your music.</div></button>
   <button class="box" onclick="openPage('music')"><div class="box-icon">♫</div><div class="box-title">Music</div><div class="box-description">Your songs and beats.</div></button>
   <button class="box wide" onclick="openPage('distribute')"><div class="box-icon">➤</div><div class="box-title">Distribute Music</div><div class="box-description">Prepare your music for distribution.</div></button>
@@ -125,7 +164,8 @@ audio{width:100%;margin-top:12px}
  <h2 class="page-title">My Profile</h2>
  <p class="page-description">Your artist information and account.</p>
  <div class="panel">
-  <div class="logo">👤</div>
+  <div id="profilePetAvatar" class="pet-avatar large">🐶</div>
+  <p class="notice" style="text-align:center">Your Studio Flow pet avatar</p>
   <label class="notice" for="profileName">Artist name</label>
   <input id="profileName" class="field" placeholder="Your name">
   <button class="primary" onclick="saveProfile()">Save Profile</button>
@@ -200,7 +240,9 @@ audio{width:100%;margin-top:12px}
  <button class="nav-button active" id="navHome" onclick="openPage('home')"><span class="nav-icon">🏠</span><span>Home</span></button>
  <button class="nav-button" id="navStudio" onclick="openPage('studio')"><span class="nav-icon">🎙️</span><span>Studio</span></button>
  <button class="nav-button" id="navMusic" onclick="openPage('music')"><span class="nav-icon">🎵</span><span>Music</span></button>
- <button class="nav-button" id="navProfile" onclick="openPage('profile')"><span class="nav-icon">👤</span><span>Profile</span></button>
+ <button class="nav-button" id="navProfile" onclick="openPage('profile')">
+  <span id="navPetAvatar" class="pet-avatar pet-nav-icon">🐶</span><span>Profile</span>
+ </button>
 </nav>
 </div>
 
@@ -214,6 +256,59 @@ let chunks=[];
 let touchStartX=0;
 let touchStartY=0;
 let touchStartedAtEdge=false;
+let currentStudioUser=null;
+
+/* Pet avatar collection and account assignment */
+const petCollection=[
+ {emoji:'🐶',name:'Dog'},
+ {emoji:'🐱',name:'Cat'},
+ {emoji:'🐰',name:'Rabbit'},
+ {emoji:'🦁',name:'Lion'},
+ {emoji:'🐼',name:'Panda'},
+ {emoji:'🦊',name:'Fox'},
+ {emoji:'🐻',name:'Bear'},
+ {emoji:'🐯',name:'Tiger'},
+ {emoji:'🐨',name:'Koala'},
+ {emoji:'🐸',name:'Frog'},
+ {emoji:'🐵',name:'Monkey'},
+ {emoji:'🐧',name:'Penguin'},
+ {emoji:'🦄',name:'Unicorn'},
+ {emoji:'🐮',name:'Cow'},
+ {emoji:'🐷',name:'Pig'},
+ {emoji:'🐹',name:'Hamster'},
+ {emoji:'🐺',name:'Wolf'},
+ {emoji:'🦉',name:'Owl'},
+ {emoji:'🦋',name:'Butterfly'},
+ {emoji:'🐢',name:'Turtle'},
+ {emoji:'🐬',name:'Dolphin'},
+ {emoji:'🦜',name:'Parrot'},
+ {emoji:'🦓',name:'Zebra'},
+ {emoji:'🐙',name:'Octopus'}
+];
+
+function getPetForUser(user){
+ const identity=user?.id||user?.email||'studio-flow-guest';
+ let hash=0;
+ for(let i=0;i<identity.length;i++){
+  hash=((hash<<5)-hash)+identity.charCodeAt(i);
+  hash|=0;
+ }
+ const index=Math.abs(hash)%petCollection.length;
+ return petCollection[index];
+}
+
+function renderPetAvatars(user){
+ const pet=getPetForUser(user);
+ const avatarIds=['headerPetAvatar','homePetAvatar','profilePetAvatar','navPetAvatar'];
+ avatarIds.forEach(id=>{
+  const element=document.getElementById(id);
+  if(element){
+   element.textContent=pet.emoji;
+   element.setAttribute('aria-label',pet.name+' pet avatar');
+   element.title=pet.name+' pet avatar';
+  }
+ });
+}
 
 function switchAuth(){
  creatingAccount=!creatingAccount;
@@ -255,7 +350,9 @@ async function authenticate(){
 }
 
 function enterApp(user){
+ currentStudioUser=user;
  const name=user?.user_metadata?.name||user?.email||'Artist';
+ renderPetAvatars(user);
  document.getElementById('authScreen').classList.add('hidden');
  document.getElementById('application').classList.remove('hidden');
  document.getElementById('profileName').value=name;
@@ -306,7 +403,6 @@ function goBack(){
  }
 }
 
-/* Android/browser back button */
 window.addEventListener('popstate',function(){
  if(!document.getElementById('application').classList.contains('hidden')){
   const previous=pageHistory.pop()||'home';
@@ -314,7 +410,6 @@ window.addEventListener('popstate',function(){
  }
 });
 
-/* iPhone-style left-edge swipe back */
 document.addEventListener('touchstart',function(event){
  if(document.getElementById('application').classList.contains('hidden'))return;
  const touch=event.changedTouches[0];
@@ -344,6 +439,10 @@ async function saveProfile(){
   const {error}=await window.supabase.auth.updateUser({data:{name}});
   if(error)throw error;
   message.textContent='Profile name updated.';
+  if(currentStudioUser){
+   currentStudioUser.user_metadata=currentStudioUser.user_metadata||{};
+   currentStudioUser.user_metadata.name=name;
+  }
  }catch(error){message.textContent=error.message||'Could not update profile.'}
 }
 
@@ -351,6 +450,7 @@ async function logout(){
  try{
   const {error}=await window.supabase.auth.signOut();
   if(error)throw error;
+  currentStudioUser=null;
   document.getElementById('application').classList.add('hidden');
   document.getElementById('authScreen').classList.remove('hidden');
   document.getElementById('accountPassword').value='';
