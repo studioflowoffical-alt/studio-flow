@@ -1,4 +1,5 @@
-const CACHE_NAME = "studio-flow-v2";
+
+const CACHE_NAME = "studio-flow-v3";
 
 const FILES_TO_CACHE = [
   "./",
@@ -23,7 +24,9 @@ self.addEventListener("activate", (event) => {
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames
-          .filter((name) => name !== CACHE_NAME)
+          .filter((name) =>
+            name.startsWith("studio-flow-") && name !== CACHE_NAME
+          )
           .map((name) => caches.delete(name))
       );
     }).then(() => self.clients.claim())
@@ -33,11 +36,49 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
 
+  const url = new URL(event.request.url);
+
+  if (url.origin !== self.location.origin) return;
+
+  const isPage =
+    event.request.mode === "navigate" ||
+    url.pathname.endsWith("/index.html") ||
+    url.pathname.endsWith("/");
+
+  if (isPage) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          if (response.ok) {
+            const copy = response.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, copy);
+            });
+          }
+          return response;
+        })
+        .catch(async () => {
+          return (
+            await caches.match(event.request)
+          ) || (
+            await caches.match("./index.html")
+          );
+        })
+    );
+    return;
+  }
+
   event.respondWith(
-    fetch(event.request).then((response) => {
-      return response;
-    }).catch(() => {
-      return caches.match(event.request);
-    })
+    fetch(event.request)
+      .then((response) => {
+        if (response.ok) {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, copy);
+          });
+        }
+        return response;
+      })
+      .catch(() => caches.match(event.request))
   );
 });
