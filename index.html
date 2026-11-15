@@ -6,6 +6,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#080808">
 <meta name="description" content="Studio Flow - Your Music. Your Sound. Your Future.">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="./manifest.json">
 <title>Studio Flow</title>
 
 <style>
@@ -21,19 +25,45 @@
   --danger:#ff5151;
 }
 *{box-sizing:border-box}
-html,body{margin:0;min-height:100%;background:var(--bg);color:var(--white);font-family:Arial,Helvetica,sans-serif}
+html,body{
+  margin:0;
+  min-height:100%;
+  background:var(--bg);
+  color:var(--white);
+  font-family:Arial,Helvetica,sans-serif;
+  overscroll-behavior-x:none;
+}
 body{padding-bottom:env(safe-area-inset-bottom)}
-button,input{font:inherit}
+button,input,textarea{font:inherit}
 button{cursor:pointer}
 button:disabled{opacity:.55;cursor:not-allowed}
-.app{width:100%;max-width:520px;min-height:100vh;margin:auto;background:#080808;position:relative;overflow:hidden}
-.screen{display:none;min-height:100vh;padding:22px 20px 100px;animation:fade .2s ease}
+.app{
+  width:100%;
+  max-width:520px;
+  min-height:100vh;
+  min-height:100dvh;
+  margin:auto;
+  background:#080808;
+  position:relative;
+  overflow:hidden;
+}
+.screen{
+  display:none;
+  min-height:100vh;
+  min-height:100dvh;
+  padding:22px 20px 105px;
+}
 .screen.active{display:block}
-@keyframes fade{from{opacity:.5}to{opacity:1}}
 .auth-screen{padding:0 20px 35px;min-height:100vh}
-.back{border:0;background:none;color:white;font-size:30px;padding:5px 0;margin:0 0 14px}
-.topbar{height:45px;display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-.topbar h2{font-size:19px;margin:0;font-weight:700}
+.back{
+  border:0;background:none;color:white;font-size:30px;
+  padding:5px 0;margin:0 0 14px
+}
+.topbar{
+  min-height:45px;display:flex;align-items:center;
+  justify-content:space-between;margin-bottom:18px;gap:10px
+}
+.topbar h2{font-size:19px;margin:0;font-weight:700;text-align:center}
 .brand{display:flex;align-items:center;gap:9px;font-size:19px;font-weight:800}
 .brand-mark{color:var(--gold);font-size:29px}
 .gold{color:var(--gold)}
@@ -41,92 +71,126 @@ button:disabled{opacity:.55;cursor:not-allowed}
 .small{font-size:12px}
 .center{text-align:center}
 .gold-button,.dark-button{
-  width:100%;border:0;border-radius:14px;padding:16px 12px;
-  font-weight:800;font-size:15px;margin-top:12px
+  width:100%;border-radius:14px;padding:15px 12px;
+  font-weight:800;font-size:15px;margin-top:10px
 }
-.gold-button{background:linear-gradient(110deg,#f8e5c4,#e8c58c,#f9e9ce);color:#111}
+.gold-button{
+  background:linear-gradient(110deg,#f8e5c4,#e8c58c,#f9e9ce);
+  color:#111;border:1px solid #f6dfb8
+}
 .dark-button{background:#222;color:white;border:1px solid #555}
 .text-button{background:none;border:0;color:var(--gold);padding:12px}
 .field{
   width:100%;height:52px;background:#202124;border:1px solid #555;
-  border-radius:12px;color:white;padding:0 15px;margin:6px 0;
-  outline:none
+  border-radius:12px;color:white;padding:0 15px;margin:6px 0;outline:none
 }
+textarea.field{height:100px;padding-top:14px;resize:vertical}
 .field:focus{border-color:var(--gold)}
 .field::placeholder{color:#c5c5c5}
-.card{background:linear-gradient(145deg,#202020,#111);border:1px solid #303030;border-radius:16px;padding:16px;margin:12px 0}
+.card{
+  background:linear-gradient(145deg,#202020,#111);
+  border:1px solid #383838;border-radius:16px;padding:16px;margin:12px 0
+}
 .avatar{
   width:118px;height:118px;border-radius:50%;margin:12px auto;
-  display:flex;align-items:center;justify-content:center;
-  background:radial-gradient(circle,#f5d9aa,#a8783c);
-  border:4px solid #f2d9aa;font-size:68px;box-shadow:0 0 20px #d5a45b55
+  display:block;object-fit:cover;background:#29231b;
+  border:3px solid var(--gold);
+  box-shadow:0 0 18px #d5a45b66
 }
 .welcome{
-  min-height:100vh;padding:42px 20px 35px;display:flex;flex-direction:column;
-  justify-content:space-between;text-align:center;
-  background:linear-gradient(180deg,#050505 0%,#111 60%,#050505 100%)
+  min-height:100vh;min-height:100dvh;padding:38px 20px 25px;
+  display:flex;flex-direction:column;justify-content:space-between;
+  text-align:center;
+  background:
+    linear-gradient(180deg,#0008 0%,#0002 35%,#000b 75%,#000 100%),
+    url("https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=1100&q=85") center center/cover,
+    #080808;
 }
-.welcome-logo{font-size:48px;font-weight:900;line-height:.98;margin-top:10px}
+.welcome-logo{font-size:48px;font-weight:900;line-height:.98;margin-top:8px;text-shadow:0 3px 12px #000}
 .welcome-logo span{color:var(--gold)}
-.welcome-symbol{font-size:54px;color:var(--gold);margin-top:10px}
-.studio-hero{
-  height:235px;border-radius:18px;margin:20px 0;
-  background:linear-gradient(0deg,#080808dd,#08080822),
-  radial-gradient(ellipse at 50% 65%,#725331,#171717 65%);
-  border:1px solid #444;display:flex;flex-direction:column;justify-content:flex-end;
-  padding:18px;text-align:left
-}
-.hero-mic{font-size:78px;text-align:center;line-height:1.1}
-.welcome-icons{display:flex;justify-content:space-around;margin:20px 0}
-.welcome-icons div{font-size:13px;display:grid;gap:8px}
+.welcome-symbol{font-size:54px;color:var(--gold);margin-top:5px}
+.welcome-tagline{font-size:14px;text-shadow:0 2px 8px #000}
+.welcome-bottom{background:linear-gradient(180deg,transparent,#0008 25%,#000d)}
+.welcome-icons{display:flex;justify-content:space-around;margin:16px 0 10px}
+.welcome-icons div{font-size:13px;display:grid;gap:6px;text-shadow:0 2px 8px #000}
 .welcome-icons b{font-size:25px;color:var(--gold)}
-.header-row{display:flex;justify-content:space-between;align-items:center}
-.notification{background:none;border:0;color:white;font-size:24px}
-.home-title{font-size:24px;font-weight:800;margin:16px 0 4px}
+.install-button{
+  width:100%;border:1px solid #555;border-radius:14px;
+  padding:12px;background:#202020;color:#fff;font-weight:700;
+  margin-top:8px
+}
+.install-button.installed{
+  border-color:#b99455;color:var(--gold);background:#211c13
+}
 .hero-card{
   min-height:115px;border-radius:16px;padding:17px;margin:14px 0;
-  background:linear-gradient(90deg,#171717ee,#17171777),linear-gradient(120deg,#333,#090909);
-  border:1px solid #555;display:flex;justify-content:space-between;align-items:end
+  background:
+    linear-gradient(90deg,#080808bb,#08080855),
+    url("https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=900&q=80") center/cover;
+  border:1px solid #555;display:flex;justify-content:space-between;
+  align-items:end;cursor:pointer
 }
 .hero-card strong{font-size:17px}
-.arrow-circle{background:var(--gold);color:#111;border-radius:50%;padding:10px;font-size:20px}
+.arrow-circle{background:var(--gold);color:#111;border-radius:50%;padding:9px 13px;font-size:20px}
+.header-row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.notification{background:none;border:0;color:white;font-size:23px;padding:5px}
+.home-title{font-size:24px;font-weight:800;margin:16px 0 4px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .tile{
-  min-height:105px;background:linear-gradient(145deg,#202020,#101010);
-  border:1px solid #292929;border-radius:15px;color:white;
+  min-height:105px;background:linear-gradient(145deg,#242424,#101010);
+  border:1px solid #383838;border-radius:15px;color:white;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:7px;text-align:center;padding:12px;font-weight:700
+  gap:6px;text-align:center;padding:12px;font-weight:700
 }
 .tile .symbol{font-size:27px;color:var(--gold)}
 .project-row{
-  display:flex;align-items:center;gap:12px;background:#191919;border-radius:13px;
-  padding:12px;margin-top:10px
+  display:flex;align-items:center;gap:12px;background:#191919;
+  border-radius:13px;padding:12px;margin-top:10px
 }
-.play{border:0;background:#bbb;color:#111;border-radius:50%;width:38px;height:38px;font-size:18px}
+.play{
+  border:0;background:#ddd;color:#111;border-radius:50%;
+  width:38px;height:38px;font-size:18px;flex-shrink:0
+}
 .project-info{flex:1;min-width:0}
-.project-info strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px}
+.project-info strong{
+  display:block;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;font-size:13px
+}
 .project-info small{color:#aaa}
 .nav{
   position:fixed;bottom:0;left:50%;transform:translateX(-50%);
-  width:100%;max-width:520px;height:70px;padding:8px 8px calc(8px + env(safe-area-inset-bottom));
-  background:#090909f5;border-top:1px solid #282828;display:flex;justify-content:space-around;
-  z-index:20
+  width:100%;max-width:520px;height:72px;
+  padding:8px 8px calc(8px + env(safe-area-inset-bottom));
+  background:#090909f5;border-top:1px solid #282828;
+  display:flex;justify-content:space-around;z-index:20
 }
-.nav button{background:none;border:0;color:#888;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;min-width:55px}
+.nav button{
+  background:none;border:0;color:#888;display:flex;
+  flex-direction:column;align-items:center;gap:4px;
+  font-size:11px;min-width:55px
+}
 .nav button span{font-size:21px}
 .nav button.selected{color:var(--gold)}
-.timer{font-size:45px;font-weight:800;text-align:center;margin:65px 0 8px}
+.timer{font-size:45px;font-weight:800;text-align:center;margin:55px 0 8px}
 .mic-button{
-  width:116px;height:116px;border-radius:50%;border:4px solid #b9965c;
-  background:linear-gradient(130deg,#fff2d9,#dfbd88);color:#111;
-  font-size:43px;display:block;margin:28px auto
+  width:116px;height:116px;border-radius:50%;
+  border:4px solid #b9965c;
+  background:linear-gradient(130deg,#fff2d9,#dfbd88);
+  color:#111;font-size:43px;display:block;margin:25px auto
 }
-.wave{height:75px;display:flex;align-items:center;justify-content:center;gap:3px;margin:25px 0}
-.wave i{display:block;width:3px;border-radius:4px;background:linear-gradient(#d4b174,#eee0c4);height:var(--h)}
+.wave{
+  height:75px;display:flex;align-items:center;
+  justify-content:center;gap:3px;margin:25px 0;overflow:hidden
+}
+.wave i{
+  display:block;width:3px;border-radius:4px;
+  background:linear-gradient(#d4b174,#eee0c4);
+  height:var(--h);flex-shrink:0
+}
 .record-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:28px}
 .record-actions button{min-height:75px}
 .progress{height:13px;background:#333;border:1px solid #666;border-radius:20px;overflow:hidden;margin:18px 0 5px}
-.progress div{height:100%;width:0;background:linear-gradient(90deg,#f0d5a4,#bd8b3f);transition:width .4s}
+.progress div{height:100%;width:0;background:linear-gradient(90deg,#f0d5a4,#bd8b3f)}
 .checklist{background:#171717;border:1px solid #333;border-radius:13px;padding:14px;margin:15px 0}
 .checklist p{margin:8px 0;font-size:13px}
 .price{font-size:34px;color:var(--gold);font-weight:900;text-align:center;margin:8px 0}
@@ -135,17 +199,40 @@ button:disabled{opacity:.55;cursor:not-allowed}
 .step b{border:1px solid #c6a46a;border-radius:50%;width:23px;height:23px;display:grid;place-items:center;flex-shrink:0}
 .platforms{display:flex;justify-content:center;align-items:center;gap:18px;font-size:30px;margin:18px 0}
 .profile-list{padding:0;overflow:hidden}
-.profile-list button{width:100%;display:flex;align-items:center;gap:12px;background:transparent;color:white;border:0;border-bottom:1px solid #333;padding:15px;text-align:left}
+.profile-list button{
+  width:100%;display:flex;align-items:center;gap:12px;
+  background:transparent;color:white;border:0;
+  border-bottom:1px solid #333;padding:15px;text-align:left
+}
 .profile-list button span:last-child{margin-left:auto;color:#aaa}
 .toast{
-  display:none;position:fixed;z-index:50;bottom:85px;left:50%;transform:translateX(-50%);
-  width:calc(100% - 36px);max-width:470px;background:#242424;border:1px solid #666;
-  padding:13px 15px;border-radius:12px;font-size:13px;box-shadow:0 5px 25px #000
+  display:none;position:fixed;z-index:50;bottom:88px;left:50%;
+  transform:translateX(-50%);width:calc(100% - 36px);
+  max-width:470px;background:#242424;border:1px solid #777;
+  padding:13px 15px;border-radius:12px;font-size:13px;
+  box-shadow:0 5px 25px #000
 }
 .toast.show{display:block}
 .error{color:#ff8d8d;font-size:13px;min-height:18px;margin:8px 0}
 a{color:var(--gold)}
-@media(min-width:600px){.app{border-left:1px solid #222;border-right:1px solid #222}}
+.studio-photo{
+  background:
+    linear-gradient(#0005,#0009),
+    url("https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=900&q=85") center/cover;
+}
+.mastering-photo{
+  background:
+    linear-gradient(#0005,#0009),
+    url("https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?auto=format&fit=crop&w=900&q=85") center/cover;
+}
+.distribution-photo{
+  background:
+    linear-gradient(#0005,#0009),
+    url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=900&q=85") center/cover;
+}
+@media(min-width:600px){
+  .app{border-left:1px solid #222;border-right:1px solid #222}
+}
 </style>
 </head>
 
@@ -158,20 +245,17 @@ a{color:var(--gold)}
     <div>
       <div class="welcome-symbol">〽</div>
       <div class="welcome-logo">Studio<br><span>Flow</span></div>
-      <p class="muted">Your Music. Your Sound. Your Future.</p>
+      <p class="welcome-tagline">Your Music. Your Sound. Your Future.</p>
     </div>
-    <div>
-      <div class="studio-hero">
-        <div class="hero-mic">🎙️</div>
-        <strong>Make your music sound professional.</strong>
-      </div>
+    <div class="welcome-bottom">
       <div class="welcome-icons">
         <div><b>🎙</b>Record</div>
         <div><b>〽</b>Master</div>
         <div><b>♫</b>Distribute</div>
       </div>
       <button class="gold-button" onclick="showScreen('signup')">Get Started →</button>
-      <button class="dark-button" onclick="showScreen('signin')">Sign In</button>
+      <button id="installButton" class="install-button" onclick="installApp()">⇩　Install App</button>
+      <button class="dark-button" style="border-color:#d9ad62" onclick="showScreen('signin')">Sign In</button>
     </div>
   </div>
 </section>
@@ -180,10 +264,10 @@ a{color:var(--gold)}
 <section id="signup" class="screen auth-screen">
   <button class="back" onclick="showScreen('welcome')">‹</button>
   <h2 class="center">Create Account</h2>
-  <div class="avatar">🐶</div>
+  <img id="signupAvatar" class="avatar" alt="Your pet avatar">
   <div class="center">
     <strong>Your Pet Avatar</strong>
-    <p class="muted small">Generated by Studio Flow</p>
+    <p class="muted small">A different pet for every user</p>
   </div>
   <input id="signupName" class="field" placeholder="👤  Full Name" autocomplete="name">
   <input id="signupEmail" class="field" type="email" placeholder="✉  Gmail Address" autocomplete="email">
@@ -198,7 +282,7 @@ a{color:var(--gold)}
   <button class="back" onclick="showScreen('welcome')">‹</button>
   <div class="center" style="margin-top:55px">
     <div class="welcome-symbol">〽</div>
-    <h2>Welcome Back</h2>
+    <h2>Welcome Back!</h2>
     <p class="muted">Sign in to your Studio Flow account</p>
   </div>
   <input id="loginEmail" class="field" type="email" placeholder="✉  Gmail Address" autocomplete="email">
@@ -231,10 +315,10 @@ a{color:var(--gold)}
 <!-- 3. HOME -->
 <section id="home" class="screen">
   <div class="header-row">
-    <div class="brand"><span class="brand-mark">〽</span>Studio<br>Flow</div>
+    <div class="brand"><span class="brand-mark">〽</span><span>Studio<br>Flow</span></div>
     <div>
       <button class="notification" onclick="showScreen('notifications')">♧</button>
-      <button class="notification" onclick="showScreen('profile')">🐶</button>
+      <button class="notification" onclick="showScreen('profile')"><img id="homeAvatar" src="" alt="Pet" style="width:38px;height:38px;object-fit:cover;border-radius:50%;border:2px solid #d9ad62;vertical-align:middle"></button>
     </div>
   </div>
   <div class="home-title">Welcome Back!</div>
@@ -288,8 +372,8 @@ a{color:var(--gold)}
     <button class="back" onclick="goBack()">‹</button>
     <h2>AI Beat Generator</h2><span style="width:25px"></span>
   </div>
-  <div class="wave" id="beatWave" style="height:120px;margin-top:65px"></div>
-  <h3 class="center">Analyze your song</h3>
+  <div class="wave" id="beatWave" style="height:120px;margin-top:55px"></div>
+  <h3 class="center">Analyzing your song...</h3>
   <p class="center muted">Our AI is designed to detect your style<br>and help generate a suitable beat.</p>
   <div class="progress"><div id="beatProgress"></div></div>
   <p class="center small" id="beatPercent">Ready</p>
@@ -302,7 +386,7 @@ a{color:var(--gold)}
   <div class="card">
     <strong>💡 Detected Style:</strong>
     <div class="gold" style="font-size:20px;font-weight:bold;margin-top:8px" id="detectedStyle">Afrobeat</div>
-    <small class="muted">This is a demonstration preview. Connect an AI audio service to perform real vocal analysis and beat generation.</small>
+    <small class="muted">AI vocal analysis and beat generation require an AI audio service connection.</small>
   </div>
   <button class="gold-button" onclick="showScreen('mastering')">Continue to Mastering</button>
 </section>
@@ -313,9 +397,8 @@ a{color:var(--gold)}
     <button class="back" onclick="goBack()">‹</button>
     <h2>Mastering</h2><span style="width:25px"></span>
   </div>
-  <div class="studio-hero" style="height:145px;text-align:center;justify-content:center">
-    <div style="font-size:52px">🎛️</div>
-    <strong>Professional Music Mastering</strong>
+  <div class="studio-photo" style="height:145px;border-radius:15px;border:1px solid #555;display:grid;place-items:center">
+    <div class="center"><div style="font-size:45px">🎛️</div><strong>Professional Music Mastering</strong></div>
   </div>
   <div class="card center">
     <div style="font-size:30px;color:var(--gold)">🎚</div>
@@ -337,7 +420,9 @@ a{color:var(--gold)}
     <button class="back" onclick="goBack()">‹</button>
     <h2>Distribute Your Music</h2><span style="width:25px"></span>
   </div>
-  <div class="platforms">🌐　▶　♫　●</div>
+  <div class="distribution-photo" style="height:165px;border-radius:15px;border:1px solid #444;display:grid;place-items:center">
+    <div class="platforms">🌐　▶　♫　●</div>
+  </div>
   <div class="center">
     <h3>Worldwide Music Distribution</h3>
     <p class="muted">Get your music on major platforms worldwide.</p>
@@ -365,7 +450,7 @@ a{color:var(--gold)}
   <input id="songTitle" class="field" placeholder="Song Title">
   <input id="genre" class="field" placeholder="Music Genre">
   <input id="releaseDate" class="field" type="date">
-  <textarea id="platformList" class="field" style="height:100px;padding-top:14px" placeholder="Preferred platforms (Spotify, Apple Music, YouTube Music...)"></textarea>
+  <textarea id="platformList" class="field" placeholder="Preferred platforms (Spotify, Apple Music, YouTube Music...)"></textarea>
   <button class="gold-button" onclick="submitDistribution()">Submit Details</button>
 </section>
 
@@ -376,7 +461,7 @@ a{color:var(--gold)}
     <h2>My Profile</h2>
     <button class="notification" onclick="showScreen('settings')">⚙</button>
   </div>
-  <div class="avatar">🐶</div>
+  <img id="profileAvatar" class="avatar" src="" alt="Your pet avatar">
   <h3 class="center" id="profileName">StudioFlow Artist</h3>
   <p class="center muted small" id="profileEmail">@studioflow_artist</p>
   <div class="card profile-list">
@@ -434,42 +519,80 @@ a{color:var(--gold)}
 <div id="toast" class="toast"></div>
 </div>
 
-<!-- Supabase client library -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-/* =====================================================
+/* ================================================
    STUDIO FLOW SUPABASE CONFIGURATION
-   Keep this URL and publishable key unchanged.
-===================================================== */
-const SUPABASE_URL = "https://wqhnrsozsgyfosvzkppz.supabase.co";
-const SUPABASE_KEY = "sb_publishable_S_Jv_5K8rOME8hsqkcCMSQ_phrBXwuO";
+   Existing project URL and publishable key retained.
+================================================ */
+const SUPABASE_URL="https://wqhnrsozsgyfosvzkppz.supabase.co";
+const SUPABASE_KEY="sb_publishable_S_Jv_5K8rOME8hsqkcCMSQ_phrBXwuO";
 
-let supabaseClient = null;
-let currentUser = null;
-let pageHistory = [];
-let recording = false;
-let recordingSeconds = 0;
-let recordingInterval = null;
-let audioItems = [];
+let supabaseClient=null;
+let currentUser=null;
+let pageHistory=[];
+let recording=false;
+let recordingSeconds=0;
+let recordingInterval=null;
+let audioItems=[];
+let mediaRecorder=null;
+let recordedChunks=[];
+let deferredInstallPrompt=null;
+
+/* A selection of pet portraits.
+   Each account is assigned one and the choice is saved
+   in that user's Supabase account metadata. */
+const PET_AVATARS=[
+  {
+    name:"Golden Retriever",
+    url:"https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=400&q=85"
+  },
+  {
+    name:"Cute Cat",
+    url:"https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=400&q=85"
+  },
+  {
+    name:"Rabbit",
+    url:"https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?auto=format&fit=crop&w=400&q=85"
+  },
+  {
+    name:"Hamster",
+    url:"https://images.unsplash.com/photo-1425082661705-1834bfd09dca?auto=format&fit=crop&w=400&q=85"
+  },
+  {
+    name:"Dog",
+    url:"https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=400&q=85"
+  },
+  {
+    name:"Cat",
+    url:"https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=400&q=85"
+  },
+  {
+    name:"Parrot",
+    url:"https://images.unsplash.com/photo-1552728089-57bdde30beb3?auto=format&fit=crop&w=400&q=85"
+  }
+];
+
+let signupPet=PET_AVATARS[Math.floor(Math.random()*PET_AVATARS.length)];
 
 function showToast(message){
   const toast=document.getElementById("toast");
   toast.textContent=message;
   toast.classList.add("show");
   clearTimeout(showToast.timer);
-  showToast.timer=setTimeout(()=>toast.classList.remove("show"),4000);
+  showToast.timer=setTimeout(()=>toast.classList.remove("show"),4500);
 }
 
 function showError(id,message){
   const el=document.getElementById(id);
-  if(el) el.textContent=message || "";
+  if(el)el.textContent=message||"";
 }
 
 function friendlyError(error){
-  const message=error?.message || String(error || "");
+  const message=error?.message||String(error||"");
   if(/failed to fetch|networkerror|load failed|fetch/i.test(message)){
-    return "Connection failed. Check your internet connection and make sure the Supabase project URL is correct. Then try again.";
+    return "Connection failed. Check your internet connection and try again.";
   }
   if(/invalid login credentials/i.test(message)){
     return "Email or password is incorrect. Please check and try again.";
@@ -480,20 +603,19 @@ function friendlyError(error){
   if(/password should be at least/i.test(message)){
     return "Your password must contain at least 6 characters.";
   }
-  return message || "Something went wrong. Please try again.";
+  return message||"Something went wrong. Please try again.";
 }
 
 function setBusy(buttonId,busy,label){
   const button=document.getElementById(buttonId);
   if(!button)return;
   button.disabled=busy;
-  if(busy)button.textContent="Please wait...";
-  else button.textContent=label;
+  button.textContent=busy?"Please wait...":label;
 }
 
 function initSupabase(){
-  if(!window.supabase || !window.supabase.createClient){
-    throw new Error("The Supabase library did not load. Check your internet connection and reload the app.");
+  if(!window.supabase||!window.supabase.createClient){
+    throw new Error("The Supabase library did not load. Check your internet connection and reload.");
   }
   supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{
     auth:{
@@ -505,24 +627,32 @@ function initSupabase(){
 }
 
 function showScreen(id,remember=true){
-  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   const page=document.getElementById(id);
   if(!page)return;
-  page.classList.add("active");
-  if(remember && !["welcome","signup","signin","forgot","reset"].includes(id)){
-    pageHistory.push(id);
+
+  const current=document.querySelector(".screen.active");
+  if(remember&&current&&current.id!==id){
+    pageHistory.push(current.id);
   }
-  const isAppPage=["home","recording","beat","mastering","distribution","distributionForm","profile","library","account","paymentHistory","distributionStatus","notifications","settings"].includes(id);
+
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  page.classList.add("active");
+
+  const authPages=["welcome","signup","signin","forgot","reset"];
+  const isAppPage=!authPages.includes(id);
   document.getElementById("bottomNav").style.display=isAppPage?"flex":"none";
-  document.querySelectorAll(".nav button").forEach(b=>{
-    b.classList.toggle("selected",b.dataset.page===id || (id==="library"&&b.dataset.page==="home"));
+
+  document.querySelectorAll(".nav button").forEach(button=>{
+    button.classList.toggle(
+      "selected",
+      button.dataset.page===id||
+      (id==="library"&&button.dataset.page==="home")
+    );
   });
-  window.scrollTo(0,0);
 }
 
 function goBack(){
-  if(pageHistory.length>1){
-    pageHistory.pop();
+  if(pageHistory.length){
     const previous=pageHistory.pop();
     showScreen(previous,false);
   }else{
@@ -531,7 +661,40 @@ function goBack(){
 }
 
 function requireSupabase(){
-  if(!supabaseClient)throw new Error("Supabase has not loaded. Check your internet connection and reload the app.");
+  if(!supabaseClient){
+    throw new Error("Supabase has not loaded. Check your internet connection and reload.");
+  }
+}
+
+/* PET AVATAR HELPERS */
+function setSignupPet(){
+  signupPet=PET_AVATARS[Math.floor(Math.random()*PET_AVATARS.length)];
+  document.getElementById("signupAvatar").src=signupPet.url;
+}
+function showPetAvatar(url){
+  const fallback=PET_AVATARS[0].url;
+  ["profileAvatar","homeAvatar"].forEach(id=>{
+    const image=document.getElementById(id);
+    if(image)image.src=url||fallback;
+  });
+}
+async function ensurePetAvatar(){
+  if(!currentUser)return;
+  let petUrl=currentUser.user_metadata?.pet_avatar;
+
+  if(!petUrl){
+    const selected=PET_AVATARS[Math.floor(Math.random()*PET_AVATARS.length)];
+    petUrl=selected.url;
+    try{
+      const {data,error}=await supabaseClient.auth.updateUser({
+        data:{pet_avatar:petUrl,pet_name:selected.name}
+      });
+      if(!error&&data?.user)currentUser=data.user;
+    }catch(error){
+      console.log("Pet avatar could not be saved yet:",error);
+    }
+  }
+  showPetAvatar(petUrl);
 }
 
 /* CREATE ACCOUNT */
@@ -541,7 +704,7 @@ async function signUp(){
   const email=document.getElementById("signupEmail").value.trim();
   const password=document.getElementById("signupPassword").value;
 
-  if(!name || !email || !password){
+  if(!name||!email||!password){
     showError("signupError","Please fill in your name, email and password.");
     return;
   }
@@ -550,23 +713,32 @@ async function signUp(){
     return;
   }
 
-  setBusy("signupButton",true);
+  setBusy("signupButton",true,"Create Account");
   try{
     requireSupabase();
     const {data,error}=await supabaseClient.auth.signUp({
-      email,password,
-      options:{data:{full_name:name}}
+      email,
+      password,
+      options:{
+        data:{
+          full_name:name,
+          pet_avatar:signupPet.url,
+          pet_name:signupPet.name
+        }
+      }
     });
     if(error)throw error;
 
     if(data.session){
       currentUser=data.user;
       updateProfile();
-      showToast("Account created successfully.");
-      showScreen("home");
+      showPetAvatar(signupPet.url);
+      pageHistory=[];
+      showScreen("home",false);
+      showToast("Your Studio Flow account is ready!");
     }else{
-      showToast("Account created. Check your email if confirmation is required.");
-      showScreen("signin");
+      showToast("Account created. Sign in to continue if email confirmation is required.");
+      showScreen("signin",false);
     }
   }catch(error){
     showError("signupError",friendlyError(error));
@@ -581,21 +753,23 @@ async function signIn(){
   const email=document.getElementById("loginEmail").value.trim();
   const password=document.getElementById("loginPassword").value;
 
-  if(!email || !password){
+  if(!email||!password){
     showError("loginError","Enter your email and password.");
     return;
   }
 
-  setBusy("loginButton",true);
+  setBusy("loginButton",true,"Sign In");
   try{
     requireSupabase();
     const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
     if(error)throw error;
+
     currentUser=data.user;
+    await ensurePetAvatar();
     updateProfile();
-    showToast("Welcome back!");
     pageHistory=[];
-    showScreen("home");
+    showScreen("home",false);
+    showToast("Welcome back!");
   }catch(error){
     showError("loginError",friendlyError(error));
   }finally{
@@ -611,7 +785,8 @@ async function resetPassword(){
     showError("forgotError","Enter your email address.");
     return;
   }
-  setBusy("forgotButton",true);
+
+  setBusy("forgotButton",true,"Send Reset Link");
   try{
     requireSupabase();
     const {error}=await supabaseClient.auth.resetPasswordForEmail(email,{
@@ -629,7 +804,7 @@ async function resetPassword(){
 async function saveNewPassword(){
   showError("resetError","");
   const password=document.getElementById("newPassword").value;
-  if(!password || password.length<6){
+  if(!password||password.length<6){
     showError("resetError","Enter a password with at least 6 characters.");
     return;
   }
@@ -637,8 +812,8 @@ async function saveNewPassword(){
     requireSupabase();
     const {error}=await supabaseClient.auth.updateUser({password});
     if(error)throw error;
-    showToast("Password updated. Please sign in.");
-    showScreen("signin");
+    showToast("Password updated successfully.");
+    showScreen("signin",false);
   }catch(error){
     showError("resetError",friendlyError(error));
   }
@@ -661,42 +836,44 @@ async function signOut(){
 
 function updateProfile(){
   if(!currentUser)return;
-  const name=currentUser.user_metadata?.full_name || "StudioFlow Artist";
-  const email=currentUser.email || "";
+  const name=currentUser.user_metadata?.full_name||"StudioFlow Artist";
+  const email=currentUser.email||"";
   document.getElementById("profileName").textContent=name;
   document.getElementById("profileEmail").textContent=email;
   document.getElementById("accountName").textContent=name;
   document.getElementById("accountEmail").textContent=email;
+  showPetAvatar(currentUser.user_metadata?.pet_avatar);
 }
 
 /* RESTORE LOGIN SESSION */
 async function restoreSession(){
-  try{
-    requireSupabase();
-    const {data,error}=await supabaseClient.auth.getSession();
-    if(error)throw error;
-    if(data.session){
-      currentUser=data.session.user;
+  requireSupabase();
+  const {data,error}=await supabaseClient.auth.getSession();
+  if(error)throw error;
+
+  if(data.session){
+    currentUser=data.session.user;
+    await ensurePetAvatar();
+    updateProfile();
+    showScreen("home",false);
+  }else{
+    showScreen("welcome",false);
+  }
+
+  supabaseClient.auth.onAuthStateChange(async(event,session)=>{
+    currentUser=session?.user||null;
+    if(currentUser){
       updateProfile();
-      showScreen("home",false);
-    }else{
+    }
+    if(event==="SIGNED_OUT"){
+      currentUser=null;
+      pageHistory=[];
       showScreen("welcome",false);
     }
-
-    supabaseClient.auth.onAuthStateChange((event,session)=>{
-      currentUser=session?.user || null;
-      if(currentUser)updateProfile();
-      if(event==="SIGNED_OUT"){
-        showScreen("welcome",false);
-      }
-      if(event==="PASSWORD_RECOVERY"){
-        showScreen("reset",false);
-      }
-    });
-  }catch(error){
-    showScreen("welcome",false);
-    showToast(friendlyError(error));
-  }
+    if(event==="PASSWORD_RECOVERY"){
+      showScreen("reset",false);
+    }
+  });
 }
 
 /* AUDIO IMPORT */
@@ -719,21 +896,36 @@ function importAudio(event){
   event.target.value="";
 }
 
-function renderProjects(){
-  const html=audioItems.length?audioItems.map((item,index)=>`
-    <div class="project-row">
-      <button class="play" onclick="playAudio(${index})">▶</button>
-      <div class="project-info"><strong>${escapeHtml(item.name)}</strong><small>${item.size} · Imported</small></div>
-    </div>`).join(""):`
-    <div class="project-row"><button class="play">▶</button><div class="project-info"><strong>No projects yet</strong><small>Record or import a song to begin</small></div></div>`;
-  document.getElementById("projectList").innerHTML=html;
-  document.getElementById("libraryList").innerHTML=html;
-}
-
 function escapeHtml(value){
   return String(value).replace(/[&<>"']/g,char=>({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
   }[char]));
+}
+
+function renderProjects(){
+  const html=audioItems.length
+    ?audioItems.map((item,index)=>`
+      <div class="project-row">
+        <button class="play" onclick="playAudio(${index})">▶</button>
+        <div class="project-info">
+          <strong>${escapeHtml(item.name)}</strong>
+          <small>${item.size} · Current session</small>
+        </div>
+      </div>`).join("")
+    :`<div class="project-row">
+        <button class="play">▶</button>
+        <div class="project-info">
+          <strong>No projects yet</strong>
+          <small>Record or import a song to begin</small>
+        </div>
+      </div>`;
+
+  document.getElementById("projectList").innerHTML=html;
+  document.getElementById("libraryList").innerHTML=html;
 }
 
 function playAudio(index){
@@ -756,20 +948,25 @@ function toggleRecording(){
   }
 }
 
-let mediaRecorder=null;
-let recordedChunks=[];
-
 async function startRecording(){
   try{
     const stream=await navigator.mediaDevices.getUserMedia({audio:true});
     recordedChunks=[];
-    mediaRecorder=new MediaRecorder(stream);
-    mediaRecorder.ondataavailable=e=>{
-      if(e.data.size)recordedChunks.push(e.data);
+
+    const mimeType=MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
+      ?"audio/webm;codecs=opus":"audio/webm";
+
+    mediaRecorder=new MediaRecorder(stream,{mimeType});
+    mediaRecorder.ondataavailable=event=>{
+      if(event.data.size)recordedChunks.push(event.data);
     };
     mediaRecorder.onstop=()=>{
-      const blob=new Blob(recordedChunks,{type:mediaRecorder.mimeType || "audio/webm"});
-      const file=new File([blob],"StudioFlow-Recording-"+Date.now()+".webm",{type:blob.type});
+      const blob=new Blob(recordedChunks,{type:mediaRecorder.mimeType||"audio/webm"});
+      const file=new File(
+        [blob],
+        "StudioFlow-Recording-"+Date.now()+".webm",
+        {type:blob.type}
+      );
       audioItems.push({
         name:file.name,
         size:(file.size/1024/1024).toFixed(2)+" MB",
@@ -780,10 +977,13 @@ async function startRecording(){
       stream.getTracks().forEach(track=>track.stop());
       showToast("Recording saved in My Projects for this session.");
     };
+
     mediaRecorder.start();
     recording=true;
     recordingSeconds=0;
     document.getElementById("recordButton").textContent="■";
+    document.getElementById("timer").textContent="00:00";
+
     recordingInterval=setInterval(()=>{
       recordingSeconds++;
       const mins=String(Math.floor(recordingSeconds/60)).padStart(2,"0");
@@ -796,7 +996,9 @@ async function startRecording(){
 }
 
 function stopRecording(){
-  if(mediaRecorder && mediaRecorder.state!=="inactive")mediaRecorder.stop();
+  if(mediaRecorder&&mediaRecorder.state!=="inactive"){
+    mediaRecorder.stop();
+  }
   recording=false;
   clearInterval(recordingInterval);
   document.getElementById("recordButton").textContent="🎙";
@@ -804,13 +1006,14 @@ function stopRecording(){
 
 /* PAYMENT / DISTRIBUTION DEMO ACTIONS */
 function paymentNotice(type){
-  showToast(type+" payment submission needs your official payment details and payment verification setup.");
+  showToast(type+" payment needs official payment details and payment verification to be connected.");
 }
 
 function submitDistribution(){
   const artist=document.getElementById("artistName").value.trim();
   const song=document.getElementById("songTitle").value.trim();
-  if(!artist || !song){
+
+  if(!artist||!song){
     showToast("Please enter your artist name and song title.");
     return;
   }
@@ -820,20 +1023,93 @@ function submitDistribution(){
 
 /* DECORATIVE WAVEFORMS */
 function makeWave(id,count){
-  const el=document.getElementById(id);
-  if(!el)return;
-  el.innerHTML="";
+  const element=document.getElementById(id);
+  if(!element)return;
+  element.innerHTML="";
   for(let i=0;i<count;i++){
     const bar=document.createElement("i");
-    bar.style.setProperty("--h",(12+Math.abs(Math.sin(i*2.3)*48+Math.cos(i*.7)*18))+"px");
-    el.appendChild(bar);
+    const height=12+Math.abs(Math.sin(i*2.3)*48+Math.cos(i*.7)*18);
+    bar.style.setProperty("--h",height+"px");
+    element.appendChild(bar);
   }
 }
 makeWave("recordWave",85);
 makeWave("beatWave",95);
 
-/* INIT */
+/* PWA INSTALL */
+function isAppInstalled(){
+  return window.matchMedia("(display-mode: standalone)").matches||
+    window.matchMedia("(display-mode: fullscreen)").matches||
+    window.navigator.standalone===true;
+}
+
+function updateInstallButton(installed){
+  const button=document.getElementById("installButton");
+  if(!button)return;
+  if(installed){
+    button.textContent="✓ Installed";
+    button.classList.add("installed");
+    button.disabled=true;
+  }else{
+    button.textContent="⇩　Install App";
+    button.classList.remove("installed");
+    button.disabled=false;
+  }
+}
+
+async function installApp(){
+  if(isAppInstalled()){
+    updateInstallButton(true);
+    return;
+  }
+
+  if(deferredInstallPrompt){
+    deferredInstallPrompt.prompt();
+    const choice=await deferredInstallPrompt.userChoice;
+    if(choice?.outcome==="accepted"){
+      showToast("Installation accepted. Finish installing Studio Flow.");
+    }else{
+      showToast("Installation cancelled.");
+    }
+    deferredInstallPrompt=null;
+    return;
+  }
+
+  const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  if(isIOS){
+    showToast("To install: tap Share in Safari, then choose Add to Home Screen.");
+  }else{
+    showToast("If Chrome shows Install app in its menu, select it to install Studio Flow.");
+  }
+}
+
+window.addEventListener("beforeinstallprompt",event=>{
+  event.preventDefault();
+  deferredInstallPrompt=event;
+  updateInstallButton(false);
+});
+
+window.addEventListener("appinstalled",()=>{
+  deferredInstallPrompt=null;
+  updateInstallButton(true);
+  showToast("Studio Flow has been installed!");
+});
+
+/* SERVICE WORKER */
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>{
+    navigator.serviceWorker.register("./sw.js").catch(error=>{
+      console.log("Service worker registration:",error);
+    });
+  });
+}
+
+/* INITIALIZE */
 (async function(){
+  updateInstallButton(isAppInstalled());
+  setSignupPet();
+  renderProjects();
+
   try{
     initSupabase();
     await restoreSession();
