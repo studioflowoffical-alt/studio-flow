@@ -6,107 +6,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#080808">
 <meta name="description" content="Studio Flow - Your Music. Your Sound. Your Future.">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="./manifest.json">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <title>Studio Flow</title>
-
 <style>
-:root{
---bg:#080808;
---panel:#151515;
---card:#1b1b1b;
---gold:#f3d9a5;
---gold2:#d5ad6b;
---text:#fff;
---muted:#aaa;
---border:#39342b;
---danger:#e65c5c;
-}
+:root{--bg:#080808;--panel:#151515;--card:#1b1b1b;--gold:#f3d9a5;--gold2:#d5ad6b;--text:#fff;--muted:#aaa;--border:#39342b}
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
 body{padding-bottom:env(safe-area-inset-bottom)}
 button,input,textarea,select{font:inherit}
 button{cursor:pointer}
-button:disabled{opacity:.65}
+button:disabled{opacity:.6}
 .hidden{display:none!important}
 .screen{display:none;max-width:760px;margin:auto;padding:12px 17px 100px}
 .screen.active{display:block}
-.center-screen{
-min-height:100dvh;display:flex;align-items:center;justify-content:center;
-text-align:center;padding:20px;background:#080808;
-}
-#welcome{
-position:fixed;inset:0;z-index:50;width:100%;height:100dvh;
-min-height:0;overflow:hidden;padding:10px 15px;
-}
-.welcome-wrap{
-width:100%;max-width:430px;height:100%;max-height:780px;
-margin:auto;display:flex;flex-direction:column;justify-content:center;
-overflow:hidden;
-}
-.studio-scene{
-position:relative;flex:1 1 auto;min-height:120px;max-height:440px;
-overflow:hidden;border-radius:18px 18px 0 0;
-background:
-radial-gradient(ellipse at 52% 20%,#a4773c66,transparent 35%),
-linear-gradient(115deg,#2c2117,#090909 55%,#3a2918);
-}
-.studio-scene:before{
-content:"";position:absolute;inset:0;
-background:
-linear-gradient(90deg,transparent 10%,#c99b5522 11%,transparent 13%),
-repeating-linear-gradient(90deg,transparent 0 45px,#d3a75a12 46px 48px);
-}
-.studio-window{
-position:absolute;left:20%;top:10%;width:60%;height:38%;
-border:5px solid #70502e;background:linear-gradient(140deg,#17191b,#302719,#080808);
-box-shadow:0 0 35px #d4a35444;
-}
-.speaker{
-position:absolute;top:35%;width:50px;height:85px;
-border:4px solid #5a4529;border-radius:7px;background:#111;
-}
-.speaker:after{
-content:"";position:absolute;left:9px;top:24px;width:25px;height:25px;
-border-radius:50%;background:radial-gradient(circle,#e0b66c 0 20%,#513b21 45%,#080808 70%);
-}
+.center-screen{min-height:100dvh;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;background:#080808}
+#welcome{position:fixed;inset:0;z-index:50;width:100%;height:100dvh;overflow:auto;padding:10px 15px}
+.welcome-wrap{width:100%;max-width:430px;min-height:100%;margin:auto;display:flex;flex-direction:column;justify-content:center}
+.studio-scene{position:relative;height:clamp(150px,42vh,390px);flex-shrink:1;min-height:120px;overflow:hidden;border-radius:18px 18px 0 0;background:radial-gradient(ellipse at 52% 20%,#a4773c66,transparent 35%),linear-gradient(115deg,#2c2117,#090909 55%,#3a2918)}
+.studio-scene:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 45px,#d3a75a12 46px 48px)}
+.studio-window{position:absolute;left:20%;top:10%;width:60%;height:38%;border:5px solid #70502e;background:linear-gradient(140deg,#17191b,#302719,#080808);box-shadow:0 0 35px #d4a35444}
+.speaker{position:absolute;top:35%;width:50px;height:85px;border:4px solid #5a4529;border-radius:7px;background:#111}
+.speaker:after{content:"";position:absolute;left:9px;top:24px;width:25px;height:25px;border-radius:50%;background:radial-gradient(circle,#e0b66c 0 20%,#513b21 45%,#080808 70%)}
 .speaker.left{left:5%}.speaker.right{right:5%}
-.console{
-position:absolute;bottom:0;left:0;right:0;height:20%;
-background:linear-gradient(#47331e,#100d09);
-border-top:3px solid #9a713c;
-}
-.console:after{
-content:"";position:absolute;inset:10px;
-background:repeating-linear-gradient(90deg,#d9b16b 0 3px,transparent 3px 15px);
-opacity:.5;
-}
-.mic{
-position:absolute;left:57%;top:32%;height:48%;width:25px;
-border-radius:20px;background:linear-gradient(90deg,#4c3924,#f2d19a,#6a4c27);
-box-shadow:0 0 22px #d9ad5a66;
-}
-.mic:before{
-content:"";position:absolute;top:-10px;left:-2px;width:29px;height:40%;
-border-radius:50%;background:repeating-linear-gradient(0deg,#181818 0 3px,#c7a16b 4px 5px);
-}
-.headphones{
-position:absolute;left:8%;bottom:13%;width:90px;height:55px;
-border:9px solid #171717;border-bottom:0;border-radius:60px 60px 0 0;
-transform:rotate(-15deg);
-}
-.headphones:after{
-content:"";position:absolute;left:-9px;top:32px;width:18px;height:27px;
-background:#8e6939;border-radius:7px;box-shadow:78px 0 #8e6939;
-}
-.welcome-content{
-flex:0 0 auto;padding:10px 17px 12px;
-background:linear-gradient(#111,#050505);
-border-radius:0 0 18px 18px;
-}
+.console{position:absolute;bottom:0;left:0;right:0;height:20%;background:linear-gradient(#47331e,#100d09);border-top:3px solid #9a713c}
+.console:after{content:"";position:absolute;inset:10px;background:repeating-linear-gradient(90deg,#d9b16b 0 3px,transparent 3px 15px);opacity:.5}
+.mic{position:absolute;left:57%;top:32%;height:48%;width:25px;border-radius:20px;background:linear-gradient(90deg,#4c3924,#f2d19a,#6a4c27);box-shadow:0 0 22px #d9ad5a66}
+.mic:before{content:"";position:absolute;top:-10px;left:-2px;width:29px;height:40%;border-radius:50%;background:repeating-linear-gradient(0deg,#181818 0 3px,#c7a16b 4px 5px)}
+.headphones{position:absolute;left:8%;bottom:13%;width:90px;height:55px;border:9px solid #171717;border-bottom:0;border-radius:60px 60px 0 0;transform:rotate(-15deg)}
+.headphones:after{content:"";position:absolute;left:-9px;top:32px;width:18px;height:27px;background:#8e6939;border-radius:7px;box-shadow:78px 0 #8e6939}
+.welcome-content{padding:10px 17px 12px;background:linear-gradient(#111,#050505);border-radius:0 0 18px 18px}
 .logo-mark{font-size:36px;color:var(--gold);font-weight:900;line-height:1}
 .welcome-brand{font-size:clamp(34px,9vw,47px);font-weight:900;line-height:1;margin:5px 0}
 .welcome-brand span{color:var(--gold)}
@@ -114,27 +43,10 @@ border-radius:0 0 18px 18px;
 .features{display:flex;justify-content:space-around;margin:10px 0 14px}
 .feature{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px}
 .feature-icon{font-size:25px;color:var(--gold)}
-.welcome-btn{
-width:100%;height:47px;border-radius:30px;margin:4px 0;
-font-weight:900;border:0;flex-shrink:0;
-}
+.welcome-btn{width:100%;height:47px;border-radius:30px;margin:4px 0;font-weight:900;border:0;flex-shrink:0}
 .get-started{background:linear-gradient(110deg,#fff0ce,#d8b77c);color:#17120a}
 .install-btn{background:transparent;border:1px solid var(--gold);color:var(--gold)}
 .signin-btn{background:#202020;color:#fff;border:1px solid #555}
-@media(max-height:650px){
-#welcome{padding:5px 12px}
-.welcome-wrap{max-height:100%}
-.studio-scene{min-height:90px}
-.welcome-content{padding:5px 12px}
-.logo-mark{font-size:27px}
-.welcome-brand{font-size:30px}
-.tagline{margin:3px 0 6px}
-.features{margin:5px 0 7px}
-.feature-icon{font-size:20px}
-.welcome-btn{height:37px;margin:2px 0}
-}
-
-/* GENERAL */
 .brand{font-size:24px;font-weight:900;letter-spacing:2px;color:var(--gold)}
 h1{font-size:26px;margin:8px 0}
 h2{font-size:21px}
@@ -143,157 +55,69 @@ p{line-height:1.45}
 .muted{color:var(--muted)}
 .gold{color:var(--gold)}
 .small{font-size:12px}
-.btn{
-width:100%;padding:15px;border:0;border-radius:13px;margin:7px 0;
-background:linear-gradient(110deg,#fff0ce,#d6b477);
-color:#17120a;font-weight:900;
-}
+.btn{width:100%;padding:15px;border:0;border-radius:13px;margin:7px 0;background:linear-gradient(110deg,#fff0ce,#d6b477);color:#17120a;font-weight:900}
 .btn-dark{background:#202020;color:#fff;border:1px solid var(--border)}
 .btn-outline{background:transparent;color:var(--gold);border:1px solid var(--gold)}
 .btn-danger{background:#381b1b;color:#ffbaba;border:1px solid #693333}
-.input{
-width:100%;padding:15px;margin:7px 0 14px;background:#1b1b1b;
-border:1px solid #454545;border-radius:12px;color:#fff;outline:none;
-}
+.input{width:100%;padding:15px;margin:7px 0 14px;background:#1b1b1b;border:1px solid #454545;border-radius:12px;color:#fff;outline:none}
 .input:focus{border-color:var(--gold)}
 label{display:block;text-align:left;color:#c7c0b4;font-size:13px}
 .auth-box{width:100%;max-width:420px;padding:20px}
 .link{border:0;background:none;color:var(--gold);padding:8px}
 .back-row{margin:0 0 18px}
 .back-row button{border:0;background:none;color:var(--gold);font-size:16px;padding:8px 0}
-.topbar{
-max-width:760px;margin:auto;padding:12px 17px;
-display:flex;align-items:center;justify-content:space-between;
-}
+.topbar{max-width:760px;margin:auto;padding:12px 17px;display:flex;align-items:center;justify-content:space-between}
 .topbrand{display:flex;align-items:center;gap:9px;color:var(--gold);font-weight:900;font-size:20px}
 .topbrand-mark{font-size:27px}
-.icon-btn{
-width:40px;height:40px;border-radius:50%;border:1px solid var(--border);
-background:#1b1b1b;color:var(--gold);font-size:19px;
-}
-.avatar-small{
-width:39px;height:39px;border-radius:50%;display:grid;place-items:center;
-background:#342b20;border:2px solid var(--gold);font-size:23px;
-}
+.icon-btn{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:#1b1b1b;color:var(--gold);font-size:19px}
+.avatar-small{width:39px;height:39px;border-radius:50%;display:grid;place-items:center;background:#342b20;border:2px solid var(--gold);font-size:23px}
 .row{display:flex;align-items:center;gap:10px}
-
-/* HOME */
 .home-intro{font-size:27px;font-weight:900;margin:10px 0 3px}
 .home-subtitle{font-size:14px;color:#ccc;margin:0 0 15px}
-.home-hero{
-width:100%;height:145px;position:relative;overflow:hidden;
-display:flex;align-items:end;text-align:left;padding:17px;
-border:1px solid #65543a;border-radius:17px;color:#fff;
-background:
-linear-gradient(90deg,#111b 0%,#1119 48%,#1114),
-radial-gradient(ellipse at 80% 20%,#a88b5d88,transparent 45%),
-linear-gradient(130deg,#302a23,#090909 60%,#4c4030);
-}
-.home-hero:before{
-content:"🎙️";position:absolute;right:20px;top:10px;font-size:85px;
-filter:drop-shadow(0 8px 12px #000);
-}
+.home-hero{width:100%;height:145px;position:relative;overflow:hidden;display:flex;align-items:end;text-align:left;padding:17px;border:1px solid #65543a;border-radius:17px;color:#fff;background:linear-gradient(90deg,#111b 0%,#1119 48%,#1114),radial-gradient(ellipse at 80% 20%,#a88b5d88,transparent 45%),linear-gradient(130deg,#302a23,#090909 60%,#4c4030)}
+.home-hero:before{content:"🎙️";position:absolute;right:20px;top:10px;font-size:85px;filter:drop-shadow(0 8px 12px #000)}
 .hero-copy{position:relative;z-index:1}
 .hero-copy strong{font-size:17px}
 .hero-copy p{font-size:12px;margin:4px 0 0;color:#ddd}
-.hero-arrow{
-position:absolute;right:12px;bottom:12px;z-index:2;
-width:35px;height:35px;border-radius:50%;display:grid;place-items:center;
-background:var(--gold);color:#111;font-size:25px;
-}
-.section-title{font-size:19px;margin:19px 0 12px}
+.hero-arrow{position:absolute;right:12px;bottom:12px;z-index:2;width:35px;height:35px;border-radius:50%;display:grid;place-items:center;background:var(--gold);color:#111;font-size:25px}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.tile{
-min-height:112px;padding:13px 10px;text-align:center;
-border-radius:15px;border:1px solid #393939;
-background:linear-gradient(145deg,#242424,#141414);color:#fff;
-}
-.tile:active{transform:scale(.98)}
+.tile{min-height:112px;padding:13px 10px;text-align:center;border-radius:15px;border:1px solid #393939;background:linear-gradient(145deg,#242424,#141414);color:#fff}
 .tile .emoji{display:block;font-size:25px;margin-bottom:8px;color:var(--gold)}
 .tile strong{display:block;font-size:13px;color:#f6e2bd;margin-bottom:5px}
 .tile small{display:block;color:#aaa;font-size:11px;line-height:1.35}
-.panel{
-padding:16px;margin:12px 0;border-radius:16px;
-background:#171717;border:1px solid var(--border);
-}
-.project-item{
-display:flex;align-items:center;gap:11px;padding:12px;
-margin:8px 0;border-radius:13px;background:#202020;
-border:1px solid #353535;
-}
-.project-play{
-width:35px;height:35px;border-radius:50%;border:0;
-background:#e8d5b0;color:#111;font-size:17px;
-}
+.panel{padding:16px;margin:12px 0;border-radius:16px;background:#171717;border:1px solid var(--border)}
+.project-item{display:flex;align-items:center;gap:11px;padding:12px;margin:8px 0;border-radius:13px;background:#202020;border:1px solid #353535}
+.project-play{width:35px;height:35px;border-radius:50%;border:0;background:#e8d5b0;color:#111;font-size:17px}
 .project-info{flex:1;min-width:0}
 .project-info strong{font-size:13px;display:block;overflow:hidden;text-overflow:ellipsis}
 .project-info small{font-size:11px;color:#aaa}
-.project-more{border:0;background:none;color:#ddd;font-size:20px}
-
-/* RECORDING */
 .recording-screen{text-align:center}
 .timer{font-size:48px;font-weight:900;margin:35px 0 5px;font-variant-numeric:tabular-nums}
 .record-hint{font-size:14px;color:#ccc;margin-bottom:25px}
-.mic-button{
-width:116px;height:116px;border-radius:50%;border:4px solid #b99a69;
-background:linear-gradient(140deg,#fff4df,#d9bd8b);
-color:#17120a;font-size:43px;margin:0 auto 24px;
-box-shadow:0 0 0 7px #b99a6922;
-}
+.mic-button{width:116px;height:116px;border-radius:50%;border:4px solid #b99a69;background:linear-gradient(140deg,#fff4df,#d9bd8b);color:#17120a;font-size:43px;margin:0 auto 24px}
 .mic-button.recording{background:#9b3333;color:white;border-color:#f0a0a0}
-.waveform{
-height:65px;display:flex;align-items:center;justify-content:center;
-gap:3px;margin:12px 0 25px;overflow:hidden;
-}
-.waveform i{
-display:block;width:3px;border-radius:5px;background:linear-gradient(#fff0ce,#b88c4c);
-height:var(--h);
-}
+.waveform{height:65px;display:flex;align-items:center;justify-content:center;gap:3px;margin:12px 0 25px;overflow:hidden}
+.waveform i{display:block;width:3px;border-radius:5px;background:linear-gradient(#fff0ce,#b88c4c);height:var(--h)}
 .record-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:25px}
-.record-action{
-min-height:78px;border:1px solid #393939;border-radius:14px;
-background:#202020;color:#fff;font-weight:700;
-}
+.record-action{min-height:78px;border:1px solid #393939;border-radius:14px;background:#202020;color:#fff;font-weight:700}
 .record-action span{display:block;font-size:24px;margin-bottom:6px;color:var(--gold)}
 audio{width:100%;margin-top:12px}
-
-/* LISTS / NAV */
 .list-item{padding:14px;background:#202020;border:1px solid var(--border);border-radius:13px;margin:9px 0}
-.nav{
-position:fixed;bottom:0;left:0;right:0;z-index:20;
-display:flex;justify-content:space-around;
-padding:9px 5px calc(9px + env(safe-area-inset-bottom));
-background:#101010f5;border-top:1px solid #39342b;backdrop-filter:blur(14px);
-}
-.nav button{
-flex:1;border:0;background:none;color:#999;font-size:10px;
-display:flex;flex-direction:column;align-items:center;gap:4px;
-}
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:20;display:flex;justify-content:space-around;padding:9px 5px calc(9px + env(safe-area-inset-bottom));background:#101010f5;border-top:1px solid #39342b;backdrop-filter:blur(14px)}
+.nav button{flex:1;border:0;background:none;color:#999;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:4px}
 .nav button span{font-size:21px}
 .nav button.active{color:var(--gold)}
-.toast{
-position:fixed;z-index:100;left:50%;bottom:95px;transform:translateX(-50%);
-width:max-content;max-width:90%;padding:12px 16px;
-background:#27231d;border:1px solid var(--gold);border-radius:12px;
-color:#fff;text-align:center;
-}
-@media(min-width:650px){.grid{grid-template-columns:repeat(2,1fr)}}
+.toast{position:fixed;z-index:100;left:50%;bottom:95px;transform:translateX(-50%);width:max-content;max-width:90%;padding:12px 16px;background:#27231d;border:1px solid var(--gold);border-radius:12px;color:#fff;text-align:center}
+@media(max-height:650px){#welcome{padding:5px 12px}.welcome-content{padding:5px 12px}.logo-mark{font-size:27px}.welcome-brand{font-size:30px}.tagline{margin:3px 0 6px}.features{margin:5px 0 7px}.feature-icon{font-size:20px}.welcome-btn{height:37px;margin:2px 0}}
 </style>
 </head>
-
 <body>
 <div id="toast" class="toast hidden"></div>
 
-<!-- WELCOME -->
 <section id="welcome" class="center-screen">
 <div class="welcome-wrap">
 <div class="studio-scene">
-<div class="studio-window"></div>
-<div class="speaker left"></div>
-<div class="speaker right"></div>
-<div class="console"></div>
-<div class="headphones"></div>
-<div class="mic"></div>
+<div class="studio-window"></div><div class="speaker left"></div><div class="speaker right"></div><div class="console"></div><div class="headphones"></div><div class="mic"></div>
 </div>
 <div class="welcome-content">
 <div class="logo-mark">〽</div>
@@ -311,65 +135,49 @@ color:#fff;text-align:center;
 </div>
 </section>
 
-<!-- CREATE ACCOUNT -->
 <section id="signup" class="center-screen hidden">
 <div class="auth-box">
 <div class="back-row"><button onclick="showScreen('welcome')">← Back</button></div>
 <div class="brand">〽 STUDIO FLOW</div>
-<h1>Create Account</h1>
-<p class="muted">Start your music journey.</p>
+<h1>Create Account</h1><p class="muted">Start your music journey.</p>
 <div class="avatar-small" style="width:105px;height:105px;margin:15px auto;font-size:58px">🐶</div>
 <p><strong>Your Pet Avatar</strong><br><span class="muted small">Generated by Studio Flow</span></p>
-<label>Full Name</label>
-<input id="signupName" class="input" placeholder="Enter your full name" autocomplete="name">
-<label>Gmail Address</label>
-<input id="signupEmail" class="input" type="email" placeholder="Enter your email" autocomplete="email">
-<label>Password</label>
-<input id="signupPassword" class="input" type="password" placeholder="At least 6 characters" autocomplete="new-password">
+<label>Full Name</label><input id="signupName" class="input" placeholder="Enter your full name" autocomplete="name">
+<label>Gmail Address</label><input id="signupEmail" class="input" type="email" placeholder="Enter your email" autocomplete="email">
+<label>Password</label><input id="signupPassword" class="input" type="password" placeholder="At least 6 characters" autocomplete="new-password">
 <button class="btn" onclick="signUp()">Create Account</button>
 <p class="muted">Already have an account? <button class="link" onclick="showScreen('signin')">Sign In</button></p>
 </div>
 </section>
 
-<!-- SIGN IN -->
 <section id="signin" class="center-screen hidden">
 <div class="auth-box">
 <div class="back-row"><button onclick="showScreen('welcome')">← Back</button></div>
 <div class="brand">〽 STUDIO FLOW</div>
-<h1>Welcome Back!</h1>
-<p class="muted">Sign in to continue making music.</p>
-<label>Email Address</label>
-<input id="signinEmail" class="input" type="email" placeholder="Email address">
-<label>Password</label>
-<input id="signinPassword" class="input" type="password" placeholder="Password">
-<button class="btn" onclick="signIn()">Sign In</button>
+<h1>Welcome Back!</h1><p class="muted">Sign in to continue making music.</p>
+<label>Email Address</label><input id="signinEmail" class="input" type="email" placeholder="Email address" autocomplete="email">
+<label>Password</label><input id="signinPassword" class="input" type="password" placeholder="Password" autocomplete="current-password">
+<button id="signinButton" class="btn" onclick="signIn()">Sign In</button>
 <button class="link" onclick="showScreen('forgot')">Forgot password?</button>
 <p class="muted">New to Studio Flow? <button class="link" onclick="showScreen('signup')">Create Account</button></p>
 </div>
 </section>
 
-<!-- FORGOT PASSWORD -->
 <section id="forgot" class="center-screen hidden">
 <div class="auth-box">
 <div class="back-row"><button onclick="showScreen('signin')">← Back</button></div>
-<h1>Reset Password</h1>
-<p class="muted">Enter your account email. We'll send a recovery link.</p>
-<label>Email Address</label>
-<input id="forgotEmail" class="input" type="email" placeholder="Your email">
+<h1>Reset Password</h1><p class="muted">Enter your account email. We'll send a recovery link.</p>
+<label>Email Address</label><input id="forgotEmail" class="input" type="email" placeholder="Your email">
 <button class="btn" onclick="resetPassword()">Send Recovery Link</button>
 </div>
 </section>
 
 <section id="reset" class="center-screen hidden">
-<div class="auth-box">
-<h1>Choose a New Password</h1>
-<label>New Password</label>
-<input id="newPassword" class="input" type="password" placeholder="New password">
-<button class="btn" onclick="updatePassword()">Update Password</button>
-</div>
+<div class="auth-box"><h1>Choose a New Password</h1>
+<label>New Password</label><input id="newPassword" class="input" type="password" placeholder="New password">
+<button class="btn" onclick="updatePassword()">Update Password</button></div>
 </section>
 
-<!-- MAIN APP -->
 <div id="mainApp" class="hidden">
 <header class="topbar">
 <div class="topbrand"><span class="topbrand-mark">〽</span> Studio Flow</div>
@@ -379,52 +187,24 @@ color:#fff;text-align:center;
 </div>
 </header>
 
-<!-- HOME -->
 <section id="home" class="screen active">
 <div class="home-intro">Welcome Back!</div>
 <p class="home-subtitle">Let's make great music today.</p>
-
 <button class="home-hero" onclick="showScreen('recording')">
-<div class="hero-copy">
-<strong>Record Your Song</strong>
-<p>Turn your idea into a hit!</p>
-</div>
-<span class="hero-arrow">›</span>
+<div class="hero-copy"><strong>Record Your Song</strong><p>Turn your idea into a hit!</p></div><span class="hero-arrow">›</span>
 </button>
-
 <div class="grid" style="margin-top:12px">
-<button class="tile" onclick="showScreen('recording')">
-<span class="emoji">🎙</span>
-<strong>Record Your Song</strong>
-<small>Record your vocals</small>
-</button>
-<button class="tile" onclick="showScreen('beats')">
-<span class="emoji">〽</span>
-<strong>AI Beat (Automatic)</strong>
-<small>Generate your music beat</small>
-</button>
-<button class="tile" onclick="showScreen('mastering')">
-<span class="emoji">🎚</span>
-<strong>Mastering</strong>
-<small>Pay per song</small>
-</button>
-<button class="tile" onclick="showScreen('distribution')">
-<span class="emoji">➤</span>
-<strong>Distribute Your Music</strong>
-<small>Pay per song</small>
-</button>
+<button class="tile" onclick="showScreen('recording')"><span class="emoji">🎙</span><strong>Record Your Song</strong><small>Record your vocals</small></button>
+<button class="tile" onclick="showScreen('beats')"><span class="emoji">〽</span><strong>AI Beat</strong><small>Generate your music beat</small></button>
+<button class="tile" onclick="showScreen('mastering')"><span class="emoji">🎚</span><strong>Mastering</strong><small>Pay per song</small></button>
+<button class="tile" onclick="showScreen('distribution')"><span class="emoji">➤</span><strong>Distribute Your Music</strong><small>Pay per song</small></button>
 </div>
-
-<div class="row" style="margin-top:22px">
-<h3 style="margin:0">My Projects</h3>
-<button class="link" onclick="showScreen('library')">See All →</button>
-</div>
+<div class="row" style="margin-top:22px"><h3 style="margin:0">My Projects</h3><button class="link" onclick="showScreen('library')">See All →</button></div>
 <div id="homeProjects"></div>
 </section>
 
-<!-- RECORDING -->
 <section id="recording" class="screen recording-screen">
-<div class="back-row" style="text-align:left"><button onclick="showScreen('home')">←</button></div>
+<div class="back-row" style="text-align:left"><button onclick="showScreen('home')">← Home</button></div>
 <h2>Recording</h2>
 <div id="recordTimer" class="timer">00:00</div>
 <p id="recordStatus" class="record-hint">Tap the button to start recording your song</p>
@@ -433,105 +213,65 @@ color:#fff;text-align:center;
 <audio id="recordedAudio" controls class="hidden"></audio>
 <button id="saveRecordingButton" class="btn hidden" onclick="saveCurrentAudio()">Save Recording</button>
 <div class="record-actions">
-<button class="record-action" onclick="document.getElementById('audioImport').click()">
-<span>▱</span>Import from Phone
-</button>
-<button class="record-action" onclick="showScreen('mastering')">
-<span>⚙</span>Mastering
-</button>
+<button class="record-action" onclick="document.getElementById('audioImport').click()"><span>▱</span>Import from Phone</button>
+<button class="record-action" onclick="showScreen('mastering')"><span>🎚</span>Mastering</button>
 </div>
 <input id="audioImport" class="hidden" type="file" accept="audio/*" onchange="importAudio(event)">
 </section>
 
-<!-- AI BEAT -->
 <section id="beats" class="screen">
 <div class="back-row"><button onclick="showScreen('home')">← Home</button></div>
-<h1>AI Beat Generator</h1>
-<div class="waveform" style="height:95px" id="beatWave"></div>
+<h1>AI Beat Generator</h1><div class="waveform" style="height:95px" id="beatWave"></div>
 <div class="panel" style="text-align:center">
 <h3 class="gold">Create Your Beat</h3>
-<p class="muted">Our AI will help identify your music style and prepare a matching beat.</p>
+<p class="muted">Choose your style and mood for your beat.</p>
 <label>Choose Music Style</label>
-<select id="beatStyle" class="input">
-<option>Automatic</option><option>Afrobeats</option><option>Afropop</option>
-<option>Hip-hop</option><option>Gospel</option><option>R&B</option>
-<option>Drill</option><option>Amapiano</option>
-</select>
+<select id="beatStyle" class="input"><option>Automatic</option><option>Afrobeats</option><option>Afropop</option><option>Hip-hop</option><option>Gospel</option><option>R&B</option><option>Drill</option><option>Amapiano</option></select>
 <label>Beat Mood</label>
-<select id="beatMood" class="input">
-<option>Automatic</option><option>Happy</option><option>Emotional</option>
-<option>Energetic</option><option>Romantic</option><option>Inspirational</option>
-</select>
+<select id="beatMood" class="input"><option>Automatic</option><option>Happy</option><option>Emotional</option><option>Energetic</option><option>Romantic</option><option>Inspirational</option></select>
 <button class="btn" onclick="requestBeat()">Generate AI Beat</button>
-<p class="muted small">AI beat generation will require a connected music-generation service.</p>
+<p class="muted small">AI beat generation needs a connected music-generation service.</p>
 </div>
-<div class="panel">
-<h3>Import a Beat</h3>
-<button class="btn btn-dark" onclick="document.getElementById('beatImport').click()">＋ Import Beat From Phone</button>
-<input id="beatImport" class="hidden" type="file" accept="audio/*" onchange="importBeat(event)">
-</div>
-<h3>My Beat List</h3>
-<div id="beatList"></div>
+<div class="panel"><h3>Import a Beat</h3><button class="btn btn-dark" onclick="document.getElementById('beatImport').click()">＋ Import Beat From Phone</button><input id="beatImport" class="hidden" type="file" accept="audio/*" onchange="importBeat(event)"></div>
+<h3>My Beat List</h3><div id="beatList"></div>
 </section>
 
-<!-- MASTERING -->
 <section id="mastering" class="screen">
 <div class="back-row"><button onclick="showScreen('home')">← Home</button></div>
 <h1>Mastering</h1>
 <div class="panel" style="text-align:center">
-<div style="font-size:35px;color:var(--gold)">🎚</div>
-<h2>Master Your Song</h2>
-<p class="muted">Our AI will generate a matching beat and help master your song without changing your voice.</p>
-<div style="font-size:32px;font-weight:900;color:var(--gold)">₦5,000</div>
-<p class="muted small">Per Song</p>
+<div style="font-size:35px;color:var(--gold)">🎚</div><h2>Master Your Song</h2>
+<p class="muted">Master your song while keeping your original voice.</p>
+<div style="font-size:32px;font-weight:900;color:var(--gold)">₦5,000</div><p class="muted small">Per Song</p>
 </div>
 <div class="panel">
 <p class="gold"><strong>Pay before mastering</strong></p>
 <p class="muted small">Your song will be processed after payment is confirmed.</p>
-<label>Select Your Song</label>
-<select id="masteringSong" class="input">
-<option value="">Choose a saved recording</option>
-</select>
+<label>Select Your Song</label><select id="masteringSong" class="input"><option value="">Choose a saved recording</option></select>
 <button class="btn" onclick="requestMastering()">Continue to Mastering</button>
-<p class="muted small">The displayed price is a placeholder until the owner configures the actual price and payment verification.</p>
+<p class="muted small">Price is a placeholder until the owner configures the actual price and payment verification.</p>
 </div>
 </section>
 
-<!-- DISTRIBUTION -->
 <section id="distribution" class="screen">
 <div class="back-row"><button onclick="showScreen('home')">← Home</button></div>
 <h1>Distribute Your Music</h1>
-<div class="panel" style="text-align:center">
-<div style="font-size:70px">🌍</div>
-<p>Get your music on major platforms worldwide.</p>
-<div style="font-size:32px;font-weight:900;color:var(--gold)">₦15,000</div>
-<p class="muted small">Per Song</p>
-</div>
+<div class="panel" style="text-align:center"><div style="font-size:70px">🌍</div><p>Get your music on major platforms worldwide.</p><div style="font-size:32px;font-weight:900;color:var(--gold)">₦15,000</div><p class="muted small">Per Song</p></div>
 <div class="panel">
-<label>Song Title</label>
-<input id="releaseTitle" class="input" placeholder="Enter song title">
-<label>Artist Name</label>
-<input id="releaseArtist" class="input" placeholder="Artist name">
-<label>Release Type</label>
-<select id="releaseType" class="input">
-<option>Single</option><option>EP</option><option>Album</option>
-</select>
-<label>Release Notes</label>
-<textarea id="releaseNotes" class="input" rows="3" placeholder="Additional information"></textarea>
+<label>Song Title</label><input id="releaseTitle" class="input" placeholder="Enter song title">
+<label>Artist Name</label><input id="releaseArtist" class="input" placeholder="Artist name">
+<label>Release Type</label><select id="releaseType" class="input"><option>Single</option><option>EP</option><option>Album</option></select>
+<label>Release Notes</label><textarea id="releaseNotes" class="input" rows="3" placeholder="Additional information"></textarea>
 <button class="btn" onclick="requestDistribution()">Start Distribution</button>
-<p class="muted small">Distribution requires an authorized partner and a connected payment workflow.</p>
+<p class="muted small">Distribution partner and payment integration are still required.</p>
 </div>
 </section>
 
-<!-- MY MUSIC -->
 <section id="library" class="screen">
 <div class="back-row"><button onclick="showScreen('home')">← Home</button></div>
-<h1>My Music</h1>
-<p class="muted">Your saved recordings and imported music.</p>
-<div id="musicLibrary"></div>
+<h1>My Music</h1><p class="muted">Your saved recordings and imported music.</p><div id="musicLibrary"></div>
 </section>
 
-<!-- PROFILE -->
 <section id="profile" class="screen">
 <div class="back-row"><button onclick="showScreen('home')">← Home</button></div>
 <h1>My Profile</h1>
@@ -539,40 +279,19 @@ color:#fff;text-align:center;
 <div class="avatar-small" style="width:110px;height:110px;margin:12px auto;font-size:62px">🐶</div>
 <h2 id="profileName" class="gold" style="text-align:center">StudioFlow Artist</h2>
 <p id="profileEmail" class="muted small" style="text-align:center"></p>
-<label>Artist Name</label>
-<input id="artistName" class="input" placeholder="Your artist name">
-<label>About Me</label>
-<textarea id="artistBio" class="input" rows="3" placeholder="Tell people about your music"></textarea>
+<label>Artist Name</label><input id="artistName" class="input" placeholder="Your artist name">
+<label>About Me</label><textarea id="artistBio" class="input" rows="3" placeholder="Tell people about your music"></textarea>
 <button class="btn" onclick="saveProfile()">Save Profile</button>
 </div>
-<button class="btn btn-dark" onclick="showScreen('settings')">Settings</button>
-<button class="btn btn-danger" onclick="signOut()">Sign Out</button>
-</section>
-
-<!-- NOTIFICATIONS -->
-<section id="notifications" class="screen">
-<div class="back-row"><button onclick="showScreen('home')">← Home</button></div>
-<h1>Notifications</h1>
-<div class="panel"><p class="muted">You don't have any new notifications.</p></div>
-</section>
-
-<!-- SETTINGS -->
-<section id="settings" class="screen">
-<div class="back-row"><button onclick="showScreen('profile')">← Profile</button></div>
-<h1>Settings</h1>
-<div class="panel">
-<h3>Account</h3>
-<p class="muted small">Your account is managed using your email and password.</p>
 <button class="btn btn-dark" onclick="showScreen('forgot')">Reset Password</button>
 <button class="btn btn-danger" onclick="signOut()">Sign Out</button>
-</div>
-<div class="panel">
-<h3>App Installation</h3>
-<button id="settingsInstallButton" class="btn btn-outline" onclick="installApp()">↓ Install App</button>
-</div>
 </section>
 
-<!-- BOTTOM NAVIGATION -->
+<section id="notifications" class="screen">
+<div class="back-row"><button onclick="showScreen('home')">← Home</button></div>
+<h1>Notifications</h1><div class="panel"><p class="muted">You don't have any new notifications.</p></div>
+</section>
+
 <nav class="nav">
 <button class="active" data-page="home" onclick="showScreen('home')"><span>⌂</span>Home</button>
 <button data-page="recording" onclick="showScreen('recording')"><span>🎙</span>Studio</button>
@@ -582,420 +301,424 @@ color:#fff;text-align:center;
 </nav>
 </div>
 
-<script type="module">
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+<!-- Supabase library -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+"use strict";
 
-const SUPABASE_URL="https://wqhnrsozsgyfosvzkppz.supabase.co";
-const SUPABASE_KEY="sb_publishable_S_Jv_5K8rOME8hsqkcCMSQ_phrBXwuO";
-const supabase=createClient(SUPABASE_URL,SUPABASE_KEY);
+/* SUPABASE CONNECTION */
+const SUPABASE_URL = "https://wqhnrsozsgyfosvzkppz.supabase.co";
+const SUPABASE_KEY = "sb_publishable_S_Jv_5K8rOME8hsqkcCMSQ_phrBXwuO";
 
-let currentUser=null;
-let mediaRecorder=null;
-let recordedChunks=[];
-let currentAudioBlob=null;
-let currentAudioName="";
-let currentAudioURL=null;
-let savedMusic=[];
-let savedBeats=[];
-let recordingStarted=0;
-let recordingTimer=null;
+let supabaseClient = null;
+let currentUser = null;
+
+function initializeSupabase(){
+  if(!window.supabase || !window.supabase.createClient){
+    throw new Error("The Supabase library could not load. Check your internet connection and refresh the app.");
+  }
+  if(!SUPABASE_URL.startsWith("https://") || !SUPABASE_KEY){
+    throw new Error("Supabase project URL or publishable key is missing.");
+  }
+  if(!supabaseClient){
+    supabaseClient = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{
+      auth:{
+        persistSession:true,
+        autoRefreshToken:true,
+        detectSessionInUrl:true,
+        storage:window.localStorage
+      },
+      global:{headers:{"X-Client-Info":"studio-flow"}}
+    });
+  }
+  return supabaseClient;
+}
 
 const $=id=>document.getElementById(id);
-
+let toastTimer=null;
 function toast(message){
-const el=$("toast");
-el.textContent=message;
-el.classList.remove("hidden");
-clearTimeout(window.toastTimer);
-window.toastTimer=setTimeout(()=>el.classList.add("hidden"),3500);
+  const el=$("toast");
+  el.textContent=message;
+  el.classList.remove("hidden");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.add("hidden"),4500);
 }
 
-/* SCREEN NAVIGATION */
-window.showScreen=function(id){
+function connectionMessage(error){
+  console.error("Studio Flow connection error:",error);
+  const message=String(error?.message||error||"");
+  if(/failed to fetch|networkerror|load failed|fetch failed/i.test(message)){
+    return "Cannot reach Supabase. Check your internet connection, Supabase project status, URL and publishable key, then try again.";
+  }
+  if(/invalid login credentials/i.test(message)){
+    return "Email or password is incorrect. Check both and try again.";
+  }
+  if(/email not confirmed/i.test(message)){
+    return "Your email has not been confirmed. Check your inbox for the confirmation email.";
+  }
+  if(/too many requests/i.test(message)){
+    return "Too many attempts. Wait a little and try again.";
+  }
+  return message || "Something went wrong. Please try again.";
+}
+
+/* PAGE NAVIGATION */
 const authScreens=["welcome","signup","signin","forgot","reset"];
-document.body.classList.toggle("welcome-open",id==="welcome");
-authScreens.forEach(x=>$(x).classList.toggle("hidden",x!==id));
-$("mainApp").classList.toggle("hidden",authScreens.includes(id));
-document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-
-if(!authScreens.includes(id)){
-const page=$(id);
-if(page)page.classList.add("active");
-document.querySelectorAll(".nav button").forEach(btn=>{
-btn.classList.toggle("active",btn.dataset.page===id);
-});
-if(id==="library")renderLibrary();
-if(id==="beats")renderBeats();
-if(id==="mastering")refreshSongOptions();
-if(id==="home")renderHomeProjects();
-}
-if(!window.skipHistory)history.pushState({page:id},"","#"+id);
+window.showScreen=function(id){
+  document.body.classList.toggle("welcome-open",id==="welcome");
+  authScreens.forEach(x=>$(x)?.classList.toggle("hidden",x!==id));
+  $("mainApp").classList.toggle("hidden",authScreens.includes(id));
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  if(!authScreens.includes(id)){
+    const page=$(id);
+    if(page)page.classList.add("active");
+    document.querySelectorAll(".nav button").forEach(btn=>btn.classList.toggle("active",btn.dataset.page===id));
+    if(id==="library")renderLibrary();
+    if(id==="beats")renderBeats();
+    if(id==="mastering")refreshSongOptions();
+    if(id==="home")renderHomeProjects();
+  }
+  if(!window.skipHistory)history.pushState({page:id},"","#"+id);
 };
-
 window.addEventListener("popstate",()=>{
-const id=location.hash.replace("#","");
-window.skipHistory=true;
-window.showScreen($(id)?id:(currentUser?"home":"welcome"));
-window.skipHistory=false;
+  const id=location.hash.replace("#","");
+  window.skipHistory=true;
+  window.showScreen($(id)?id:(currentUser?"home":"welcome"));
+  window.skipHistory=false;
 });
 
-/* USER DETAILS */
+/* USER PROFILE */
 function displayUser(user){
-currentUser=user;
-const name=user?.user_metadata?.full_name||user?.email?.split("@")[0]||"Artist";
-$("profileName").textContent=user?.user_metadata?.artist_name||name;
-$("profileEmail").textContent=user?.email||"";
-$("signupName").value=user?.user_metadata?.full_name||"";
-$("artistName").value=user?.user_metadata?.artist_name||name;
-$("artistBio").value=user?.user_metadata?.bio||"";
+  currentUser=user;
+  const name=user?.user_metadata?.full_name||user?.email?.split("@")[0]||"Artist";
+  $("profileName").textContent=user?.user_metadata?.artist_name||name;
+  $("profileEmail").textContent=user?.email||"";
+  $("artistName").value=user?.user_metadata?.artist_name||name;
+  $("artistBio").value=user?.user_metadata?.bio||"";
 }
 
 /* SIGN UP */
 window.signUp=async function(){
-const name=$("signupName").value.trim();
-const email=$("signupEmail").value.trim();
-const password=$("signupPassword").value;
-if(!name||!email||password.length<6)
-return toast("Enter your name, valid email and a password of at least 6 characters.");
-
-const {data,error}=await supabase.auth.signUp({
-email,password,options:{data:{full_name:name}}
-});
-if(error)return toast(error.message);
-if(data.session){
-displayUser(data.user);
-showScreen("home");
-toast("Your account has been created!");
-}else{
-toast("Account created. Check your email if confirmation is required.");
-showScreen("signin");
-}
+  const name=$("signupName").value.trim();
+  const email=$("signupEmail").value.trim();
+  const password=$("signupPassword").value;
+  if(!name||!email||password.length<6){
+    toast("Enter your name, a valid email and a password of at least 6 characters.");
+    return;
+  }
+  const button=document.querySelector("#signup .btn");
+  button.disabled=true;button.textContent="Creating account...";
+  try{
+    const client=initializeSupabase();
+    const {data,error}=await client.auth.signUp({
+      email,password,options:{data:{full_name:name}}
+    });
+    if(error)throw error;
+    if(data.session&&data.user){
+      displayUser(data.user);showScreen("home");toast("Your account has been created!");
+    }else{
+      toast("Account created. If email confirmation is enabled, check your inbox.");
+      showScreen("signin");
+    }
+  }catch(error){toast(connectionMessage(error));}
+  finally{button.disabled=false;button.textContent="Create Account";}
 };
 
-/* SIGN IN */
+/* SIGN IN - WITH CONNECTION ERROR HANDLING */
 window.signIn=async function(){
-const email=$("signinEmail").value.trim();
-const password=$("signinPassword").value;
-if(!email||!password)return toast("Enter your email and password.");
-const {data,error}=await supabase.auth.signInWithPassword({email,password});
-if(error)return toast(error.message);
-displayUser(data.user);
-showScreen("home");
-toast("Welcome back!");
+  const email=$("signinEmail").value.trim();
+  const password=$("signinPassword").value;
+  if(!email||!password){toast("Enter your email and password.");return;}
+  const button=$("signinButton");
+  button.disabled=true;button.textContent="Signing in...";
+  try{
+    const client=initializeSupabase();
+    const {data,error}=await client.auth.signInWithPassword({email,password});
+    if(error)throw error;
+    if(!data?.user)throw new Error("Supabase did not return a signed-in user.");
+    displayUser(data.user);
+    showScreen("home");
+    toast("Welcome back!");
+  }catch(error){
+    toast(connectionMessage(error));
+  }finally{
+    button.disabled=false;
+    button.textContent="Sign In";
+  }
 };
 
 /* PASSWORD RECOVERY */
 window.resetPassword=async function(){
-const email=$("forgotEmail").value.trim();
-if(!email)return toast("Enter your account email.");
-const {error}=await supabase.auth.resetPasswordForEmail(email,{
-redirectTo:location.origin+location.pathname+"#reset"
-});
-if(error)return toast(error.message);
-toast("Recovery email sent. Check your inbox.");
+  const email=$("forgotEmail").value.trim();
+  if(!email){toast("Enter your account email.");return;}
+  try{
+    const client=initializeSupabase();
+    const {error}=await client.auth.resetPasswordForEmail(email,{
+      redirectTo:location.origin+location.pathname+"#reset"
+    });
+    if(error)throw error;
+    toast("Recovery email sent. Check your inbox.");
+  }catch(error){toast(connectionMessage(error));}
 };
-
 window.updatePassword=async function(){
-const password=$("newPassword").value;
-if(password.length<6)return toast("Use at least 6 characters.");
-const {error}=await supabase.auth.updateUser({password});
-if(error)return toast(error.message);
-toast("Password updated successfully.");
-showScreen("home");
+  const password=$("newPassword").value;
+  if(password.length<6){toast("Use at least 6 characters.");return;}
+  try{
+    const client=initializeSupabase();
+    const {error}=await client.auth.updateUser({password});
+    if(error)throw error;
+    toast("Password updated successfully.");
+    showScreen("home");
+  }catch(error){toast(connectionMessage(error));}
 };
 
 /* SIGN OUT */
 window.signOut=async function(){
-const {error}=await supabase.auth.signOut();
-if(error)return toast(error.message);
-currentUser=null;
-showScreen("welcome");
-toast("You have signed out.");
+  try{
+    const client=initializeSupabase();
+    const {error}=await client.auth.signOut();
+    if(error)throw error;
+    currentUser=null;
+    showScreen("welcome");
+    toast("You have signed out.");
+  }catch(error){toast(connectionMessage(error));}
 };
 
 /* PROFILE */
 window.saveProfile=async function(){
-if(!currentUser)return;
-const artist_name=$("artistName").value.trim();
-const bio=$("artistBio").value.trim();
-const {data,error}=await supabase.auth.updateUser({
-data:{...currentUser.user_metadata,artist_name,bio}
-});
-if(error)return toast(error.message);
-displayUser(data.user);
-toast("Profile saved.");
+  if(!currentUser)return;
+  const artist_name=$("artistName").value.trim();
+  const bio=$("artistBio").value.trim();
+  try{
+    const client=initializeSupabase();
+    const {data,error}=await client.auth.updateUser({
+      data:{...currentUser.user_metadata,artist_name,bio}
+    });
+    if(error)throw error;
+    displayUser(data.user);
+    toast("Profile saved.");
+  }catch(error){toast(connectionMessage(error));}
 };
 
-/* APP INSTALLATION */
+/* INSTALL APP */
 let deferredInstallPrompt=null;
 let installationConfirmed=false;
-
 function isInstalled(){
-return installationConfirmed||
-window.matchMedia("(display-mode: standalone)").matches||
-window.navigator.standalone===true;
+  return installationConfirmed ||
+    window.matchMedia("(display-mode: standalone)").matches ||
+    window.navigator.standalone===true;
 }
 function updateInstallButtons(){
-const installed=isInstalled();
-const a=$("welcomeInstallButton");
-const b=$("settingsInstallButton");
-if(a){a.disabled=installed;a.textContent=installed?"✓ Installed":"↓ Install App";}
-if(b){b.disabled=installed;b.textContent=installed?"✓ Installed":"↓ Install App";}
+  const installed=isInstalled();
+  const a=$("welcomeInstallButton");
+  if(a){a.disabled=installed;a.textContent=installed?"✓ Installed":"↓ Install App";}
 }
 window.addEventListener("beforeinstallprompt",event=>{
-event.preventDefault();
-deferredInstallPrompt=event;
+  event.preventDefault();deferredInstallPrompt=event;
 });
 window.installApp=async function(){
-if(isInstalled()){updateInstallButtons();return toast("Studio Flow is already installed.");}
-if(deferredInstallPrompt){
-deferredInstallPrompt.prompt();
-const result=await deferredInstallPrompt.userChoice;
-deferredInstallPrompt=null;
-if(result.outcome==="accepted")toast("Installation started. Open Studio Flow from your home screen.");
-else toast("Installation cancelled.");
-updateInstallButtons();
-return;
-}
-toast("Open Chrome's ⋮ menu and choose Install app or Add to Home screen.");
+  if(isInstalled()){updateInstallButtons();toast("Studio Flow is already installed.");return;}
+  if(deferredInstallPrompt){
+    deferredInstallPrompt.prompt();
+    const result=await deferredInstallPrompt.userChoice;
+    deferredInstallPrompt=null;
+    if(result.outcome==="accepted")toast("Installation started. Open Studio Flow from your home screen.");
+    else toast("Installation cancelled.");
+    updateInstallButtons();return;
+  }
+  toast("Open Chrome's ⋮ menu and choose Install app or Add to Home screen.");
 };
 window.addEventListener("appinstalled",()=>{
-deferredInstallPrompt=null;
-installationConfirmed=true;
-updateInstallButtons();
-toast("Studio Flow has been installed!");
+  deferredInstallPrompt=null;installationConfirmed=true;updateInstallButtons();toast("Studio Flow has been installed!");
 });
 window.addEventListener("pageshow",updateInstallButtons);
 document.addEventListener("visibilitychange",updateInstallButtons);
 updateInstallButtons();
 
-/* WAVEFORM DECORATION */
+/* WAVEFORM */
 function makeWave(id,count=55){
-const el=$(id);
-if(!el)return;
-el.innerHTML="";
-for(let i=0;i<count;i++){
-const bar=document.createElement("i");
-bar.style.setProperty("--h",(8+Math.abs(Math.sin(i*1.7)*42))+"px");
-el.appendChild(bar);
+  const el=$(id);if(!el)return;
+  el.innerHTML="";
+  for(let i=0;i<count;i++){
+    const bar=document.createElement("i");
+    bar.style.setProperty("--h",(8+Math.abs(Math.sin(i*1.7)*42))+"px");
+    el.appendChild(bar);
+  }
 }
-}
-makeWave("waveform",65);
-makeWave("beatWave",65);
-
-/* RECORDING TIMER */
-function formatTime(seconds){
-const m=Math.floor(seconds/60).toString().padStart(2,"0");
-const s=(seconds%60).toString().padStart(2,"0");
-return m+":"+s;
-}
-function startTimer(){
-recordingStarted=Date.now();
-clearInterval(recordingTimer);
-recordingTimer=setInterval(()=>{
-$("recordTimer").textContent=formatTime(Math.floor((Date.now()-recordingStarted)/1000));
-},500);
-}
-function stopTimer(){clearInterval(recordingTimer);recordingTimer=null;}
+makeWave("waveform",65);makeWave("beatWave",65);
 
 /* RECORDING */
-window.toggleRecording=async function(){
-if(mediaRecorder&&mediaRecorder.state==="recording"){
-mediaRecorder.stop();
-stopTimer();
-$("recordButton").classList.remove("recording");
-$("recordButton").textContent="🎙";
-$("recordStatus").textContent="Finishing your recording...";
-return;
+let mediaRecorder=null,recordedChunks=[],currentAudioBlob=null,currentAudioName="",currentAudioURL=null;
+let savedMusic=[],savedBeats=[],recordingStarted=0,recordingTimer=null;
+function formatTime(seconds){
+  return Math.floor(seconds/60).toString().padStart(2,"0")+":"+Math.floor(seconds%60).toString().padStart(2,"0");
 }
-if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder)
-return toast("Audio recording is not supported in this browser.");
-
-try{
-const stream=await navigator.mediaDevices.getUserMedia({audio:true});
-recordedChunks=[];
-mediaRecorder=new MediaRecorder(stream);
-mediaRecorder.ondataavailable=e=>{if(e.data.size)recordedChunks.push(e.data);};
-mediaRecorder.onstop=()=>{
-currentAudioBlob=new Blob(recordedChunks,{type:mediaRecorder.mimeType||"audio/webm"});
-currentAudioName="Studio Flow Recording "+new Date().toLocaleString();
-if(currentAudioURL)URL.revokeObjectURL(currentAudioURL);
-currentAudioURL=URL.createObjectURL(currentAudioBlob);
-$("recordedAudio").src=currentAudioURL;
-$("recordedAudio").classList.remove("hidden");
-$("saveRecordingButton").classList.remove("hidden");
-$("recordStatus").textContent="Recording complete. Save your song or continue to mastering.";
-$("recordTimer").textContent=formatTime(Math.floor((Date.now()-recordingStarted)/1000));
-stream.getTracks().forEach(track=>track.stop());
+function startTimer(){
+  recordingStarted=Date.now();clearInterval(recordingTimer);
+  recordingTimer=setInterval(()=>{
+    $("recordTimer").textContent=formatTime((Date.now()-recordingStarted)/1000);
+  },500);
+}
+function stopTimer(){clearInterval(recordingTimer);recordingTimer=null;}
+window.toggleRecording=async function(){
+  if(mediaRecorder&&mediaRecorder.state==="recording"){
+    mediaRecorder.stop();stopTimer();
+    $("recordButton").classList.remove("recording");
+    $("recordButton").textContent="🎙";
+    $("recordStatus").textContent="Finishing your recording...";
+    return;
+  }
+  if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){
+    toast("Audio recording is not supported in this browser.");return;
+  }
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    recordedChunks=[];
+    mediaRecorder=new MediaRecorder(stream);
+    mediaRecorder.ondataavailable=e=>{if(e.data.size)recordedChunks.push(e.data);};
+    mediaRecorder.onstop=()=>{
+      currentAudioBlob=new Blob(recordedChunks,{type:mediaRecorder.mimeType||"audio/webm"});
+      currentAudioName="Studio Flow Recording "+new Date().toLocaleString();
+      if(currentAudioURL)URL.revokeObjectURL(currentAudioURL);
+      currentAudioURL=URL.createObjectURL(currentAudioBlob);
+      $("recordedAudio").src=currentAudioURL;
+      $("recordedAudio").classList.remove("hidden");
+      $("saveRecordingButton").classList.remove("hidden");
+      $("recordStatus").textContent="Recording complete. Save your song or continue to mastering.";
+      $("recordTimer").textContent=formatTime((Date.now()-recordingStarted)/1000);
+      stream.getTracks().forEach(track=>track.stop());
+    };
+    mediaRecorder.start();startTimer();
+    $("recordButton").classList.add("recording");
+    $("recordButton").textContent="■";
+    $("recordStatus").textContent="Recording in progress...";
+    $("saveRecordingButton").classList.add("hidden");
+  }catch(error){console.error(error);toast("Microphone permission is needed to record.");}
 };
-mediaRecorder.start();
-startTimer();
-$("recordButton").classList.add("recording");
-$("recordButton").textContent="■";
-$("recordStatus").textContent="Recording in progress...";
-$("saveRecordingButton").classList.add("hidden");
-}catch(error){toast("Microphone permission is needed to record.");}
-};
-
 window.saveCurrentAudio=function(){
-if(!currentAudioBlob)return toast("There is no recording to save.");
-saveMusicItem(currentAudioName,currentAudioBlob,"Recording");
-toast("Recording saved to My Projects.");
+  if(!currentAudioBlob){toast("There is no recording to save.");return;}
+  saveMusicItem(currentAudioName,currentAudioBlob,"Recording");
+  toast("Recording saved to My Projects.");
 };
-
 window.importAudio=function(event){
-const file=event.target.files?.[0];
-if(!file)return;
-currentAudioBlob=file;
-currentAudioName=file.name;
-if(currentAudioURL)URL.revokeObjectURL(currentAudioURL);
-currentAudioURL=URL.createObjectURL(file);
-$("recordedAudio").src=currentAudioURL;
-$("recordedAudio").classList.remove("hidden");
-$("saveRecordingButton").classList.remove("hidden");
-$("recordStatus").textContent="Imported: "+file.name;
-$("recordTimer").textContent="00:00";
+  const file=event.target.files?.[0];if(!file)return;
+  currentAudioBlob=file;currentAudioName=file.name;
+  if(currentAudioURL)URL.revokeObjectURL(currentAudioURL);
+  currentAudioURL=URL.createObjectURL(file);
+  $("recordedAudio").src=currentAudioURL;
+  $("recordedAudio").classList.remove("hidden");
+  $("saveRecordingButton").classList.remove("hidden");
+  $("recordStatus").textContent="Imported: "+file.name;
+  $("recordTimer").textContent="00:00";
 };
 
 /* MUSIC LIBRARY */
 function saveMusicItem(name,blob,type){
-savedMusic.push({
-id:Date.now(),name,blob,type,url:URL.createObjectURL(blob)
-});
-localStorage.setItem("studioFlowMusicMeta",JSON.stringify(
-savedMusic.map(item=>({id:item.id,name:item.name,type:item.type}))
-));
-renderLibrary();
-renderHomeProjects();
-refreshSongOptions();
+  savedMusic.push({id:Date.now(),name,blob,type,url:URL.createObjectURL(blob)});
+  renderLibrary();renderHomeProjects();refreshSongOptions();
 }
-
 function renderHomeProjects(){
-const list=$("homeProjects");
-if(!list)return;
-list.innerHTML="";
-if(!savedMusic.length){
-list.innerHTML='<div class="project-item"><div class="project-play">▶</div><div class="project-info"><strong>No projects yet</strong><small>Your saved songs will appear here.</small></div></div>';
-return;
+  const list=$("homeProjects");if(!list)return;
+  list.innerHTML="";
+  if(!savedMusic.length){
+    list.innerHTML='<div class="project-item"><div class="project-play">▶</div><div class="project-info"><strong>No projects yet</strong><small>Your saved songs will appear here.</small></div></div>';return;
+  }
+  savedMusic.slice(-3).reverse().forEach(item=>{
+    const box=document.createElement("div");box.className="project-item";
+    const play=document.createElement("button");play.className="project-play";play.textContent="▶";play.onclick=()=>showScreen("library");
+    const info=document.createElement("div");info.className="project-info";
+    const title=document.createElement("strong");title.textContent=item.name;
+    const sub=document.createElement("small");sub.textContent=item.type+" · Saved in this session";
+    info.append(title,sub);box.append(play,info);list.appendChild(box);
+  });
 }
-savedMusic.slice(-3).reverse().forEach(item=>{
-const box=document.createElement("div");
-box.className="project-item";
-const play=document.createElement("button");
-play.className="project-play";
-play.textContent="▶";
-play.onclick=()=>{showScreen("library");};
-const info=document.createElement("div");
-info.className="project-info";
-const title=document.createElement("strong");
-title.textContent=item.name;
-const sub=document.createElement("small");
-sub.textContent=item.type+" · Saved in this session";
-info.append(title,sub);
-box.append(play,info);
-list.appendChild(box);
-});
-}
-
 function renderLibrary(){
-const list=$("musicLibrary");
-list.innerHTML="";
-if(!savedMusic.length){
-list.innerHTML='<div class="panel"><p class="muted">Your saved music will appear here.</p></div>';
-return;
-}
-savedMusic.forEach(item=>{
-const box=document.createElement("div");
-box.className="list-item";
-const title=document.createElement("strong");
-title.textContent=item.name;
-const type=document.createElement("p");
-type.className="muted small";
-type.textContent=item.type;
-const audio=document.createElement("audio");
-audio.controls=true;
-audio.src=item.url;
-box.append(title,type,audio);
-list.appendChild(box);
-});
+  const list=$("musicLibrary");if(!list)return;
+  list.innerHTML="";
+  if(!savedMusic.length){list.innerHTML='<div class="panel"><p class="muted">Your saved music will appear here.</p></div>';return;}
+  savedMusic.forEach(item=>{
+    const box=document.createElement("div");box.className="list-item";
+    const title=document.createElement("strong");title.textContent=item.name;
+    const type=document.createElement("p");type.className="muted small";type.textContent=item.type;
+    const audio=document.createElement("audio");audio.controls=true;audio.src=item.url;
+    box.append(title,type,audio);list.appendChild(box);
+  });
 }
 
 /* BEATS */
 window.importBeat=function(event){
-const file=event.target.files?.[0];
-if(!file)return;
-savedBeats.push({id:Date.now(),name:file.name,url:URL.createObjectURL(file),file});
-renderBeats();
-toast("Beat imported into your beat list.");
+  const file=event.target.files?.[0];if(!file)return;
+  savedBeats.push({id:Date.now(),name:file.name,url:URL.createObjectURL(file),file});
+  renderBeats();toast("Beat imported into your beat list.");
 };
 function renderBeats(){
-const list=$("beatList");
-list.innerHTML="";
-if(!savedBeats.length){
-list.innerHTML='<p class="muted small">Your imported beats will appear here.</p>';
-return;
-}
-savedBeats.forEach(beat=>{
-const item=document.createElement("div");
-item.className="list-item";
-const title=document.createElement("strong");
-title.textContent=beat.name;
-const audio=document.createElement("audio");
-audio.controls=true;
-audio.src=beat.url;
-item.append(title,audio);
-list.appendChild(item);
-});
+  const list=$("beatList");if(!list)return;
+  list.innerHTML="";
+  if(!savedBeats.length){list.innerHTML='<p class="muted small">Your imported beats will appear here.</p>';return;}
+  savedBeats.forEach(beat=>{
+    const item=document.createElement("div");item.className="list-item";
+    const title=document.createElement("strong");title.textContent=beat.name;
+    const audio=document.createElement("audio");audio.controls=true;audio.src=beat.url;
+    item.append(title,audio);list.appendChild(item);
+  });
 }
 window.requestBeat=function(){
-toast("AI beat generation is not connected yet. A beat-generation service must be integrated.");
+  toast("AI beat generation is not connected yet. A music-generation service must be integrated.");
 };
 
 /* MASTERING */
 function refreshSongOptions(){
-const select=$("masteringSong");
-if(!select)return;
-select.innerHTML='<option value="">Choose a saved recording</option>';
-savedMusic.filter(item=>item.type==="Recording").forEach(item=>{
-const option=document.createElement("option");
-option.value=item.id;
-option.textContent=item.name;
-select.appendChild(option);
-});
+  const select=$("masteringSong");if(!select)return;
+  select.innerHTML='<option value="">Choose a saved recording</option>';
+  savedMusic.filter(item=>item.type==="Recording").forEach(item=>{
+    const option=document.createElement("option");
+    option.value=item.id;option.textContent=item.name;select.appendChild(option);
+  });
 }
 window.requestMastering=function(){
-if(!$("masteringSong").value)return toast("Choose a saved recording first.");
-toast("Song selected. Payment and mastering services must be connected before processing.");
+  if(!$("masteringSong").value){toast("Choose a saved recording first.");return;}
+  toast("Song selected. Payment and mastering services must be connected before processing.");
 };
 
 /* DISTRIBUTION */
 window.requestDistribution=function(){
-if(!$("releaseTitle").value.trim()||!$("releaseArtist").value.trim())
-return toast("Enter your song title and artist name.");
-toast("Release details prepared. Distribution partner and payment integration are still required.");
+  if(!$("releaseTitle").value.trim()||!$("releaseArtist").value.trim()){
+    toast("Enter your song title and artist name.");return;
+  }
+  toast("Release details prepared. Distribution partner and payment integration are still required.");
 };
 
 /* SERVICE WORKER */
-if("serviceWorker"in navigator){
-window.addEventListener("load",async()=>{
-try{
-await navigator.serviceWorker.register("./service-worker.js",{scope:"./"});
-}catch(error){console.error("Service worker registration failed:",error);}
-});
+if("serviceWorker" in navigator){
+  window.addEventListener("load",async()=>{
+    try{await navigator.serviceWorker.register("./service-worker.js",{scope:"./"});}
+    catch(error){console.error("Service worker registration failed:",error);}
+  });
 }
 
-/* RESTORE LOGIN */
-const {data:{session}}=await supabase.auth.getSession();
-if(session?.user){
-displayUser(session.user);
-showScreen("home");
-}else{
-const hash=location.hash.replace("#","");
-showScreen(hash==="reset"?"reset":"welcome");
-}
-supabase.auth.onAuthStateChange((event,session)=>{
-if(session?.user)displayUser(session.user);
-});
+/* RESTORE SESSION AND CHECK CONNECTION */
+(async function startApp(){
+  try{
+    const client=initializeSupabase();
+    const {data,error}=await client.auth.getSession();
+    if(error)throw error;
+    if(data?.session?.user){
+      displayUser(data.session.user);showScreen("home");
+    }else{
+      const hash=location.hash.replace("#","");
+      showScreen(hash==="reset"?"reset":"welcome");
+    }
+    client.auth.onAuthStateChange((event,session)=>{
+      if(session?.user)displayUser(session.user);
+    });
+  }catch(error){
+    console.error("Studio Flow startup:",error);
+    showScreen("welcome");
+    if(/could not load|failed to fetch|networkerror/i.test(String(error?.message||error))){
+      toast(connectionMessage(error));
+    }
+  }
+})();
 </script>
 </body>
 </html>
