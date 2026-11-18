@@ -16,7 +16,7 @@
 :root{
 --bg:#080808;--panel:#171717;--panel2:#222;
 --gold:#f4d9a5;--gold2:#d9ad62;--white:#fff;
---muted:#b8b8b8;--line:#414141;--danger:#ff5151;
+--muted:#b8b8b8;--line:#414141;--danger:#ff6666;
 }
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:var(--bg);color:white;font-family:Arial,Helvetica,sans-serif;overscroll-behavior-x:none}
@@ -67,11 +67,19 @@ textarea.field{height:100px;padding-top:14px;resize:vertical}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .tile{min-height:105px;background:linear-gradient(145deg,#242424,#101010);border:1px solid #383838;border-radius:15px;color:white;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;padding:12px;font-weight:700}
 .tile .symbol{font-size:27px;color:var(--gold)}
-.project-row{display:flex;align-items:center;gap:12px;background:#191919;border-radius:13px;padding:12px;margin-top:10px}
+.project-row{display:flex;align-items:center;gap:10px;background:#191919;border-radius:13px;padding:12px;margin-top:10px}
 .play{border:0;background:#ddd;color:#111;border-radius:50%;width:38px;height:38px;font-size:18px;flex-shrink:0}
 .project-info{flex:1;min-width:0}
 .project-info strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px}
 .project-info small{color:#aaa}
+.audio-actions{display:flex;align-items:center;gap:5px;flex-shrink:0}
+.audio-action{min-width:34px;height:34px;padding:0 7px;border-radius:9px;border:1px solid #555;background:#242424;color:var(--gold);font-size:12px;font-weight:700}
+.audio-action.download-audio{color:var(--gold);border-color:#927747}
+.audio-action.delete-audio{color:#ff8585;border-color:#8a4141;background:#291919}
+.library-item{padding:12px 0;border-bottom:1px solid #333;display:flex;align-items:center;gap:8px;min-width:0}
+.library-item:last-child{border-bottom:0}
+.library-item .item-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px}
+.library-item button{border:1px solid #555;border-radius:9px;background:#222;color:white;padding:8px}
 .nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:520px;height:72px;padding:8px 8px calc(8px + env(safe-area-inset-bottom));background:#090909f5;border-top:1px solid #282828;display:flex;justify-content:space-around;z-index:20}
 .nav button{background:none;border:0;color:#888;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;min-width:55px}
 .nav button span{font-size:21px}
@@ -101,9 +109,12 @@ a{color:var(--gold)}
 .studio-photo{background:linear-gradient(#0005,#0009),url("https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=900&q=85") center/cover}
 .mastering-photo{background:linear-gradient(#0005,#0009),url("https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?auto=format&fit=crop&w=900&q=85") center/cover}
 .distribution-photo{background:linear-gradient(#0005,#0009),url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=900&q=85") center/cover}
-.library-item{padding:12px;border-bottom:1px solid #333;display:flex;align-items:center;gap:10px}
-.library-item button{border:1px solid #555;border-radius:9px;background:#222;color:white;padding:8px}
 .section-heading{font-weight:bold;color:var(--gold);margin:22px 0 8px}
+@media(max-width:380px){
+.audio-actions{gap:3px}
+.audio-action{min-width:30px;height:32px;padding:0 5px;font-size:11px}
+.project-row{gap:7px;padding:9px}
+}
 @media(min-width:600px){.app{border-left:1px solid #222;border-right:1px solid #222}}
 </style>
 </head>
@@ -120,9 +131,7 @@ a{color:var(--gold)}
 </div>
 <div class="welcome-bottom">
 <div class="welcome-icons">
-<div><b>🎙</b>Record</div>
-<div><b>〽</b>Master</div>
-<div><b>♫</b>Distribute</div>
+<div><b>🎙</b>Record</div><div><b>〽</b>Master</div><div><b>♫</b>Distribute</div>
 </div>
 <button class="gold-button" onclick="showScreen('signin')">Get Started →</button>
 <button id="installButton" class="install-button" onclick="installApp()">⇩　Install App</button>
@@ -146,8 +155,7 @@ a{color:var(--gold)}
 <section id="signin" class="screen auth-screen">
 <button class="back" onclick="showScreen('welcome')">‹</button>
 <div class="center" style="margin-top:55px">
-<div class="welcome-symbol">〽</div>
-<h2>Welcome Back!</h2>
+<div class="welcome-symbol">〽</div><h2>Welcome Back!</h2>
 <p class="muted">Sign in to your Studio Flow account</p>
 </div>
 <input id="loginEmail" class="field" type="email" placeholder="✉ Gmail Address" autocomplete="email">
@@ -186,8 +194,7 @@ a{color:var(--gold)}
 <div class="home-title">Welcome Back!</div>
 <div class="muted">Let's make great music today.</div>
 <div class="hero-card" onclick="showScreen('recording')">
-<div><strong>Record Your Song</strong><br><small>Turn your idea into a hit!</small></div>
-<span class="arrow-circle">›</span>
+<div><strong>Record Your Song</strong><br><small>Turn your idea into a hit!</small></div><span class="arrow-circle">›</span>
 </div>
 <div class="grid">
 <button class="tile" onclick="showScreen('recording')"><span class="symbol">🎙</span>Record<br>Your Song</button>
@@ -196,8 +203,7 @@ a{color:var(--gold)}
 <button class="tile" onclick="showScreen('distribution')"><span class="symbol">➤</span>Distribute<br>Your Music<br><small>(Pay per song)</small></button>
 </div>
 <div class="header-row" style="margin-top:22px">
-<strong>My Projects</strong>
-<button class="text-button" onclick="showScreen('library')">See All →</button>
+<strong>My Projects</strong><button class="text-button" onclick="showScreen('library')">See All →</button>
 </div>
 <div id="projectList"></div>
 </section>
@@ -228,20 +234,14 @@ a{color:var(--gold)}
 <div class="wave" id="beatWave" style="height:120px;margin-top:35px"></div>
 <h3 class="center">Find Your Matching Beat</h3>
 <p class="center muted">Choose a song for analysis. AI must identify its style and match a suitable beat without changing your real voice.</p>
-<div class="card">
-<strong>My Songs</strong>
-<div id="beatSongList"></div>
-</div>
+<div class="card"><strong>My Songs</strong><div id="beatSongList"></div></div>
 <button class="gold-button" onclick="requestBeatAnalysis()">Analyse Song & Find Beat</button>
 <button class="dark-button" onclick="document.getElementById('beatImport2').click()">Import Beat From Phone</button>
 <input id="beatImport2" type="file" accept="audio/*" hidden onchange="importAudio(event,'beat')">
 <div class="progress"><div id="beatProgress"></div></div>
 <p class="center small" id="beatPercent">Ready</p>
 <div class="checklist">
-<p>☑ Analyse your vocals</p>
-<p>☑ Detect music style</p>
-<p>☑ Find a matching beat</p>
-<p>☑ Prepare for mastering</p>
+<p>☑ Analyse your vocals</p><p>☑ Detect music style</p><p>☑ Find a matching beat</p><p>☑ Prepare for mastering</p>
 </div>
 <div class="card">
 <strong>Detected Style:</strong>
@@ -261,11 +261,9 @@ a{color:var(--gold)}
 <div class="section-heading">My Beats</div>
 <div class="card" id="masteringBeats"></div>
 <div class="card center">
-<div style="font-size:30px;color:var(--gold)">🎚</div>
-<h3>Master Your Song</h3>
+<div style="font-size:30px;color:var(--gold)">🎚</div><h3>Master Your Song</h3>
 <p class="muted small">AI beat matching and mastering must preserve your real voice. No voice replacement or cloning.</p>
-<div class="price">₦5,000</div>
-<small>Per Song</small>
+<div class="price">₦5,000</div><small>Per Song</small>
 </div>
 <div class="notice"><strong>❗ Pay before mastering</strong><br>Your song will be processed after payment is confirmed.</div>
 <div class="step"><b>1</b><span>Transfer the money to the official Studio Flow payment account.</span></div>
@@ -276,9 +274,7 @@ a{color:var(--gold)}
 
 <section id="distribution" class="screen">
 <div class="topbar"><button class="back" onclick="goBack()">‹</button><h2>Distribute Your Music</h2><span></span></div>
-<div class="distribution-photo" style="height:165px;border-radius:15px;border:1px solid #444;display:grid;place-items:center">
-<div class="platforms">🌐　▶　♫　●</div>
-</div>
+<div class="distribution-photo" style="height:165px;border-radius:15px;border:1px solid #444;display:grid;place-items:center"><div class="platforms">🌐　▶　♫　●</div></div>
 <div class="center"><h3>Worldwide Music Distribution</h3><p class="muted">Get your music on major platforms worldwide.</p></div>
 <div class="card center"><div class="price" style="color:white">₦15,000</div><strong>Per Song</strong></div>
 <div class="checklist"><p>☑ Enter your details</p><p>☑ Choose platforms</p><p>☑ Pay and submit</p></div>
@@ -357,29 +353,19 @@ a{color:var(--gold)}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
 /* SUPABASE */
 const SUPABASE_URL="https://wqhnrsozsgyfosvzkppz.supabase.co";
 const SUPABASE_KEY="sb_publishable_S_Jv_5K8rOME8hsqkcCMSQ_phrBXwuO";
+const AUDIO_BUCKET="studio-flow-audio";
 
-let supabaseClient=null;
-let currentUser=null;
-let pageHistory=[];
-let audioItems=[];
-let beatItems=[];
-let mediaRecorder=null;
-let recordingStream=null;
-let recordedChunks=[];
-let recordingState="idle";
-let recordingSeconds=0;
-let recordingInterval=null;
+let supabaseClient=null,currentUser=null,pageHistory=[];
+let audioItems=[],beatItems=[];
+let mediaRecorder=null,recordingStream=null,recordedChunks=[];
+let recordingState="idle",recordingSeconds=0,recordingInterval=null;
 let deferredInstallPrompt=null;
-let activeAudio=null;
-let activeAudioType=null;
-let activeAudioIndex=null;
-let selectedSong=null;
-let selectedBeat=null;
+let activeAudio=null,activeAudioType=null,activeAudioIndex=null;
+let selectedSong=null,selectedBeat=null;
 
 const PET_AVATARS=[
 {name:"Golden Retriever",url:"https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=400&q=85"},
@@ -554,10 +540,7 @@ requireSupabase();
 stopActiveAudio();
 const {error}=await supabaseClient.auth.signOut();
 if(error)throw error;
-currentUser=null;
-audioItems=[];
-beatItems=[];
-pageHistory=[];
+currentUser=null;audioItems=[];beatItems=[];pageHistory=[];
 showScreen("welcome",false);
 showToast("You have signed out.");
 }catch(e){showToast(friendlyError(e));}
@@ -584,18 +567,16 @@ if(!file.type.startsWith("audio/"))throw new Error("Please choose an audio file.
 const prefix=type==="beat"?"beat-":"song-";
 const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
 const path=currentUser.id+"/"+prefix+Date.now()+"-"+safeName;
-const {error}=await supabaseClient.storage.from("studio-flow-audio").upload(path,file,{
+const {error}=await supabaseClient.storage.from(AUDIO_BUCKET).upload(path,file,{
 cacheControl:"3600",upsert:false,contentType:file.type
 });
 if(error)throw error;
-const {data,error:urlError}=await supabaseClient.storage.from("studio-flow-audio").createSignedUrl(path,3600);
+const {data,error:urlError}=await supabaseClient.storage.from(AUDIO_BUCKET).createSignedUrl(path,3600);
 if(urlError)throw urlError;
 const item={name:file.name,size:(file.size/1024/1024).toFixed(2)+" MB",url:data.signedUrl,path,type};
 if(type==="beat")beatItems.unshift(item);
 else audioItems.unshift(item);
-renderProjects();
-renderMastering();
-renderBeatSongs();
+renderProjects();renderMastering();renderBeatSongs();
 return item;
 }
 async function importAudio(event,type="song"){
@@ -606,30 +587,116 @@ showToast("Uploading your "+(type==="beat"?"beat":"song")+"...");
 await uploadMusicFile(file,type);
 showToast(type==="beat"?"Beat uploaded to My Beats.":"Song uploaded to My Projects.");
 }catch(e){
-console.error(e);
-showToast(friendlyError(e));
+console.error(e);showToast(friendlyError(e));
 }finally{event.target.value="";}
 }
 async function loadStoredAudio(){
-audioItems=[];
-beatItems=[];
+audioItems=[];beatItems=[];
 if(!currentUser)return;
 try{
-const {data,error}=await supabaseClient.storage.from("studio-flow-audio").list(currentUser.id,{limit:100,sortBy:{column:"created_at",order:"desc"}});
+const {data,error}=await supabaseClient.storage.from(AUDIO_BUCKET).list(currentUser.id,{limit:100,sortBy:{column:"created_at",order:"desc"}});
 if(error)throw error;
 for(const file of data||[]){
 if(file.name==="."||file.name==="..")continue;
 const isBeat=file.name.startsWith("beat-");
-const {data:urlData,error:urlError}=await supabaseClient.storage.from("studio-flow-audio").createSignedUrl(currentUser.id+"/"+file.name,3600);
+const path=currentUser.id+"/"+file.name;
+const {data:urlData,error:urlError}=await supabaseClient.storage.from(AUDIO_BUCKET).createSignedUrl(path,3600);
 if(urlError)continue;
-const item={name:file.name.replace(/^(song-|beat-)\d+-/,""),size:file.metadata?.size?(file.metadata.size/1048576).toFixed(2)+" MB":"Audio",url:urlData.signedUrl,path:currentUser.id+"/"+file.name,type:isBeat?"beat":"song"};
-if(isBeat)beatItems.push(item);
-else audioItems.push(item);
+const item={
+name:file.name.replace(/^(song-|beat-)\d+-/,""),
+size:file.metadata?.size?(file.metadata.size/1048576).toFixed(2)+" MB":"Audio",
+url:urlData.signedUrl,path,type:isBeat?"beat":"song"
+};
+if(isBeat)beatItems.push(item);else audioItems.push(item);
 }
 }catch(e){console.log("Could not load music library:",e);}
+renderProjects();renderMastering();renderBeatSongs();
+}
+
+/* AUDIO DOWNLOAD */
+async function downloadAudio(index,type="song"){
+const list=type==="beat"?beatItems:audioItems;
+const item=list[index];
+if(!item)return;
+try{
+showToast("Preparing your download...");
+let downloadUrl=item.url;
+
+/* If a mastering service later saves a mastered file,
+   use its URL/path instead of the original recording. */
+if(type==="song"&&(item.masteredUrl||item.masteredPath)){
+if(item.masteredUrl){
+downloadUrl=item.masteredUrl;
+}else{
+const {data,error}=await supabaseClient.storage.from(AUDIO_BUCKET).createSignedUrl(item.masteredPath,3600);
+if(error)throw error;
+downloadUrl=data.signedUrl;
+}
+}
+
+const response=await fetch(downloadUrl);
+if(!response.ok)throw new Error("Could not download this audio file.");
+const blob=await response.blob();
+const objectUrl=URL.createObjectURL(blob);
+const link=document.createElement("a");
+link.href=objectUrl;
+const cleanName=(item.name||"StudioFlow-Audio").replace(/[\\/:*?"<>|]/g,"_");
+const extension=(item.name.match(/\.[a-zA-Z0-9]{2,5}$/)||[])[0]||".audio";
+link.download=(type==="beat"?"StudioFlow-Beat-":"StudioFlow-")+
+cleanName.replace(/\.[a-zA-Z0-9]{2,5}$/,"")+extension;
+document.body.appendChild(link);
+link.click();
+link.remove();
+setTimeout(()=>URL.revokeObjectURL(objectUrl),15000);
+showToast("Download started. Check your phone's Downloads folder.");
+}catch(e){
+console.error(e);
+showToast("Download failed: "+friendlyError(e));
+}
+}
+
+/* DELETE AUDIO FROM PRIVATE STORAGE */
+async function deleteAudio(index,type="song"){
+const list=type==="beat"?beatItems:audioItems;
+const item=list[index];
+if(!item)return;
+
+const label=type==="beat"?"beat":"song";
+const confirmed=confirm(
+"Delete \""+item.name+"\"?\n\nThis will permanently remove this "+label+" from your Studio Flow account. This cannot be undone."
+);
+if(!confirmed)return;
+
+try{
+requireSupabase();
+if(!currentUser)throw new Error("Please sign in again.");
+
+/* Stop playback before changing list indexes. */
+stopActiveAudio();
+
+const {error}=await supabaseClient.storage.from(AUDIO_BUCKET).remove([item.path]);
+if(error)throw error;
+
+/* Remove the item locally only after storage confirms success. */
+list.splice(index,1);
+
+/* Keep the selected song/beat pointing at the correct item. */
+if(type==="song"){
+if(selectedSong===index)selectedSong=null;
+else if(selectedSong!==null&&selectedSong>index)selectedSong--;
+}else{
+if(selectedBeat===index)selectedBeat=null;
+else if(selectedBeat!==null&&selectedBeat>index)selectedBeat--;
+}
+
 renderProjects();
 renderMastering();
 renderBeatSongs();
+showToast(type==="beat"?"Beat deleted successfully.":"Song deleted successfully.");
+}catch(e){
+console.error(e);
+showToast("Could not delete this "+label+": "+friendlyError(e));
+}
 }
 
 /* SHARED AUDIO PLAYER */
@@ -656,9 +723,7 @@ activeAudio.pause();
 activeAudio.removeAttribute("src");
 activeAudio.load();
 }
-activeAudio=null;
-activeAudioType=null;
-activeAudioIndex=null;
+activeAudio=null;activeAudioType=null;activeAudioIndex=null;
 refreshAllAudioButtons();
 }
 function playAudio(index,type="song"){
@@ -668,9 +733,7 @@ if(!item)return;
 
 if(activeAudio&&activeAudioType===type&&activeAudioIndex===index){
 if(activeAudio.paused){
-activeAudio.play().catch(()=>{
-showToast("Could not resume this audio file.");
-});
+activeAudio.play().catch(()=>showToast("Could not resume this audio file."));
 }else{
 activeAudio.pause();
 }
@@ -678,11 +741,8 @@ return;
 }
 
 stopActiveAudio();
-
 const player=new Audio(item.url);
-activeAudio=player;
-activeAudioType=type;
-activeAudioIndex=index;
+activeAudio=player;activeAudioType=type;activeAudioIndex=index;
 
 player.addEventListener("play",()=>{
 if(activeAudio===player)updateAudioButtons(type,index);
@@ -692,39 +752,42 @@ if(activeAudio===player)updateAudioButtons(type,index);
 });
 player.addEventListener("ended",()=>{
 if(activeAudio===player){
-activeAudio=null;
-activeAudioType=null;
-activeAudioIndex=null;
+activeAudio=null;activeAudioType=null;activeAudioIndex=null;
 refreshAllAudioButtons();
 }
 });
 player.addEventListener("error",()=>{
 if(activeAudio===player){
-activeAudio=null;
-activeAudioType=null;
-activeAudioIndex=null;
+activeAudio=null;activeAudioType=null;activeAudioIndex=null;
 refreshAllAudioButtons();
 showToast("Could not play this audio file.");
 }
 });
-
 player.play().catch(()=>{
 if(activeAudio===player){
-activeAudio=null;
-activeAudioType=null;
-activeAudioIndex=null;
+activeAudio=null;activeAudioType=null;activeAudioIndex=null;
 refreshAllAudioButtons();
 }
 showToast("Could not play this audio file.");
 });
+}
+
+/* AUDIO BUTTONS */
+function audioActionButtons(index,type){
+return `
+<div class="audio-actions">
+<button class="audio-action" type="button" data-audio-type="${type}" data-audio-index="${index}" onclick="playAudio(${index},'${type}')" aria-label="Play or pause">${getAudioIcon(type,index)}</button>
+<button class="audio-action download-audio" type="button" onclick="downloadAudio(${index},'${type}')" aria-label="Download">↓</button>
+<button class="audio-action delete-audio" type="button" onclick="deleteAudio(${index},'${type}')" aria-label="Delete">✕</button>
+</div>`;
 }
 
 /* SONG AND BEAT LISTS */
 function renderProjects(){
 const html=audioItems.length?audioItems.map((item,i)=>`
 <div class="project-row">
-<button class="play" type="button" data-audio-type="song" data-audio-index="${i}" onclick="playAudio(${i},'song')">${getAudioIcon("song",i)}</button>
 <div class="project-info"><strong>${safeText(item.name)}</strong><small>${safeText(item.size)} · My Songs</small></div>
+${audioActionButtons(i,"song")}
 </div>`).join(""):`<div class="project-row"><div class="project-info"><strong>No projects yet</strong><small>Record or import a song to begin</small></div></div>`;
 document.getElementById("projectList").innerHTML=html;
 document.getElementById("libraryList").innerHTML=html;
@@ -735,8 +798,8 @@ if(!el)return;
 el.innerHTML=audioItems.length?audioItems.map((item,i)=>`
 <div class="library-item">
 <input type="radio" name="analysisSong" ${selectedSong===i?"checked":""} onchange="selectSong(${i})">
-<span style="flex:1">${safeText(item.name)}</span>
-<button type="button" data-audio-type="song" data-audio-index="${i}" onclick="playAudio(${i},'song')">${getAudioIcon("song",i)}</button>
+<span class="item-name">${safeText(item.name)}</span>
+${audioActionButtons(i,"song")}
 </div>`).join(""):`<p class="muted small">No songs yet. Record or import a song first.</p>`;
 }
 function renderMastering(){
@@ -745,18 +808,19 @@ const beats=document.getElementById("masteringBeats");
 if(!songs||!beats)return;
 songs.innerHTML=audioItems.length?audioItems.map((item,i)=>`
 <div class="library-item">
-<input type="radio" name="masterSong" ${selectedSong===i?"checked":""} onchange="selectedSong=${i}">
-<span style="flex:1">${safeText(item.name)}</span>
-<button type="button" data-audio-type="song" data-audio-index="${i}" onclick="playAudio(${i},'song')">${getAudioIcon("song",i)}</button>
+<input type="radio" name="masterSong" ${selectedSong===i?"checked":""} onchange="selectSong(${i})">
+<span class="item-name">${safeText(item.name)}</span>
+${audioActionButtons(i,"song")}
 </div>`).join(""):`<p class="muted small">No songs yet. Record or import your song.</p>`;
 beats.innerHTML=beatItems.length?beatItems.map((item,i)=>`
 <div class="library-item">
-<input type="radio" name="masterBeat" ${selectedBeat===i?"checked":""} onchange="selectedBeat=${i}">
-<span style="flex:1">${safeText(item.name)}</span>
-<button type="button" data-audio-type="beat" data-audio-index="${i}" onclick="playAudio(${i},'beat')">${getAudioIcon("beat",i)}</button>
+<input type="radio" name="masterBeat" ${selectedBeat===i?"checked":""} onchange="selectBeat(${i})">
+<span class="item-name">${safeText(item.name)}</span>
+${audioActionButtons(i,"beat")}
 </div>`).join(""):`<p class="muted small">No beats yet. Import a beat from your phone.</p>`;
 }
 function selectSong(i){selectedSong=i;}
+function selectBeat(i){selectedBeat=i;}
 
 /* RECORDING WITH PAUSE, RESUME AND STOP */
 function updateTimer(){
@@ -780,7 +844,6 @@ const stopping=recordingState==="stopping";
 document.getElementById("pauseButton").disabled=!active;
 document.getElementById("resumeButton").disabled=!paused;
 document.getElementById("recordButton").disabled=active||paused||stopping;
-
 if(active){
 document.getElementById("recordMessage").textContent="Recording your song...";
 document.getElementById("recordButton").textContent="●";
@@ -808,38 +871,24 @@ try{
 recordingStream=await navigator.mediaDevices.getUserMedia({audio:true});
 recordedChunks=[];
 let mime="audio/webm;codecs=opus";
-if(!MediaRecorder.isTypeSupported(mime)){
-mime="audio/webm";
-}
-if(!MediaRecorder.isTypeSupported(mime)){
-mime="";
-}
+if(!MediaRecorder.isTypeSupported(mime))mime="audio/webm";
+if(!MediaRecorder.isTypeSupported(mime))mime="";
 const recorder=mime?new MediaRecorder(recordingStream,{mimeType:mime}):new MediaRecorder(recordingStream);
 mediaRecorder=recorder;
-
 recorder.ondataavailable=e=>{
 if(e.data&&e.data.size)recordedChunks.push(e.data);
 };
-
 recorder.onerror=e=>{
 console.error("Recording error:",e);
 showToast("There was a problem recording your audio.");
 };
-
 recorder.onstop=async()=>{
 clearInterval(recordingInterval);
 const blob=new Blob(recordedChunks,{type:recorder.mimeType||"audio/webm"});
 recordingStream?.getTracks().forEach(track=>track.stop());
-recordingStream=null;
-mediaRecorder=null;
-recordingState="idle";
+recordingStream=null;mediaRecorder=null;recordingState="idle";
 updateRecordingControls();
-
-if(!blob.size){
-showToast("No audio was recorded.");
-return;
-}
-
+if(!blob.size){showToast("No audio was recorded.");return;}
 const file=new File([blob],"StudioFlow-Recording-"+Date.now()+".webm",{type:blob.type||"audio/webm"});
 try{
 showToast("Saving your recording...");
@@ -850,88 +899,61 @@ console.error(e);
 showToast("Recording captured but upload failed: "+friendlyError(e));
 }
 };
-
 recorder.start(1000);
 recordingState="recording";
 recordingSeconds=0;
-updateTimer();
-startTimer();
-updateRecordingControls();
+updateTimer();startTimer();updateRecordingControls();
 }catch(e){
 console.error(e);
 recordingStream?.getTracks().forEach(track=>track.stop());
-recordingStream=null;
-mediaRecorder=null;
-recordingState="idle";
-clearInterval(recordingInterval);
-updateRecordingControls();
+recordingStream=null;mediaRecorder=null;recordingState="idle";
+clearInterval(recordingInterval);updateRecordingControls();
 showToast("Microphone permission is needed to record.");
 }
 }
 function pauseRecording(){
 if(!mediaRecorder||recordingState!=="recording"||mediaRecorder.state!=="recording")return;
 try{
-mediaRecorder.pause();
-recordingState="paused";
-clearInterval(recordingInterval);
-updateRecordingControls();
+mediaRecorder.pause();recordingState="paused";
+clearInterval(recordingInterval);updateRecordingControls();
 showToast("Recording paused.");
-}catch(e){
-console.error(e);
-showToast("Could not pause recording.");
-}
+}catch(e){console.error(e);showToast("Could not pause recording.");}
 }
 function resumeRecording(){
 if(!mediaRecorder||recordingState!=="paused"||mediaRecorder.state!=="paused")return;
 try{
-mediaRecorder.resume();
-recordingState="recording";
-startTimer();
-updateRecordingControls();
+mediaRecorder.resume();recordingState="recording";
+startTimer();updateRecordingControls();
 showToast("Recording resumed.");
-}catch(e){
-console.error(e);
-showToast("Could not resume recording.");
-}
+}catch(e){console.error(e);showToast("Could not resume recording.");}
 }
 function stopRecording(){
 if(!mediaRecorder||recordingState==="idle"||recordingState==="stopping"){
-showToast("There is no active recording.");
-return;
+showToast("There is no active recording.");return;
 }
 clearInterval(recordingInterval);
-recordingState="stopping";
-updateRecordingControls();
+recordingState="stopping";updateRecordingControls();
 try{
 if(mediaRecorder.state!=="inactive"){
 mediaRecorder.stop();
 }else{
-recordingState="idle";
-mediaRecorder=null;
+recordingState="idle";mediaRecorder=null;
 recordingStream?.getTracks().forEach(track=>track.stop());
-recordingStream=null;
-updateRecordingControls();
+recordingStream=null;updateRecordingControls();
 }
 }catch(e){
-console.error(e);
-recordingState="idle";
-mediaRecorder=null;
+console.error(e);recordingState="idle";mediaRecorder=null;
 recordingStream?.getTracks().forEach(track=>track.stop());
-recordingStream=null;
-updateRecordingControls();
+recordingStream=null;updateRecordingControls();
 showToast("Could not stop the recording.");
 }
 }
 
 /* BEAT ANALYSIS - REQUIRES CONNECTED AI SERVICE */
 function requestBeatAnalysis(){
-if(!audioItems.length){
-showToast("Record or import a song before analysis.");
-return;
-}
+if(!audioItems.length){showToast("Record or import a song before analysis.");return;}
 if(selectedSong===null||!audioItems[selectedSong]){
-showToast("Please select a song first.");
-return;
+showToast("Please select a song first.");return;
 }
 document.getElementById("beatPercent").textContent="AI service not connected";
 document.getElementById("beatProgress").style.width="0%";
@@ -974,25 +996,18 @@ const b=document.getElementById("installButton");
 if(b)b.style.display="none";
 }
 function updateInstallButton(){
-if(isAppInstalled()||localStorage.getItem("studioFlowInstalled")==="yes"){
-hideInstallButton();
-}
+if(isAppInstalled()||localStorage.getItem("studioFlowInstalled")==="yes")hideInstallButton();
 }
 async function installApp(){
 if(isAppInstalled()){
-localStorage.setItem("studioFlowInstalled","yes");
-hideInstallButton();
-return;
+localStorage.setItem("studioFlowInstalled","yes");hideInstallButton();return;
 }
 if(deferredInstallPrompt){
 try{
 deferredInstallPrompt.prompt();
 const choice=await deferredInstallPrompt.userChoice;
-if(choice?.outcome==="accepted"){
-showToast("Installation accepted. Finish installing Studio Flow.");
-}else{
-showToast("Installation cancelled.");
-}
+if(choice?.outcome==="accepted")showToast("Installation accepted. Finish installing Studio Flow.");
+else showToast("Installation cancelled.");
 deferredInstallPrompt=null;
 }catch(e){showToast("Could not open installation. Try Chrome's menu.");}
 return;
@@ -1002,13 +1017,11 @@ if(ios)showToast("Tap Share in Safari, then choose Add to Home Screen.");
 else showToast("Open Chrome's menu and choose Install app or Add to Home screen.");
 }
 window.addEventListener("beforeinstallprompt",e=>{
-e.preventDefault();
-deferredInstallPrompt=e;
+e.preventDefault();deferredInstallPrompt=e;
 });
 window.addEventListener("appinstalled",()=>{
 localStorage.setItem("studioFlowInstalled","yes");
-deferredInstallPrompt=null;
-hideInstallButton();
+deferredInstallPrompt=null;hideInstallButton();
 showToast("Studio Flow has been installed!");
 });
 window.matchMedia("(display-mode: standalone)").addEventListener?.("change",updateInstallButton);
@@ -1027,12 +1040,10 @@ makeWave("beatWave",95);
 setSignupPet();
 updateInstallButton();
 updateRecordingControls();
-
 try{
 initSupabase();
 const {data,error}=await supabaseClient.auth.getSession();
 if(error)throw error;
-
 if(data.session){
 currentUser=data.session.user;
 await ensurePetAvatar();
@@ -1042,15 +1053,10 @@ showScreen("home",false);
 }else{
 showScreen("welcome",false);
 }
-
 supabaseClient.auth.onAuthStateChange((event,session)=>{
 currentUser=session?.user||null;
-
 if(event==="SIGNED_OUT"){
-stopActiveAudio();
-audioItems=[];
-beatItems=[];
-pageHistory=[];
+stopActiveAudio();audioItems=[];beatItems=[];pageHistory=[];
 showScreen("welcome",false);
 }else if(event==="PASSWORD_RECOVERY"){
 showScreen("reset",false);
