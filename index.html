@@ -111,7 +111,6 @@ a{color:var(--gold)}
 <body>
 <div class="app">
 
-<!-- WELCOME -->
 <section id="welcome" class="screen active" style="padding:0">
 <div class="welcome">
 <div>
@@ -131,7 +130,6 @@ a{color:var(--gold)}
 </div>
 </section>
 
-<!-- CREATE ACCOUNT -->
 <section id="signup" class="screen auth-screen">
 <button class="back" onclick="showScreen('welcome')">‹</button>
 <h2 class="center">Create Account</h2>
@@ -145,7 +143,6 @@ a{color:var(--gold)}
 <p class="center small">Already have an account? <a href="#" onclick="showScreen('signin');return false">Sign In</a></p>
 </section>
 
-<!-- SIGN IN -->
 <section id="signin" class="screen auth-screen">
 <button class="back" onclick="showScreen('welcome')">‹</button>
 <div class="center" style="margin-top:55px">
@@ -161,7 +158,6 @@ a{color:var(--gold)}
 <p class="center small">Don't have an account? <a href="#" onclick="showScreen('signup');return false">Create Account</a></p>
 </section>
 
-<!-- FORGOT PASSWORD -->
 <section id="forgot" class="screen auth-screen">
 <button class="back" onclick="showScreen('signin')">‹</button>
 <h2 class="center">Reset Password</h2>
@@ -179,7 +175,6 @@ a{color:var(--gold)}
 <button class="gold-button" onclick="saveNewPassword()">Update Password</button>
 </section>
 
-<!-- HOME -->
 <section id="home" class="screen">
 <div class="header-row">
 <div class="brand"><span class="brand-mark">〽</span><span>Studio<br>Flow</span></div>
@@ -207,7 +202,6 @@ a{color:var(--gold)}
 <div id="projectList"></div>
 </section>
 
-<!-- RECORDING -->
 <section id="recording" class="screen">
 <div class="topbar"><button class="back" onclick="goBack()">‹</button><h2>Recording</h2><span style="width:25px"></span></div>
 <div class="timer" id="timer">00:00</div>
@@ -229,7 +223,6 @@ a{color:var(--gold)}
 <p class="center small muted">Your recordings and imported songs appear in My Projects.</p>
 </section>
 
-<!-- BEAT GENERATOR -->
 <section id="beat" class="screen">
 <div class="topbar"><button class="back" onclick="goBack()">‹</button><h2>AI Beat Generator</h2><span></span></div>
 <div class="wave" id="beatWave" style="height:120px;margin-top:35px"></div>
@@ -258,19 +251,15 @@ a{color:var(--gold)}
 <button class="gold-button" onclick="showScreen('mastering')">Continue to Mastering</button>
 </section>
 
-<!-- MASTERING -->
 <section id="mastering" class="screen">
 <div class="topbar"><button class="back" onclick="goBack()">‹</button><h2>Mastering</h2><span></span></div>
 <div class="studio-photo" style="height:145px;border-radius:15px;border:1px solid #555;display:grid;place-items:center">
 <div class="center"><div style="font-size:45px">🎛️</div><strong>Professional Music Mastering</strong></div>
 </div>
-
 <div class="section-heading">My Songs</div>
 <div class="card" id="masteringSongs"></div>
-
 <div class="section-heading">My Beats</div>
 <div class="card" id="masteringBeats"></div>
-
 <div class="card center">
 <div style="font-size:30px;color:var(--gold)">🎚</div>
 <h3>Master Your Song</h3>
@@ -285,7 +274,6 @@ a{color:var(--gold)}
 <p class="center small"><a href="mailto:support@studioflow.com">Need Help? Contact Support</a></p>
 </section>
 
-<!-- DISTRIBUTION -->
 <section id="distribution" class="screen">
 <div class="topbar"><button class="back" onclick="goBack()">‹</button><h2>Distribute Your Music</h2><span></span></div>
 <div class="distribution-photo" style="height:165px;border-radius:15px;border:1px solid #444;display:grid;place-items:center">
@@ -308,7 +296,6 @@ a{color:var(--gold)}
 <button class="gold-button" onclick="submitDistribution()">Submit Details</button>
 </section>
 
-<!-- PROFILE -->
 <section id="profile" class="screen">
 <div class="topbar"><button class="back" onclick="goBack()">‹</button><h2>My Profile</h2><button class="notification" onclick="showScreen('settings')">⚙</button></div>
 <img id="profileAvatar" class="avatar" src="" alt="Your pet avatar">
@@ -389,6 +376,8 @@ let recordingSeconds=0;
 let recordingInterval=null;
 let deferredInstallPrompt=null;
 let activeAudio=null;
+let activeAudioType=null;
+let activeAudioIndex=null;
 let selectedSong=null;
 let selectedBeat=null;
 
@@ -562,6 +551,7 @@ showScreen("signin",false);
 async function signOut(){
 try{
 requireSupabase();
+stopActiveAudio();
 const {error}=await supabaseClient.auth.signOut();
 if(error)throw error;
 currentUser=null;
@@ -641,10 +631,99 @@ renderProjects();
 renderMastering();
 renderBeatSongs();
 }
+
+/* SHARED AUDIO PLAYER */
+function getAudioIcon(type,index){
+return activeAudio&&activeAudioType===type&&activeAudioIndex===index&&!activeAudio.paused?"Ⅱ":"▶";
+}
+function updateAudioButtons(type,index){
+document.querySelectorAll("[data-audio-type]").forEach(button=>{
+if(button.dataset.audioType===type&&Number(button.dataset.audioIndex)===index){
+button.textContent=getAudioIcon(type,index);
+}
+});
+}
+function refreshAllAudioButtons(){
+document.querySelectorAll("[data-audio-type]").forEach(button=>{
+const type=button.dataset.audioType;
+const index=Number(button.dataset.audioIndex);
+button.textContent=getAudioIcon(type,index);
+});
+}
+function stopActiveAudio(){
+if(activeAudio){
+activeAudio.pause();
+activeAudio.removeAttribute("src");
+activeAudio.load();
+}
+activeAudio=null;
+activeAudioType=null;
+activeAudioIndex=null;
+refreshAllAudioButtons();
+}
+function playAudio(index,type="song"){
+const list=type==="beat"?beatItems:audioItems;
+const item=list[index];
+if(!item)return;
+
+if(activeAudio&&activeAudioType===type&&activeAudioIndex===index){
+if(activeAudio.paused){
+activeAudio.play().catch(()=>{
+showToast("Could not resume this audio file.");
+});
+}else{
+activeAudio.pause();
+}
+return;
+}
+
+stopActiveAudio();
+
+const player=new Audio(item.url);
+activeAudio=player;
+activeAudioType=type;
+activeAudioIndex=index;
+
+player.addEventListener("play",()=>{
+if(activeAudio===player)updateAudioButtons(type,index);
+});
+player.addEventListener("pause",()=>{
+if(activeAudio===player)updateAudioButtons(type,index);
+});
+player.addEventListener("ended",()=>{
+if(activeAudio===player){
+activeAudio=null;
+activeAudioType=null;
+activeAudioIndex=null;
+refreshAllAudioButtons();
+}
+});
+player.addEventListener("error",()=>{
+if(activeAudio===player){
+activeAudio=null;
+activeAudioType=null;
+activeAudioIndex=null;
+refreshAllAudioButtons();
+showToast("Could not play this audio file.");
+}
+});
+
+player.play().catch(()=>{
+if(activeAudio===player){
+activeAudio=null;
+activeAudioType=null;
+activeAudioIndex=null;
+refreshAllAudioButtons();
+}
+showToast("Could not play this audio file.");
+});
+}
+
+/* SONG AND BEAT LISTS */
 function renderProjects(){
 const html=audioItems.length?audioItems.map((item,i)=>`
 <div class="project-row">
-<button class="play" onclick="playAudio(${i},'song')">▶</button>
+<button class="play" type="button" data-audio-type="song" data-audio-index="${i}" onclick="playAudio(${i},'song')">${getAudioIcon("song",i)}</button>
 <div class="project-info"><strong>${safeText(item.name)}</strong><small>${safeText(item.size)} · My Songs</small></div>
 </div>`).join(""):`<div class="project-row"><div class="project-info"><strong>No projects yet</strong><small>Record or import a song to begin</small></div></div>`;
 document.getElementById("projectList").innerHTML=html;
@@ -655,8 +734,9 @@ const el=document.getElementById("beatSongList");
 if(!el)return;
 el.innerHTML=audioItems.length?audioItems.map((item,i)=>`
 <div class="library-item">
-<input type="radio" name="analysisSong" onchange="selectSong(${i})">
+<input type="radio" name="analysisSong" ${selectedSong===i?"checked":""} onchange="selectSong(${i})">
 <span style="flex:1">${safeText(item.name)}</span>
+<button type="button" data-audio-type="song" data-audio-index="${i}" onclick="playAudio(${i},'song')">${getAudioIcon("song",i)}</button>
 </div>`).join(""):`<p class="muted small">No songs yet. Record or import a song first.</p>`;
 }
 function renderMastering(){
@@ -665,27 +745,20 @@ const beats=document.getElementById("masteringBeats");
 if(!songs||!beats)return;
 songs.innerHTML=audioItems.length?audioItems.map((item,i)=>`
 <div class="library-item">
-<input type="radio" name="masterSong" onchange="selectedSong=${i}">
+<input type="radio" name="masterSong" ${selectedSong===i?"checked":""} onchange="selectedSong=${i}">
 <span style="flex:1">${safeText(item.name)}</span>
+<button type="button" data-audio-type="song" data-audio-index="${i}" onclick="playAudio(${i},'song')">${getAudioIcon("song",i)}</button>
 </div>`).join(""):`<p class="muted small">No songs yet. Record or import your song.</p>`;
 beats.innerHTML=beatItems.length?beatItems.map((item,i)=>`
 <div class="library-item">
-<input type="radio" name="masterBeat" onchange="selectedBeat=${i}">
+<input type="radio" name="masterBeat" ${selectedBeat===i?"checked":""} onchange="selectedBeat=${i}">
 <span style="flex:1">${safeText(item.name)}</span>
-<button onclick="playAudio(${i},'beat')">▶</button>
+<button type="button" data-audio-type="beat" data-audio-index="${i}" onclick="playAudio(${i},'beat')">${getAudioIcon("beat",i)}</button>
 </div>`).join(""):`<p class="muted small">No beats yet. Import a beat from your phone.</p>`;
 }
 function selectSong(i){selectedSong=i;}
-function playAudio(index,type="song"){
-const list=type==="beat"?beatItems:audioItems;
-const item=list[index];
-if(!item)return;
-if(activeAudio){activeAudio.pause();activeAudio=null;}
-activeAudio=new Audio(item.url);
-activeAudio.play().catch(()=>showToast("Could not play this audio file."));
-}
 
-/* RECORDING WITH PAUSE AND RESUME */
+/* RECORDING WITH PAUSE, RESUME AND STOP */
 function updateTimer(){
 const mins=String(Math.floor(recordingSeconds/60)).padStart(2,"0");
 const secs=String(recordingSeconds%60).padStart(2,"0");
@@ -694,17 +767,33 @@ document.getElementById("timer").textContent=mins+":"+secs;
 function startTimer(){
 clearInterval(recordingInterval);
 recordingInterval=setInterval(()=>{
+if(recordingState==="recording"){
 recordingSeconds++;
 updateTimer();
+}
 },1000);
 }
 function updateRecordingControls(){
 const paused=recordingState==="paused";
 const active=recordingState==="recording";
+const stopping=recordingState==="stopping";
 document.getElementById("pauseButton").disabled=!active;
 document.getElementById("resumeButton").disabled=!paused;
-document.getElementById("recordButton").disabled=active||paused;
-document.getElementById("recordMessage").textContent=active?"Recording your song...":paused?"Recording paused. Tap Resume to continue.":"Tap the button to start recording your song";
+document.getElementById("recordButton").disabled=active||paused||stopping;
+
+if(active){
+document.getElementById("recordMessage").textContent="Recording your song...";
+document.getElementById("recordButton").textContent="●";
+}else if(paused){
+document.getElementById("recordMessage").textContent="Recording paused. Tap Resume to continue.";
+document.getElementById("recordButton").textContent="●";
+}else if(stopping){
+document.getElementById("recordMessage").textContent="Saving your recording...";
+document.getElementById("recordButton").textContent="●";
+}else{
+document.getElementById("recordMessage").textContent="Tap the button to start recording your song";
+document.getElementById("recordButton").textContent="🎙";
+}
 }
 async function startRecording(){
 if(recordingState!=="idle"){
@@ -718,61 +807,120 @@ return;
 try{
 recordingStream=await navigator.mediaDevices.getUserMedia({audio:true});
 recordedChunks=[];
-const mime=MediaRecorder.isTypeSupported("audio/webm;codecs=opus")?"audio/webm;codecs=opus":"audio/webm";
-mediaRecorder=new MediaRecorder(recordingStream,{mimeType:mime});
-mediaRecorder.ondataavailable=e=>{if(e.data.size)recordedChunks.push(e.data);};
-mediaRecorder.onstop=async()=>{
-const blob=new Blob(recordedChunks,{type:mediaRecorder.mimeType||"audio/webm"});
-recordingStream?.getTracks().forEach(t=>t.stop());
+let mime="audio/webm;codecs=opus";
+if(!MediaRecorder.isTypeSupported(mime)){
+mime="audio/webm";
+}
+if(!MediaRecorder.isTypeSupported(mime)){
+mime="";
+}
+const recorder=mime?new MediaRecorder(recordingStream,{mimeType:mime}):new MediaRecorder(recordingStream);
+mediaRecorder=recorder;
+
+recorder.ondataavailable=e=>{
+if(e.data&&e.data.size)recordedChunks.push(e.data);
+};
+
+recorder.onerror=e=>{
+console.error("Recording error:",e);
+showToast("There was a problem recording your audio.");
+};
+
+recorder.onstop=async()=>{
+clearInterval(recordingInterval);
+const blob=new Blob(recordedChunks,{type:recorder.mimeType||"audio/webm"});
+recordingStream?.getTracks().forEach(track=>track.stop());
 recordingStream=null;
+mediaRecorder=null;
 recordingState="idle";
 updateRecordingControls();
-if(!blob.size){showToast("No audio was recorded.");return;}
-const file=new File([blob],"StudioFlow-Recording-"+Date.now()+".webm",{type:blob.type});
+
+if(!blob.size){
+showToast("No audio was recorded.");
+return;
+}
+
+const file=new File([blob],"StudioFlow-Recording-"+Date.now()+".webm",{type:blob.type||"audio/webm"});
 try{
 showToast("Saving your recording...");
 await uploadMusicFile(file,"song");
 showToast("Recording saved to My Projects.");
 }catch(e){
+console.error(e);
 showToast("Recording captured but upload failed: "+friendlyError(e));
 }
 };
-mediaRecorder.start(1000);
+
+recorder.start(1000);
 recordingState="recording";
 recordingSeconds=0;
 updateTimer();
 startTimer();
 updateRecordingControls();
-document.getElementById("recordButton").textContent="●";
 }catch(e){
 console.error(e);
+recordingStream?.getTracks().forEach(track=>track.stop());
+recordingStream=null;
+mediaRecorder=null;
+recordingState="idle";
+clearInterval(recordingInterval);
+updateRecordingControls();
 showToast("Microphone permission is needed to record.");
 }
 }
 function pauseRecording(){
-if(!mediaRecorder||recordingState!=="recording")return;
+if(!mediaRecorder||recordingState!=="recording"||mediaRecorder.state!=="recording")return;
+try{
 mediaRecorder.pause();
 recordingState="paused";
 clearInterval(recordingInterval);
 updateRecordingControls();
 showToast("Recording paused.");
+}catch(e){
+console.error(e);
+showToast("Could not pause recording.");
+}
 }
 function resumeRecording(){
-if(!mediaRecorder||recordingState!=="paused")return;
+if(!mediaRecorder||recordingState!=="paused"||mediaRecorder.state!=="paused")return;
+try{
 mediaRecorder.resume();
 recordingState="recording";
 startTimer();
 updateRecordingControls();
 showToast("Recording resumed.");
+}catch(e){
+console.error(e);
+showToast("Could not resume recording.");
+}
 }
 function stopRecording(){
-if(!mediaRecorder||recordingState==="idle"){
+if(!mediaRecorder||recordingState==="idle"||recordingState==="stopping"){
 showToast("There is no active recording.");
 return;
 }
 clearInterval(recordingInterval);
-if(mediaRecorder.state!=="inactive")mediaRecorder.stop();
-document.getElementById("recordButton").textContent="🎙";
+recordingState="stopping";
+updateRecordingControls();
+try{
+if(mediaRecorder.state!=="inactive"){
+mediaRecorder.stop();
+}else{
+recordingState="idle";
+mediaRecorder=null;
+recordingStream?.getTracks().forEach(track=>track.stop());
+recordingStream=null;
+updateRecordingControls();
+}
+}catch(e){
+console.error(e);
+recordingState="idle";
+mediaRecorder=null;
+recordingStream?.getTracks().forEach(track=>track.stop());
+recordingStream=null;
+updateRecordingControls();
+showToast("Could not stop the recording.");
+}
 }
 
 /* BEAT ANALYSIS - REQUIRES CONNECTED AI SERVICE */
@@ -878,10 +1026,13 @@ makeWave("recordWave",85);
 makeWave("beatWave",95);
 setSignupPet();
 updateInstallButton();
+updateRecordingControls();
+
 try{
 initSupabase();
 const {data,error}=await supabaseClient.auth.getSession();
 if(error)throw error;
+
 if(data.session){
 currentUser=data.session.user;
 await ensurePetAvatar();
@@ -891,9 +1042,12 @@ showScreen("home",false);
 }else{
 showScreen("welcome",false);
 }
+
 supabaseClient.auth.onAuthStateChange((event,session)=>{
 currentUser=session?.user||null;
+
 if(event==="SIGNED_OUT"){
+stopActiveAudio();
 audioItems=[];
 beatItems=[];
 pageHistory=[];
