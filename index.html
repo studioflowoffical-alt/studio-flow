@@ -52,6 +52,7 @@ textarea.field{height:100px;padding-top:14px;resize:vertical}
 .welcome-logo span{color:var(--gold)}
 .welcome-symbol{font-size:54px;color:var(--gold);margin-top:5px}
 .welcome-tagline{font-size:14px;text-shadow:0 2px 8px #000}
+.owner-credit{font-size:12px;color:var(--gold);letter-spacing:1.2px;margin-top:-5px;text-shadow:0 2px 8px #000;font-weight:700}
 .welcome-bottom{background:linear-gradient(180deg,transparent,#0008 25%,#000d)}
 .welcome-icons{display:flex;justify-content:space-around;margin:16px 0 10px}
 .welcome-icons div{font-size:13px;display:grid;gap:6px}
@@ -111,7 +112,7 @@ a{color:var(--gold)}
 .distribution-photo{background:linear-gradient(#0005,#0009),url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=900&q=85") center/cover}
 .section-heading{font-weight:bold;color:var(--gold);margin:22px 0 8px}
 
-/* NEW MUSIC SCREEN LAYOUT */
+/* EXISTING MUSIC SCREEN LAYOUT */
 .beat-choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
 .beat-choice{
 min-height:112px;width:100%;padding:14px 9px;
@@ -127,6 +128,25 @@ text-align:center;font-weight:800;font-size:14px;
 .selected-audio-card{background:#171717;border:1px solid #383838;border-radius:14px;padding:12px;margin:10px 0}
 .selected-audio-card .muted{font-size:12px}
 .match-button{margin-top:14px}
+
+/* NEW: STUDIO AI AND ABOUT SCREEN */
+.studio-ai-fab{
+position:fixed;z-index:25;right:max(16px,calc((100vw - 520px)/2 + 16px));
+bottom:88px;border:1px solid #f6dfb8;border-radius:30px;
+padding:12px 17px;background:linear-gradient(110deg,#f8e5c4,#e8c58c);
+color:#111;font-weight:800;font-size:13px;box-shadow:0 4px 18px #0009;
+display:none;align-items:center;gap:7px;
+}
+.ai-chat-card{background:#171717;border:1px solid #383838;border-radius:15px;padding:13px;margin:12px 0}
+.ai-chat-messages{height:55vh;min-height:260px;max-height:520px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding:5px 2px}
+.ai-message{max-width:88%;padding:12px 13px;border-radius:14px;font-size:13px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
+.ai-message.bot{align-self:flex-start;background:#262626;border:1px solid #454545;color:white;border-bottom-left-radius:4px}
+.ai-message.user{align-self:flex-end;background:linear-gradient(110deg,#f8e5c4,#e8c58c);color:#111;border-bottom-right-radius:4px}
+.ai-chat-input-row{display:flex;gap:8px;align-items:center;margin-top:10px}
+.ai-chat-input-row .field{flex:1;min-width:0;margin:0}
+.ai-send-button{height:52px;min-width:55px;border:0;border-radius:12px;background:var(--gold);color:#111;font-size:20px;font-weight:900}
+.about-mark{font-size:48px;text-align:center;color:var(--gold);margin:8px 0}
+.about-title{text-align:center;font-size:22px;font-weight:800;margin:5px 0}
 @media(max-width:380px){
 .audio-actions{gap:3px}
 .audio-action{min-width:30px;height:32px;padding:0 5px;font-size:11px}
@@ -146,6 +166,7 @@ text-align:center;font-weight:800;font-size:14px;
 <div class="welcome-symbol">〽</div>
 <div class="welcome-logo">Studio<br><span>Flow</span></div>
 <p class="welcome-tagline">Your Music. Your Sound. Your Future.</p>
+<p class="owner-credit">OWNED BY PARIS</p>
 </div>
 <div class="welcome-bottom">
 <div class="welcome-icons">
@@ -247,51 +268,28 @@ text-align:center;font-weight:800;font-size:14px;
 <p class="center small muted">Your recordings and imported songs appear in My Projects.</p>
 </section>
 
-<!-- UPDATED MUSIC / AI BEAT SCREEN -->
 <section id="beat" class="screen">
 <div class="topbar"><button class="back" onclick="goBack()">‹</button><h2>AI Beat Generator</h2><span></span></div>
-
 <div class="wave" id="beatWave" style="height:90px;margin-top:12px"></div>
 <h3 class="center">Create Your Matching Beat</h3>
 <p class="center muted">Choose or record your song, then choose how you want to get your beat. Studio Flow will match the selected beat to your song.</p>
-
 <div class="card">
 <div class="beat-section-title">1. Choose Your Song</div>
 <div class="beat-choice-grid">
-<button class="beat-choice" onclick="showScreen('recording')">
-<span class="symbol">🎙</span>
-<span>Record Song</span>
-</button>
-<button class="beat-choice" onclick="document.getElementById('audioImport').click()">
-<span class="symbol">📁</span>
-<span>Import Song</span>
-</button>
+<button class="beat-choice" onclick="showScreen('recording')"><span class="symbol">🎙</span><span>Record Song</span></button>
+<button class="beat-choice" onclick="document.getElementById('audioImport').click()"><span class="symbol">📁</span><span>Import Song</span></button>
 </div>
-<div class="selected-audio-card">
-<strong>My Songs</strong>
-<div id="beatSongList"></div>
+<div class="selected-audio-card"><strong>My Songs</strong><div id="beatSongList"></div></div>
 </div>
-</div>
-
 <div class="card">
 <div class="beat-section-title">2. Choose Your Beat</div>
 <div class="beat-choice-grid">
-<button class="beat-choice" onclick="requestBeatGeneration()">
-<span class="symbol">✨</span>
-<span>Generate Beat for Me</span>
-</button>
-<button class="beat-choice" onclick="document.getElementById('beatImport2').click()">
-<span class="symbol">♫</span>
-<span>Import Beat From Phone</span>
-</button>
+<button class="beat-choice" onclick="requestBeatGeneration()"><span class="symbol">✨</span><span>Generate Beat for Me</span></button>
+<button class="beat-choice" onclick="document.getElementById('beatImport2').click()"><span class="symbol">♫</span><span>Import Beat From Phone</span></button>
 </div>
-<div class="selected-audio-card">
-<strong>My Beats</strong>
-<div id="beatChoiceList"></div>
-</div>
+<div class="selected-audio-card"><strong>My Beats</strong><div id="beatChoiceList"></div></div>
 <input id="beatImport2" type="file" accept="audio/*" hidden onchange="importAudio(event,'beat')">
 </div>
-
 <div class="card">
 <div class="beat-section-title">3. Match Beat to My Song</div>
 <p class="muted small">Analyse your selected song and match it with your selected beat. Your real voice must remain unchanged.</p>
@@ -299,28 +297,19 @@ text-align:center;font-weight:800;font-size:14px;
 <div class="progress"><div id="beatProgress"></div></div>
 <p class="center small" id="beatPercent">Ready</p>
 </div>
-
 <div class="card">
 <strong>Analysis Checklist</strong>
-<div class="checklist">
-<p>☑ Analyse your vocals</p>
-<p>☑ Detect music style</p>
-<p>☑ Match the selected beat</p>
-<p>☑ Prepare for mastering</p>
-</div>
+<div class="checklist"><p>☑ Analyse your vocals</p><p>☑ Detect music style</p><p>☑ Match the selected beat</p><p>☑ Prepare for mastering</p></div>
 <strong>Detected Style:</strong>
 <div class="gold" style="font-size:20px;font-weight:bold;margin-top:8px" id="detectedStyle">Awaiting analysis</div>
 <p class="small muted">Real AI audio analysis, beat generation and matching require an AI audio service connection.</p>
 </div>
-
 <button class="gold-button" onclick="continueToMastering()">Continue to Mastering</button>
 </section>
 
 <section id="mastering" class="screen">
 <div class="topbar"><button class="back" onclick="goBack()">‹</button><h2>Mastering</h2><span></span></div>
-<div class="studio-photo" style="height:145px;border-radius:15px;border:1px solid #555;display:grid;place-items:center">
-<div class="center"><div style="font-size:45px">🎛️</div><strong>Professional Music Mastering</strong></div>
-</div>
+<div class="studio-photo" style="height:145px;border-radius:15px;border:1px solid #555;display:grid;place-items:center"><div class="center"><div style="font-size:45px">🎛️</div><strong>Professional Music Mastering</strong></div></div>
 <div class="section-heading">My Songs</div>
 <div class="card" id="masteringSongs"></div>
 <div class="section-heading">My Beats</div>
@@ -368,9 +357,48 @@ text-align:center;font-weight:800;font-size:14px;
 <button onclick="showScreen('mastering')">🎚　My Beats & Mastering <span>›</span></button>
 <button onclick="showScreen('paymentHistory')">▣　Payment History <span>›</span></button>
 <button onclick="showScreen('distributionStatus')">🌐　Distribution Status <span>›</span></button>
+<button onclick="showScreen('aboutStudio')">〽　About Studio Flow <span>›</span></button>
 <button onclick="showScreen('settings')">⚙　Settings <span>›</span></button>
 <button onclick="signOut()" style="color:#ff5555">↪　Sign Out <span>›</span></button>
 </div>
+</section>
+
+<!-- NEW: ABOUT STUDIO FLOW -->
+<section id="aboutStudio" class="screen">
+<div class="topbar"><button class="back" onclick="goBack()">‹</button><h2>About Studio Flow</h2><span></span></div>
+<div class="card">
+<div class="about-mark">〽</div>
+<div class="about-title">Studio Flow</div>
+<p class="center muted">Your Music. Your Sound. Your Future.</p>
+<div style="height:1px;background:#383838;margin:18px 0"></div>
+<h3 class="center gold">Owned by Paris</h3>
+<p class="center">Paris is the founder and owner of Studio Flow.</p>
+<p class="center muted small">Studio Flow is a music app created to help artists record, organise, prepare and manage their music projects.</p>
+</div>
+</section>
+
+<!-- NEW: STUDIO AI CHAT -->
+<section id="studioAI" class="screen">
+<div class="topbar">
+<button class="back" onclick="goBack()">‹</button>
+<h2>✦ Studio AI</h2>
+<span></span>
+</div>
+<p class="muted small center">Your Studio Flow assistant</p>
+<div class="ai-chat-card">
+<div class="ai-chat-messages" id="studioAIChatMessages">
+<div class="ai-message bot">Hello! 👋 I'm Studio AI. I can help you understand how to use Studio Flow.
+
+You can ask me about recording, importing songs, beats, mastering, music distribution, or Studio Flow itself.
+
+How can I help you today?</div>
+</div>
+<div class="ai-chat-input-row">
+<input id="studioAIInput" class="field" type="text" placeholder="Ask Studio AI..." autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();sendStudioAIMessage()}">
+<button class="ai-send-button" onclick="sendStudioAIMessage()" aria-label="Send message">➤</button>
+</div>
+</div>
+<p class="center muted small">Studio Flow help is available now. General AI service connection is not yet enabled.</p>
 </section>
 
 <section id="library" class="screen">
@@ -413,6 +441,9 @@ text-align:center;font-weight:800;font-size:14px;
 <button data-page="beat" onclick="showScreen('beat')"><span>♫</span>Music</button>
 <button data-page="profile" onclick="showScreen('profile')"><span>♙</span>Profile</button>
 </nav>
+
+<!-- NEW: FLOATING STUDIO AI BUTTON -->
+<button id="studioAIFab" class="studio-ai-fab" onclick="openStudioAI()">✦ Studio AI</button>
 
 <div id="toast" class="toast"></div>
 </div>
@@ -487,8 +518,10 @@ const current=document.querySelector(".screen.active");
 if(remember&&current&&current.id!==id)pageHistory.push(current.id);
 document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
 page.classList.add("active");
-const authPages=["welcome","signup","signin","forgot","reset"];
+const authPages=["welcome","signup","signin","forgot","reset","studioAI"];
 document.getElementById("bottomNav").style.display=authPages.includes(id)?"none":"flex";
+const aiFab=document.getElementById("studioAIFab");
+if(aiFab)aiFab.style.display=(authPages.includes(id)||!currentUser)?"none":"flex";
 document.querySelectorAll(".nav button").forEach(b=>{
 b.classList.toggle("selected",b.dataset.page===id||(id==="library"&&b.dataset.page==="home")||(id==="mastering"&&b.dataset.page==="recording"));
 });
@@ -499,6 +532,96 @@ if(id==="library")renderProjects();
 function goBack(){
 if(pageHistory.length)showScreen(pageHistory.pop(),false);
 else showScreen(currentUser?"home":"welcome",false);
+}
+
+/* NEW: STUDIO AI CHAT */
+function openStudioAI(){
+if(!currentUser){showToast("Please sign in to use Studio AI.");return;}
+showScreen("studioAI");
+}
+function addStudioAIMessage(message,type){
+const messages=document.getElementById("studioAIChatMessages");
+if(!messages)return;
+const bubble=document.createElement("div");
+bubble.className="ai-message "+(type==="user"?"user":"bot");
+bubble.textContent=message;
+messages.appendChild(bubble);
+messages.scrollTop=messages.scrollHeight;
+}
+function getStudioAIReply(question){
+const q=question.toLowerCase();
+
+if(/\b(hi|hello|hey|good morning|good afternoon|good evening)\b/.test(q)){
+return "Hello! 👋 Welcome to Studio Flow. I'm here to help you use the app. You can ask me about recording, importing music, beats, mastering, or distribution.";
+}
+
+if(/who (is|are|owns|created|founded)|owner|founder|made studio flow|created studio flow|who made/.test(q)){
+return "Studio Flow is owned by Paris, the founder of Studio Flow. Paris created Studio Flow for artists to manage their music projects.";
+}
+
+if(/about studio|what is studio flow|studio flow/.test(q)){
+return "Studio Flow is a music app for recording songs, importing audio, organising beats, preparing music for mastering, and managing distribution requests. It is owned by Paris, the founder of Studio Flow.";
+}
+
+if(/record|recording|microphone|mic|sing/.test(q)){
+return "To record a song:\n1. Open the Studio tab or tap Record Your Song.\n2. Tap the microphone button.\n3. Allow microphone permission if your phone asks.\n4. Use Pause and Resume when needed.\n5. Tap Stop & Save when you finish.\n\nYour recording will upload to your Studio Flow account if the upload succeeds.";
+}
+
+if(/import|upload|phone|file/.test(q)&&/song|music|audio|record/.test(q)){
+return "To import a song:\n1. Open Studio or Recording.\n2. Tap Import Song.\n3. Choose an audio file from your phone.\n4. Wait for the upload confirmation.\n\nYour uploaded song will appear in My Projects and My Songs.";
+}
+
+if(/pause|resume|continue recording/.test(q)){
+return "While recording, tap Pause to pause your recording. Tap Resume to continue. When you are finished, tap Stop & Save.";
+}
+
+if(/delete|remove|accidentally/.test(q)){
+return "To delete a song or beat, find it in your music list and tap the red ✕ button beside it. The app will ask you to confirm before deleting it from your account.";
+}
+
+if(/download|save to phone/.test(q)){
+return "To download a song or beat, find it in your music list and tap the download arrow ↓ beside it. Your phone should save the audio in its Downloads folder.";
+}
+
+if(/beat|generate|matching|match/.test(q)){
+return "To work with beats:\n1. Open the Music tab.\n2. Choose or import your song.\n3. Choose a beat from My Beats, or import a beat from your phone.\n4. Select your song and beat.\n5. Tap Match Beat to My Song.\n\nPlease note: the real AI beat-generation and audio-matching service is not connected yet. The app can currently let you import and select audio files.";
+}
+
+if(/master|mastering|mastered/.test(q)){
+return "To open Mastering, tap Mastering on the Home screen. You can view your songs and beats there. The mastering payment verification and actual audio-processing service are not connected yet, so the app cannot master a song yet.";
+}
+
+if(/distribut|spotify|apple music|youtube music|release music/.test(q)){
+return "To start a distribution request, open Distribute Your Music from the Home screen and tap Start Distribution. You can enter your artist name and song title. Payment verification and the authorized distributor connection are not connected yet, so your music is not submitted to platforms yet.";
+}
+
+if(/private|privacy|secure|storage|bucket/.test(q)){
+return "Studio Flow currently uses its existing private audio storage setup. Your audio files are stored in your account's private storage area. The app's storage privacy settings have not been changed for this update.";
+}
+
+if(/profile|account|pet avatar|avatar/.test(q)){
+return "Open the Profile tab to view your account details, pet avatar, songs, payment history, distribution status, settings, and the new About Studio Flow section.";
+}
+
+if(/install|download app|add to home/.test(q)){
+return "To install Studio Flow, use the Install App button on the welcome screen if it is available. If it is not, open the Chrome menu and look for Install app or Add to Home screen.";
+}
+
+if(/thank|thanks/.test(q)){
+return "You're welcome! 😊 Ask me whenever you need help using Studio Flow.";
+}
+
+return "I can currently answer questions about using Studio Flow, including recording, importing songs, managing beats, downloading or deleting audio, mastering, distribution, your profile, and who owns the app.\n\nThe general AI service is not connected yet, so I cannot answer every general question at this time.";
+}
+function sendStudioAIMessage(){
+const input=document.getElementById("studioAIInput");
+if(!input)return;
+const question=input.value.trim();
+if(!question)return;
+addStudioAIMessage(question,"user");
+input.value="";
+const reply=getStudioAIReply(question);
+addStudioAIMessage(reply,"bot");
 }
 
 /* PET AVATARS */
@@ -842,7 +965,7 @@ el.innerHTML=beatItems.length?beatItems.map((item,i)=>`
 <input type="radio" name="analysisBeat" ${selectedBeat===i?"checked":""} onchange="selectBeat(${i})">
 <span class="item-name">${safeText(item.name)}</span>
 ${audioActionButtons(i,"beat")}
-</div>`).join(""):`<p class="muted small">No beats yet. Generate a beat or import one from your phone.</p>`;
+</div>`).join(""):`<p class="muted small">No beats yet. Generate a beat or import a beat from your phone.</p>`;
 }
 function renderMastering(){
 const songs=document.getElementById("masteringSongs");
