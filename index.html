@@ -110,10 +110,28 @@ a{color:var(--gold)}
 .mastering-photo{background:linear-gradient(#0005,#0009),url("https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?auto=format&fit=crop&w=900&q=85") center/cover}
 .distribution-photo{background:linear-gradient(#0005,#0009),url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=900&q=85") center/cover}
 .section-heading{font-weight:bold;color:var(--gold);margin:22px 0 8px}
+
+/* NEW MUSIC SCREEN LAYOUT */
+.beat-choice-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.beat-choice{
+min-height:112px;width:100%;padding:14px 9px;
+border-radius:15px;border:1px solid #484848;
+background:linear-gradient(145deg,#242424,#101010);
+color:white;display:flex;flex-direction:column;
+align-items:center;justify-content:center;gap:9px;
+text-align:center;font-weight:800;font-size:14px;
+}
+.beat-choice .symbol{font-size:28px;color:var(--gold)}
+.beat-choice:active{border-color:var(--gold);transform:scale(.99)}
+.beat-section-title{font-size:16px;font-weight:800;margin:18px 0 8px}
+.selected-audio-card{background:#171717;border:1px solid #383838;border-radius:14px;padding:12px;margin:10px 0}
+.selected-audio-card .muted{font-size:12px}
+.match-button{margin-top:14px}
 @media(max-width:380px){
 .audio-actions{gap:3px}
 .audio-action{min-width:30px;height:32px;padding:0 5px;font-size:11px}
 .project-row{gap:7px;padding:9px}
+.beat-choice{font-size:13px;min-height:105px}
 }
 @media(min-width:600px){.app{border-left:1px solid #222;border-right:1px solid #222}}
 </style>
@@ -229,26 +247,73 @@ a{color:var(--gold)}
 <p class="center small muted">Your recordings and imported songs appear in My Projects.</p>
 </section>
 
+<!-- UPDATED MUSIC / AI BEAT SCREEN -->
 <section id="beat" class="screen">
 <div class="topbar"><button class="back" onclick="goBack()">‹</button><h2>AI Beat Generator</h2><span></span></div>
-<div class="wave" id="beatWave" style="height:120px;margin-top:35px"></div>
-<h3 class="center">Find Your Matching Beat</h3>
-<p class="center muted">Choose a song for analysis. AI must identify its style and match a suitable beat without changing your real voice.</p>
-<div class="card"><strong>My Songs</strong><div id="beatSongList"></div></div>
-<button class="gold-button" onclick="requestBeatAnalysis()">Analyse Song & Find Beat</button>
-<button class="dark-button" onclick="document.getElementById('beatImport2').click()">Import Beat From Phone</button>
+
+<div class="wave" id="beatWave" style="height:90px;margin-top:12px"></div>
+<h3 class="center">Create Your Matching Beat</h3>
+<p class="center muted">Choose or record your song, then choose how you want to get your beat. Studio Flow will match the selected beat to your song.</p>
+
+<div class="card">
+<div class="beat-section-title">1. Choose Your Song</div>
+<div class="beat-choice-grid">
+<button class="beat-choice" onclick="showScreen('recording')">
+<span class="symbol">🎙</span>
+<span>Record Song</span>
+</button>
+<button class="beat-choice" onclick="document.getElementById('audioImport').click()">
+<span class="symbol">📁</span>
+<span>Import Song</span>
+</button>
+</div>
+<div class="selected-audio-card">
+<strong>My Songs</strong>
+<div id="beatSongList"></div>
+</div>
+</div>
+
+<div class="card">
+<div class="beat-section-title">2. Choose Your Beat</div>
+<div class="beat-choice-grid">
+<button class="beat-choice" onclick="requestBeatGeneration()">
+<span class="symbol">✨</span>
+<span>Generate Beat for Me</span>
+</button>
+<button class="beat-choice" onclick="document.getElementById('beatImport2').click()">
+<span class="symbol">♫</span>
+<span>Import Beat From Phone</span>
+</button>
+</div>
+<div class="selected-audio-card">
+<strong>My Beats</strong>
+<div id="beatChoiceList"></div>
+</div>
 <input id="beatImport2" type="file" accept="audio/*" hidden onchange="importAudio(event,'beat')">
+</div>
+
+<div class="card">
+<div class="beat-section-title">3. Match Beat to My Song</div>
+<p class="muted small">Analyse your selected song and match it with your selected beat. Your real voice must remain unchanged.</p>
+<button class="gold-button match-button" onclick="requestBeatAnalysis()">Match Beat to My Song</button>
 <div class="progress"><div id="beatProgress"></div></div>
 <p class="center small" id="beatPercent">Ready</p>
-<div class="checklist">
-<p>☑ Analyse your vocals</p><p>☑ Detect music style</p><p>☑ Find a matching beat</p><p>☑ Prepare for mastering</p>
 </div>
+
 <div class="card">
+<strong>Analysis Checklist</strong>
+<div class="checklist">
+<p>☑ Analyse your vocals</p>
+<p>☑ Detect music style</p>
+<p>☑ Match the selected beat</p>
+<p>☑ Prepare for mastering</p>
+</div>
 <strong>Detected Style:</strong>
 <div class="gold" style="font-size:20px;font-weight:bold;margin-top:8px" id="detectedStyle">Awaiting analysis</div>
-<p class="small muted">Real AI audio analysis and beat generation require an AI audio service connection.</p>
+<p class="small muted">Real AI audio analysis, beat generation and matching require an AI audio service connection.</p>
 </div>
-<button class="gold-button" onclick="showScreen('mastering')">Continue to Mastering</button>
+
+<button class="gold-button" onclick="continueToMastering()">Continue to Mastering</button>
 </section>
 
 <section id="mastering" class="screen">
@@ -540,7 +605,7 @@ requireSupabase();
 stopActiveAudio();
 const {error}=await supabaseClient.auth.signOut();
 if(error)throw error;
-currentUser=null;audioItems=[];beatItems=[];pageHistory=[];
+currentUser=null;audioItems=[];beatItems=[];selectedSong=null;selectedBeat=null;pageHistory=[];
 showScreen("welcome",false);
 showToast("You have signed out.");
 }catch(e){showToast(friendlyError(e));}
@@ -574,8 +639,13 @@ if(error)throw error;
 const {data,error:urlError}=await supabaseClient.storage.from(AUDIO_BUCKET).createSignedUrl(path,3600);
 if(urlError)throw urlError;
 const item={name:file.name,size:(file.size/1024/1024).toFixed(2)+" MB",url:data.signedUrl,path,type};
-if(type==="beat")beatItems.unshift(item);
-else audioItems.unshift(item);
+if(type==="beat"){
+beatItems.unshift(item);
+selectedBeat=0;
+}else{
+audioItems.unshift(item);
+selectedSong=0;
+}
 renderProjects();renderMastering();renderBeatSongs();
 return item;
 }
@@ -585,7 +655,7 @@ if(!file)return;
 try{
 showToast("Uploading your "+(type==="beat"?"beat":"song")+"...");
 await uploadMusicFile(file,type);
-showToast(type==="beat"?"Beat uploaded to My Beats.":"Song uploaded to My Projects.");
+showToast(type==="beat"?"Beat uploaded and selected in My Beats.":"Song uploaded and selected in My Songs.");
 }catch(e){
 console.error(e);showToast(friendlyError(e));
 }finally{event.target.value="";}
@@ -609,6 +679,8 @@ url:urlData.signedUrl,path,type:isBeat?"beat":"song"
 };
 if(isBeat)beatItems.push(item);else audioItems.push(item);
 }
+if(audioItems.length)selectedSong=0;
+if(beatItems.length)selectedBeat=0;
 }catch(e){console.log("Could not load music library:",e);}
 renderProjects();renderMastering();renderBeatSongs();
 }
@@ -621,9 +693,6 @@ if(!item)return;
 try{
 showToast("Preparing your download...");
 let downloadUrl=item.url;
-
-/* If a mastering service later saves a mastered file,
-   use its URL/path instead of the original recording. */
 if(type==="song"&&(item.masteredUrl||item.masteredPath)){
 if(item.masteredUrl){
 downloadUrl=item.masteredUrl;
@@ -633,7 +702,6 @@ if(error)throw error;
 downloadUrl=data.signedUrl;
 }
 }
-
 const response=await fetch(downloadUrl);
 if(!response.ok)throw new Error("Could not download this audio file.");
 const blob=await response.blob();
@@ -642,8 +710,7 @@ const link=document.createElement("a");
 link.href=objectUrl;
 const cleanName=(item.name||"StudioFlow-Audio").replace(/[\\/:*?"<>|]/g,"_");
 const extension=(item.name.match(/\.[a-zA-Z0-9]{2,5}$/)||[])[0]||".audio";
-link.download=(type==="beat"?"StudioFlow-Beat-":"StudioFlow-")+
-cleanName.replace(/\.[a-zA-Z0-9]{2,5}$/,"")+extension;
+link.download=(type==="beat"?"StudioFlow-Beat-":"StudioFlow-")+cleanName.replace(/\.[a-zA-Z0-9]{2,5}$/,"")+extension;
 document.body.appendChild(link);
 link.click();
 link.remove();
@@ -660,27 +727,16 @@ async function deleteAudio(index,type="song"){
 const list=type==="beat"?beatItems:audioItems;
 const item=list[index];
 if(!item)return;
-
 const label=type==="beat"?"beat":"song";
-const confirmed=confirm(
-"Delete \""+item.name+"\"?\n\nThis will permanently remove this "+label+" from your Studio Flow account. This cannot be undone."
-);
+const confirmed=confirm("Delete \""+item.name+"\"?\n\nThis will permanently remove this "+label+" from your Studio Flow account. This cannot be undone.");
 if(!confirmed)return;
-
 try{
 requireSupabase();
 if(!currentUser)throw new Error("Please sign in again.");
-
-/* Stop playback before changing list indexes. */
 stopActiveAudio();
-
 const {error}=await supabaseClient.storage.from(AUDIO_BUCKET).remove([item.path]);
 if(error)throw error;
-
-/* Remove the item locally only after storage confirms success. */
 list.splice(index,1);
-
-/* Keep the selected song/beat pointing at the correct item. */
 if(type==="song"){
 if(selectedSong===index)selectedSong=null;
 else if(selectedSong!==null&&selectedSong>index)selectedSong--;
@@ -688,10 +744,7 @@ else if(selectedSong!==null&&selectedSong>index)selectedSong--;
 if(selectedBeat===index)selectedBeat=null;
 else if(selectedBeat!==null&&selectedBeat>index)selectedBeat--;
 }
-
-renderProjects();
-renderMastering();
-renderBeatSongs();
+renderProjects();renderMastering();renderBeatSongs();
 showToast(type==="beat"?"Beat deleted successfully.":"Song deleted successfully.");
 }catch(e){
 console.error(e);
@@ -705,9 +758,7 @@ return activeAudio&&activeAudioType===type&&activeAudioIndex===index&&!activeAud
 }
 function updateAudioButtons(type,index){
 document.querySelectorAll("[data-audio-type]").forEach(button=>{
-if(button.dataset.audioType===type&&Number(button.dataset.audioIndex)===index){
-button.textContent=getAudioIcon(type,index);
-}
+if(button.dataset.audioType===type&&Number(button.dataset.audioIndex)===index)button.textContent=getAudioIcon(type,index);
 });
 }
 function refreshAllAudioButtons(){
@@ -730,44 +781,24 @@ function playAudio(index,type="song"){
 const list=type==="beat"?beatItems:audioItems;
 const item=list[index];
 if(!item)return;
-
 if(activeAudio&&activeAudioType===type&&activeAudioIndex===index){
-if(activeAudio.paused){
-activeAudio.play().catch(()=>showToast("Could not resume this audio file."));
-}else{
-activeAudio.pause();
-}
+if(activeAudio.paused)activeAudio.play().catch(()=>showToast("Could not resume this audio file."));
+else activeAudio.pause();
 return;
 }
-
 stopActiveAudio();
 const player=new Audio(item.url);
 activeAudio=player;activeAudioType=type;activeAudioIndex=index;
-
-player.addEventListener("play",()=>{
-if(activeAudio===player)updateAudioButtons(type,index);
-});
-player.addEventListener("pause",()=>{
-if(activeAudio===player)updateAudioButtons(type,index);
-});
+player.addEventListener("play",()=>{if(activeAudio===player)updateAudioButtons(type,index);});
+player.addEventListener("pause",()=>{if(activeAudio===player)updateAudioButtons(type,index);});
 player.addEventListener("ended",()=>{
-if(activeAudio===player){
-activeAudio=null;activeAudioType=null;activeAudioIndex=null;
-refreshAllAudioButtons();
-}
+if(activeAudio===player){activeAudio=null;activeAudioType=null;activeAudioIndex=null;refreshAllAudioButtons();}
 });
 player.addEventListener("error",()=>{
-if(activeAudio===player){
-activeAudio=null;activeAudioType=null;activeAudioIndex=null;
-refreshAllAudioButtons();
-showToast("Could not play this audio file.");
-}
+if(activeAudio===player){activeAudio=null;activeAudioType=null;activeAudioIndex=null;refreshAllAudioButtons();showToast("Could not play this audio file.");}
 });
 player.play().catch(()=>{
-if(activeAudio===player){
-activeAudio=null;activeAudioType=null;activeAudioIndex=null;
-refreshAllAudioButtons();
-}
+if(activeAudio===player){activeAudio=null;activeAudioType=null;activeAudioIndex=null;refreshAllAudioButtons();}
 showToast("Could not play this audio file.");
 });
 }
@@ -800,7 +831,18 @@ el.innerHTML=audioItems.length?audioItems.map((item,i)=>`
 <input type="radio" name="analysisSong" ${selectedSong===i?"checked":""} onchange="selectSong(${i})">
 <span class="item-name">${safeText(item.name)}</span>
 ${audioActionButtons(i,"song")}
-</div>`).join(""):`<p class="muted small">No songs yet. Record or import a song first.</p>`;
+</div>`).join(""):`<p class="muted small">No songs yet. Record a song or import one from your phone.</p>`;
+renderBeatChoices();
+}
+function renderBeatChoices(){
+const el=document.getElementById("beatChoiceList");
+if(!el)return;
+el.innerHTML=beatItems.length?beatItems.map((item,i)=>`
+<div class="library-item">
+<input type="radio" name="analysisBeat" ${selectedBeat===i?"checked":""} onchange="selectBeat(${i})">
+<span class="item-name">${safeText(item.name)}</span>
+${audioActionButtons(i,"beat")}
+</div>`).join(""):`<p class="muted small">No beats yet. Generate a beat or import one from your phone.</p>`;
 }
 function renderMastering(){
 const songs=document.getElementById("masteringSongs");
@@ -817,10 +859,50 @@ beats.innerHTML=beatItems.length?beatItems.map((item,i)=>`
 <input type="radio" name="masterBeat" ${selectedBeat===i?"checked":""} onchange="selectBeat(${i})">
 <span class="item-name">${safeText(item.name)}</span>
 ${audioActionButtons(i,"beat")}
-</div>`).join(""):`<p class="muted small">No beats yet. Import a beat from your phone.</p>`;
+</div>`).join(""):`<p class="muted small">No beats yet. Generate or import a beat.</p>`;
 }
-function selectSong(i){selectedSong=i;}
-function selectBeat(i){selectedBeat=i;}
+function selectSong(i){
+selectedSong=i;
+renderBeatSongs();
+renderMastering();
+}
+function selectBeat(i){
+selectedBeat=i;
+renderBeatChoices();
+renderMastering();
+}
+
+/* NEW BEAT WORKFLOW */
+function requestBeatGeneration(){
+document.getElementById("beatPercent").textContent="Waiting for AI beat service";
+document.getElementById("beatProgress").style.width="0%";
+showToast("AI beat generation is not connected yet. Your existing imported beats can still be selected.");
+}
+function requestBeatAnalysis(){
+if(selectedSong===null||!audioItems[selectedSong]){
+showToast("Please record or import a song, then select it under My Songs.");
+return;
+}
+if(selectedBeat===null||!beatItems[selectedBeat]){
+showToast("Please generate a beat or import a beat, then select it under My Beats.");
+return;
+}
+document.getElementById("beatPercent").textContent="Ready for AI matching service";
+document.getElementById("beatProgress").style.width="0%";
+document.getElementById("detectedStyle").textContent="Awaiting AI service";
+showToast("Your song and beat are selected. Real audio analysis and beat matching need the AI service connection.");
+}
+function continueToMastering(){
+if(selectedSong===null||!audioItems[selectedSong]){
+showToast("Please select a song first.");
+return;
+}
+if(selectedBeat===null||!beatItems[selectedBeat]){
+showToast("Please select a beat first.");
+return;
+}
+showScreen("mastering");
+}
 
 /* RECORDING WITH PAUSE, RESUME AND STOP */
 function updateTimer(){
@@ -831,10 +913,7 @@ document.getElementById("timer").textContent=mins+":"+secs;
 function startTimer(){
 clearInterval(recordingInterval);
 recordingInterval=setInterval(()=>{
-if(recordingState==="recording"){
-recordingSeconds++;
-updateTimer();
-}
+if(recordingState==="recording"){recordingSeconds++;updateTimer();}
 },1000);
 }
 function updateRecordingControls(){
@@ -859,14 +938,8 @@ document.getElementById("recordButton").textContent="🎙";
 }
 }
 async function startRecording(){
-if(recordingState!=="idle"){
-showToast("Stop the current recording before starting another.");
-return;
-}
-if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){
-showToast("Audio recording is not supported in this browser.");
-return;
-}
+if(recordingState!=="idle"){showToast("Stop the current recording before starting another.");return;}
+if(!navigator.mediaDevices?.getUserMedia||!window.MediaRecorder){showToast("Audio recording is not supported in this browser.");return;}
 try{
 recordingStream=await navigator.mediaDevices.getUserMedia({audio:true});
 recordedChunks=[];
@@ -875,13 +948,8 @@ if(!MediaRecorder.isTypeSupported(mime))mime="audio/webm";
 if(!MediaRecorder.isTypeSupported(mime))mime="";
 const recorder=mime?new MediaRecorder(recordingStream,{mimeType:mime}):new MediaRecorder(recordingStream);
 mediaRecorder=recorder;
-recorder.ondataavailable=e=>{
-if(e.data&&e.data.size)recordedChunks.push(e.data);
-};
-recorder.onerror=e=>{
-console.error("Recording error:",e);
-showToast("There was a problem recording your audio.");
-};
+recorder.ondataavailable=e=>{if(e.data&&e.data.size)recordedChunks.push(e.data);};
+recorder.onerror=e=>{console.error("Recording error:",e);showToast("There was a problem recording your audio.");};
 recorder.onstop=async()=>{
 clearInterval(recordingInterval);
 const blob=new Blob(recordedChunks,{type:recorder.mimeType||"audio/webm"});
@@ -893,15 +961,11 @@ const file=new File([blob],"StudioFlow-Recording-"+Date.now()+".webm",{type:blob
 try{
 showToast("Saving your recording...");
 await uploadMusicFile(file,"song");
-showToast("Recording saved to My Projects.");
-}catch(e){
-console.error(e);
-showToast("Recording captured but upload failed: "+friendlyError(e));
-}
+showToast("Recording saved and selected in My Songs.");
+}catch(e){console.error(e);showToast("Recording captured but upload failed: "+friendlyError(e));}
 };
 recorder.start(1000);
-recordingState="recording";
-recordingSeconds=0;
+recordingState="recording";recordingSeconds=0;
 updateTimer();startTimer();updateRecordingControls();
 }catch(e){
 console.error(e);
@@ -913,30 +977,20 @@ showToast("Microphone permission is needed to record.");
 }
 function pauseRecording(){
 if(!mediaRecorder||recordingState!=="recording"||mediaRecorder.state!=="recording")return;
-try{
-mediaRecorder.pause();recordingState="paused";
-clearInterval(recordingInterval);updateRecordingControls();
-showToast("Recording paused.");
-}catch(e){console.error(e);showToast("Could not pause recording.");}
+try{mediaRecorder.pause();recordingState="paused";clearInterval(recordingInterval);updateRecordingControls();showToast("Recording paused.");}
+catch(e){console.error(e);showToast("Could not pause recording.");}
 }
 function resumeRecording(){
 if(!mediaRecorder||recordingState!=="paused"||mediaRecorder.state!=="paused")return;
-try{
-mediaRecorder.resume();recordingState="recording";
-startTimer();updateRecordingControls();
-showToast("Recording resumed.");
-}catch(e){console.error(e);showToast("Could not resume recording.");}
+try{mediaRecorder.resume();recordingState="recording";startTimer();updateRecordingControls();showToast("Recording resumed.");}
+catch(e){console.error(e);showToast("Could not resume recording.");}
 }
 function stopRecording(){
-if(!mediaRecorder||recordingState==="idle"||recordingState==="stopping"){
-showToast("There is no active recording.");return;
-}
-clearInterval(recordingInterval);
-recordingState="stopping";updateRecordingControls();
+if(!mediaRecorder||recordingState==="idle"||recordingState==="stopping"){showToast("There is no active recording.");return;}
+clearInterval(recordingInterval);recordingState="stopping";updateRecordingControls();
 try{
-if(mediaRecorder.state!=="inactive"){
-mediaRecorder.stop();
-}else{
+if(mediaRecorder.state!=="inactive"){mediaRecorder.stop();}
+else{
 recordingState="idle";mediaRecorder=null;
 recordingStream?.getTracks().forEach(track=>track.stop());
 recordingStream=null;updateRecordingControls();
@@ -944,20 +998,8 @@ recordingStream=null;updateRecordingControls();
 }catch(e){
 console.error(e);recordingState="idle";mediaRecorder=null;
 recordingStream?.getTracks().forEach(track=>track.stop());
-recordingStream=null;updateRecordingControls();
-showToast("Could not stop the recording.");
+recordingStream=null;updateRecordingControls();showToast("Could not stop the recording.");
 }
-}
-
-/* BEAT ANALYSIS - REQUIRES CONNECTED AI SERVICE */
-function requestBeatAnalysis(){
-if(!audioItems.length){showToast("Record or import a song before analysis.");return;}
-if(selectedSong===null||!audioItems[selectedSong]){
-showToast("Please select a song first.");return;
-}
-document.getElementById("beatPercent").textContent="AI service not connected";
-document.getElementById("beatProgress").style.width="0%";
-showToast("Song selected. Connect an AI audio analysis service to detect its genre and generate a matching beat.");
 }
 
 /* PAYMENT AND DISTRIBUTION */
@@ -1056,7 +1098,7 @@ showScreen("welcome",false);
 supabaseClient.auth.onAuthStateChange((event,session)=>{
 currentUser=session?.user||null;
 if(event==="SIGNED_OUT"){
-stopActiveAudio();audioItems=[];beatItems=[];pageHistory=[];
+stopActiveAudio();audioItems=[];beatItems=[];selectedSong=null;selectedBeat=null;pageHistory=[];
 showScreen("welcome",false);
 }else if(event==="PASSWORD_RECOVERY"){
 showScreen("reset",false);
