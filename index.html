@@ -876,53 +876,66 @@ async function restoreSession(){
   });
 }
 
+
 /* AUDIO IMPORT */
-function importAudio(event){
+async function importAudio(event){
   const file=event.target.files?.[0];
   if(!file)return;
+
   if(!file.type.startsWith("audio/")){
     showToast("Please choose an audio file.");
+    event.target.value="";
     return;
   }
-  const item={
-    name:file.name,
-    size:(file.size/1024/1024).toFixed(2)+" MB",
-    url:URL.createObjectURL(file),
-    file
-  };
-  audioItems.push(item);
-  renderProjects();
-  showToast("Song imported into this session.");
-  event.target.value="";
-}
 
-function escapeHtml(value){
-  return String(value).replace(/[&<>"']/g,char=>({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#039;"
-  }[char]));
-}
+  try{
+    const {data:{user},error:authError}=await supabaseClient.auth.getUser();
 
-function renderProjects(){
-  const html=audioItems.length
-    ?audioItems.map((item,index)=>`
-      <div class="project-row">
-        <button class="play" onclick="playAudio(${index})">▶</button>
-        <div class="project-info">
-          <strong>${escapeHtml(item.name)}</strong>
-          <small>${item.size} · Current session</small>
-        </div>
-      </div>`).join("")
-    :`<div class="project-row">
-        <button class="play">▶</button>
-        <div class="project-info">
-          <strong>No projects yet</strong>
-          <small>Record or import a song to begin</small>
-        </div>
-      </div>`;
+    if(authError||!user){
+      showToast("Please sign in before importing a song.");
+      event.target.value="";
+      return;
+    }
+
+    const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+    const filePath=user.id+"/"+Date.now()+"-"+safeName;
+
+    showToast("Uploading your song...");
+
+    const {error:uploadError}=await supabaseClient
+      .storage
+      .from("studio-flow-audio")
+      .upload(filePath,file,{
+        cacheControl:"3600",
+        upsert:false
+      });
+
+    if(uploadError)throw uploadError;
+
+    const {data:urlData,error:urlError}=await supabaseClient
+      .storage
+      .from("studio-flow-audio")
+      .createSignedUrl(filePath,3600);
+
+    if(urlError)throw urlError;
+
+    audioItems.push({
+      name:file.name,
+      size:(file.size/1024/1024).toFixed(2)+" MB",
+      url:urlData.signedUrl,
+      file,
+      path:filePath
+    });
+
+    renderProjects();
+    showToast("Song uploaded successfully.");
+  }catch(error){
+    console.error("Audio upload error:",error);
+    showToast("Song upload failed. Please try again.");
+  }finally{
+    event.target.value="";
+  }
+}
 
   document.getElementById("projectList").innerHTML=html;
   document.getElementById("libraryList").innerHTML=html;
