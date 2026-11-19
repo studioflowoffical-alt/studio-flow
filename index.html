@@ -91,7 +91,7 @@ textarea.field{height:100px;padding-top:14px;resize:vertical}
 .record-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
 .record-actions button{min-height:75px}
 .progress{height:13px;background:#333;border:1px solid #666;border-radius:20px;overflow:hidden;margin:18px 0 5px}
-.progress div{height:100%;width:0;background:linear-gradient(90deg,#f0d5a4,#bd8b3f)}
+.progress div{height:100%;width:0;background:linear-gradient(90deg,#f0d5a4,#bd8b3f);transition:width .4s}
 .checklist{background:#171717;border:1px solid #333;border-radius:13px;padding:14px;margin:15px 0}
 .checklist p{margin:8px 0;font-size:13px}
 .price{font-size:34px;color:var(--gold);font-weight:900;text-align:center;margin:8px 0}
@@ -274,22 +274,26 @@ a{color:var(--gold)}
 </div>
 <div class="card">
 <div class="beat-section-title">3. Match Beat to My Song</div>
-<p class="muted small">Analyse your selected song and match it with your selected beat. Your real voice must remain unchanged.</p>
-<button class="gold-button match-button" onclick="requestBeatAnalysis()">Match Beat to My Song</button>
+<p class="muted small">Select your song and beat, then complete the preparation check before going to mastering. Your real voice must remain unchanged.</p>
+<button class="gold-button match-button" onclick="requestBeatAnalysis()">Analyse</button>
 <div class="progress"><div id="beatProgress"></div></div>
 <p class="center small" id="beatPercent">Ready</p>
 </div>
 <div class="card">
-<strong>Analysis Checklist</strong>
-<div class="checklist"><p>☑ Analyse your vocals</p><p>☑ Detect music style</p><p>☑ Match the selected beat</p><p>☑ Prepare for mastering</p></div>
-<strong>Detected Style:</strong>
-<div class="gold" style="font-size:20px;font-weight:bold;margin-top:8px" id="detectedStyle">Awaiting analysis</div>
-<p class="small muted">Real AI audio analysis, beat generation and matching require an AI audio service connection.</p>
+<strong>Preparation Checklist</strong>
+<div class="checklist">
+<p id="checkSong">○ Song selected</p>
+<p id="checkBeat">○ Beat selected</p>
+<p id="checkFiles">○ Both files ready</p>
+<p id="checkMaster">○ Ready for mastering</p>
+</div>
+<strong>Preparation Status:</strong>
+<div class="gold" style="font-size:20px;font-weight:bold;margin-top:8px" id="detectedStyle">Awaiting preparation</div>
+<p class="small muted">This check confirms that your selected song and beat are ready to submit. Real AI audio analysis, beat generation and matching require the AI audio service connection.</p>
 </div>
 <button class="gold-button" onclick="continueToMastering()">Continue to Mastering</button>
 </section>
 
-<!-- MASTERING: FIRST-TIME TWO-SONG OFFER AND FUTURE PAYMENTS -->
 <section id="mastering" class="screen">
 <div class="topbar"><button class="back" onclick="goBack()">‹</button><h2>Mastering</h2><span></span></div>
 <div class="studio-photo" style="height:145px;border-radius:15px;border:1px solid #555;display:grid;place-items:center"><div class="center"><div style="font-size:45px">🎛️</div><strong>Professional Music Mastering</strong></div></div>
@@ -304,12 +308,10 @@ a{color:var(--gold)}
 <div style="font-size:30px;color:var(--gold)">🎚</div>
 <h3>Master Your Song</h3>
 <p class="muted small">AI beat matching and mastering must preserve your real voice. No voice replacement or cloning.</p>
-
 <div class="notice" style="text-align:left;margin-top:14px">
 <strong>🎁 First-Time Mastering Offer</strong><br>
 Pay ₦5,000 for your first song and receive a second song mastering credit FREE. Your free credit does not expire and can be used whenever you are ready.
 </div>
-
 <div class="price">₦5,000</div>
 <strong>First purchase: 2 songs in total</strong>
 <p class="muted small">After your two introductory credits have been used, each additional song costs ₦5,000.</p>
@@ -331,25 +333,24 @@ Your first-time offer is available for ₦5,000: 1 paid mastering credit + 1 fre
 Pay securely through the payment checkout. Your mastering credits are added only after the payment provider confirms that the transaction was successful.
 </div>
 
-<!-- PAYSTACK PAYMENT PANEL - PREPARED FOR SECURE BACKEND CONNECTION -->
 <div class="card">
-  <div class="header-row">
-    <strong>Paystack Secure Payment</strong>
-    <strong class="gold">₦5,000</strong>
-  </div>
-  <p class="muted small">Your payment will open through Paystack's secure checkout when the payment connection is enabled.</p>
-  <div class="platforms" style="font-size:25px;gap:12px">
-    <span>💳 Card</span>
-    <span>🏦 Bank Transfer</span>
-  </div>
-  <p class="muted small center">Available payment methods will appear at secure checkout, depending on your Paystack account settings.</p>
+<div class="header-row">
+<strong>Paystack Secure Payment</strong>
+<strong class="gold">₦5,000</strong>
+</div>
+<p class="muted small">After you tap the payment button, Studio Flow will open Paystack's secure checkout. Your selected song and beat details will be kept for the payment return.</p>
+<div class="platforms" style="font-size:25px;gap:12px">
+<span>💳 Card</span>
+<span>🏦 Bank Transfer</span>
+</div>
+<p class="muted small center">Available payment methods will appear at secure checkout, depending on your Paystack account settings.</p>
 </div>
 
 <button id="masteringPayButton" class="gold-button" onclick="beginMasteringPayment()">Pay ₦5,000 and Get Started</button>
 <button id="masteringVerifyButton" class="dark-button" onclick="verifyMasteringPayment()" style="display:none">I Have Paid — Verify Payment</button>
 <button id="masteringUseCreditButton" class="gold-button" onclick="startMasteringWithCredit()" style="display:none">Master Selected Song Using My Credit</button>
 
-<p id="masteringPaymentMessage" class="center small muted">Select a song above. Your payment and credits will be checked securely by Studio Flow.</p>
+<p id="masteringPaymentMessage" class="center small muted">Complete Analyse first, then select your prepared song and beat here.</p>
 <p class="center small"><a href="mailto:support@studioflow.com">Need Help? Contact Support</a></p>
 </section>
 
@@ -486,40 +487,18 @@ let deferredInstallPrompt=null;
 let activeAudio=null,activeAudioType=null,activeAudioIndex=null;
 let selectedSong=null,selectedBeat=null;
 
-/*
-MASTERING BACKEND CONNECTION
-
-These Supabase Edge Functions must be created before payments and
-mastering credits can work:
-
-1. mastering-account
-   Returns:
-   { credits_remaining: number, offer_used: boolean }
-
-2. mastering-payment-init
-   Receives:
-   { song_path: string, song_name: string, return_url: string }
-   Returns:
-   { authorization_url: string, reference: string }
-
-3. mastering-payment-verify
-   Receives:
-   { reference: string }
-   Server verifies the transaction with Paystack and grants credits
-   exactly once. First successful purchase grants 2 credits.
-   Later successful purchases grant 1 credit.
-
-4. mastering-start
-   Receives:
-   { song_path: string, song_name: string }
-   Server atomically consumes one credit and creates a mastering job.
-
-The Paystack secret key must ONLY be stored on the server.
-Never put the Paystack secret key in this HTML file.
-
-The real audio mastering processor must also be connected to the
-server-side mastering job before actual mastered audio can be returned.
-*/
+/* PREPARATION AND MASTERING DETAILS */
+const MASTERING_PENDING_KEY="studioFlowPendingMasteringPayment";
+const MASTERING_DETAILS_KEY="studioFlowPendingMasteringDetails";
+const ANALYSIS_STATE_KEY="studioFlowCompletedPreparation";
+let analysisComplete=false;
+let analyzedSongPath=null;
+let analyzedBeatPath=null;
+let masteringCredits=0;
+let masteringOfferUsed=false;
+let masteringAccountLoaded=false;
+let masteringBusy=false;
+let pendingMasteringReference=null;
 
 const MASTERING_FUNCTIONS={
 account:"mastering-account",
@@ -527,14 +506,6 @@ paymentInit:"mastering-payment-init",
 paymentVerify:"mastering-payment-verify",
 start:"mastering-start"
 };
-
-const MASTERING_PENDING_KEY="studioFlowPendingMasteringPayment";
-
-let masteringCredits=0;
-let masteringOfferUsed=false;
-let masteringAccountLoaded=false;
-let masteringBusy=false;
-let pendingMasteringReference=null;
 
 const PET_AVATARS=[
 {name:"Golden Retriever",url:"https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=400&q=85"},
@@ -583,18 +554,86 @@ auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}
 });
 }
 
-/* NAVIGATION - UPDATED */
+/* PREPARATION STATE */
+function getAnalysisStorageKey(){
+return ANALYSIS_STATE_KEY+":"+(currentUser?.id||"guest");
+}
+function saveAnalysisState(){
+try{
+if(analysisComplete&&analyzedSongPath&&analyzedBeatPath){
+localStorage.setItem(getAnalysisStorageKey(),JSON.stringify({
+song_path:analyzedSongPath,
+beat_path:analyzedBeatPath,
+completed:true,
+completed_at:new Date().toISOString()
+}));
+}else{
+localStorage.removeItem(getAnalysisStorageKey());
+}
+}catch(e){console.log("Could not save preparation state:",e);}
+}
+function loadAnalysisState(){
+analysisComplete=false;
+analyzedSongPath=null;
+analyzedBeatPath=null;
+try{
+const saved=JSON.parse(localStorage.getItem(getAnalysisStorageKey())||"null");
+if(saved?.completed&&saved.song_path&&saved.beat_path){
+analysisComplete=true;
+analyzedSongPath=saved.song_path;
+analyzedBeatPath=saved.beat_path;
+}
+}catch(e){}
+updatePreparationDisplay();
+}
+function clearAnalysisState(){
+analysisComplete=false;
+analyzedSongPath=null;
+analyzedBeatPath=null;
+saveAnalysisState();
+updatePreparationDisplay();
+}
+function isSongLocked(item){
+return Boolean(item&&analysisComplete&&item.path===analyzedSongPath&&!item.masteredUrl&&!item.masteredPath);
+}
+function isPreparedSelectionCurrent(){
+const song=selectedSong!==null?audioItems[selectedSong]:null;
+const beat=selectedBeat!==null?beatItems[selectedBeat]:null;
+return Boolean(analysisComplete&&song&&beat&&song.path===analyzedSongPath&&beat.path===analyzedBeatPath);
+}
+function updatePreparationDisplay(){
+const percent=document.getElementById("beatPercent");
+const progress=document.getElementById("beatProgress");
+const style=document.getElementById("detectedStyle");
+const songCheck=document.getElementById("checkSong");
+const beatCheck=document.getElementById("checkBeat");
+const filesCheck=document.getElementById("checkFiles");
+const masterCheck=document.getElementById("checkMaster");
+
+const song=selectedSong!==null?audioItems[selectedSong]:null;
+const beat=selectedBeat!==null?beatItems[selectedBeat]:null;
+const valid=Boolean(song&&beat&&analysisComplete&&song.path===analyzedSongPath&&beat.path===analyzedBeatPath);
+
+if(songCheck)songCheck.textContent=song?"✓ Song selected":"○ Song selected";
+if(beatCheck)beatCheck.textContent=beat?"✓ Beat selected":"○ Beat selected";
+if(filesCheck)filesCheck.textContent=song&&beat?"✓ Both files ready":"○ Both files ready";
+if(masterCheck)masterCheck.textContent=valid?"✓ Ready for mastering":"○ Ready for mastering";
+
+if(percent)percent.textContent=valid?"Preparation Check Complete — 100%":(analysisComplete?"Selection changed — Analyse again":"Ready");
+if(progress)progress.style.width=valid?"100%":"0%";
+if(style)style.textContent=valid?"Preparation Complete — Ready for Mastering":"Awaiting preparation";
+}
+
+/* NAVIGATION */
 function displayScreen(id){
 const page=document.getElementById(id);
 if(!page)return false;
-
 const current=document.querySelector(".screen.active");
 document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
 page.classList.add("active");
 
 const authPages=["welcome","signup","signin","forgot","reset","studioAI"];
 document.getElementById("bottomNav").style.display=authPages.includes(id)?"none":"flex";
-
 const aiFab=document.getElementById("studioAIFab");
 if(aiFab)aiFab.style.display=(authPages.includes(id)||!currentUser)?"none":"flex";
 
@@ -610,115 +649,71 @@ if(id==="mastering"){
 renderMastering();
 loadMasteringAccount();
 }
-if(id==="beat")renderBeatSongs();
+if(id==="beat"){
+renderBeatSongs();
+updatePreparationDisplay();
+}
 if(id==="library")renderProjects();
-
 window.scrollTo({top:0,behavior:"instant"});
 return true;
 }
-
 function showScreen(id,remember=true){
 const current=document.querySelector(".screen.active");
 if(!document.getElementById(id))return;
-
 if(remember&&current&&current.id!==id){
-if(pageHistory[pageHistory.length-1]!==current.id){
-pageHistory.push(current.id);
-}
+if(pageHistory[pageHistory.length-1]!==current.id)pageHistory.push(current.id);
 history.pushState({studioFlow:true,page:id},"","#"+id);
 }else if(!remember){
 pageHistory=[];
 history.replaceState({studioFlow:true,page:id},"","#"+id);
-}else if(current&&current.id===id){
-return;
-}
-
+}else if(current&&current.id===id)return;
 displayScreen(id);
 }
-
 function goBack(){
-if(pageHistory.length>0){
-history.back();
-return;
-}
-
+if(pageHistory.length>0){history.back();return;}
 const fallback=currentUser?"home":"welcome";
 const current=document.querySelector(".screen.active");
-if(current&&current.id!==fallback){
-showScreen(fallback,false);
+if(current&&current.id!==fallback)showScreen(fallback,false);
 }
-}
-
-/* ANDROID BACK BUTTON AND BROWSER HISTORY */
 window.addEventListener("popstate",function(){
-if(pageHistory.length>0){
-const previous=pageHistory.pop();
-displayScreen(previous);
-}else{
-const fallback=currentUser?"home":"welcome";
-displayScreen(fallback);
-}
+if(pageHistory.length>0)displayScreen(pageHistory.pop());
+else displayScreen(currentUser?"home":"welcome");
 });
 
 /* LEFT EDGE SWIPE BACK */
 (function setupEdgeSwipeBack(){
-let startX=0,startY=0,lastX=0,lastY=0;
-let tracking=false;
-let startedAtEdge=false;
-
+let startX=0,startY=0,lastX=0,lastY=0,tracking=false,startedAtEdge=false;
 document.addEventListener("touchstart",function(e){
 if(!e.touches||e.touches.length!==1)return;
 const touch=e.touches[0];
-startX=touch.clientX;
-startY=touch.clientY;
-lastX=startX;
-lastY=startY;
-startedAtEdge=startX<=28;
-tracking=startedAtEdge;
+startX=touch.clientX;startY=touch.clientY;lastX=startX;lastY=startY;
+startedAtEdge=startX<=28;tracking=startedAtEdge;
 },{passive:true});
-
 document.addEventListener("touchmove",function(e){
 if(!tracking||!e.touches||e.touches.length!==1)return;
-lastX=e.touches[0].clientX;
-lastY=e.touches[0].clientY;
-
-const dx=lastX-startX;
-const dy=Math.abs(lastY-startY);
-
-if(dx<0||dy>Math.abs(dx)*1.2){
-tracking=false;
-}
+lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;
+const dx=lastX-startX,dy=Math.abs(lastY-startY);
+if(dx<0||dy>Math.abs(dx)*1.2)tracking=false;
 },{passive:true});
-
 document.addEventListener("touchend",function(){
 if(!tracking)return;
-const dx=lastX-startX;
-const dy=Math.abs(lastY-startY);
+const dx=lastX-startX,dy=Math.abs(lastY-startY);
 tracking=false;
-
-if(startedAtEdge&&dx>85&&dx>dy*1.4){
-goBack();
-}
+if(startedAtEdge&&dx>85&&dx>dy*1.4)goBack();
 },{passive:true});
-
-document.addEventListener("touchcancel",function(){
-tracking=false;
-},{passive:true});
+document.addEventListener("touchcancel",()=>tracking=false,{passive:true});
 })();
 
-/* STUDIO AI CHAT */
+/* STUDIO AI */
 function openStudioAI(){
 if(!currentUser){showToast("Please sign in to use Studio AI.");return;}
 showScreen("studioAI");
 }
-
-/* MOVABLE STUDIO AI BUTTON */
 (function setupMovableStudioAI(){
 const fab=document.getElementById("studioAIFab");
 if(!fab)return;
 const STORAGE_KEY="studioFlowStudioAIPosition";
 let dragging=false,moved=false,startX=0,startY=0,offsetX=0,offsetY=0,suppressClick=false;
-
 function getBounds(){
 const app=document.querySelector(".app");
 const rect=app?app.getBoundingClientRect():{left:0,right:window.innerWidth};
@@ -737,17 +732,14 @@ let saved=null;
 try{saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");}catch(e){}
 if(!saved||!Number.isFinite(saved.left)||!Number.isFinite(saved.top))return;
 const position=keepInsideScreen(saved.left,saved.top);
-fab.style.left=position.left+"px";
-fab.style.top=position.top+"px";
-fab.style.right="auto";
-fab.style.bottom="auto";
+fab.style.left=position.left+"px";fab.style.top=position.top+"px";
+fab.style.right="auto";fab.style.bottom="auto";
 }
 fab.addEventListener("pointerdown",function(e){
 if(e.button!==undefined&&e.button!==0)return;
 dragging=true;moved=false;suppressClick=false;
 const rect=fab.getBoundingClientRect();
-startX=e.clientX;startY=e.clientY;
-offsetX=e.clientX-rect.left;offsetY=e.clientY-rect.top;
+startX=e.clientX;startY=e.clientY;offsetX=e.clientX-rect.left;offsetY=e.clientY-rect.top;
 try{fab.setPointerCapture(e.pointerId);}catch(err){}
 });
 fab.addEventListener("pointermove",function(e){
@@ -755,19 +747,13 @@ if(!dragging)return;
 if(Math.hypot(e.clientX-startX,e.clientY-startY)<6)return;
 moved=true;
 const position=keepInsideScreen(e.clientX-offsetX,e.clientY-offsetY);
-fab.style.left=position.left+"px";
-fab.style.top=position.top+"px";
-fab.style.right="auto";
-fab.style.bottom="auto";
-fab.style.cursor="grabbing";
+fab.style.left=position.left+"px";fab.style.top=position.top+"px";
+fab.style.right="auto";fab.style.bottom="auto";fab.style.cursor="grabbing";
 });
 function finishDragging(){
 if(!dragging)return;
 dragging=false;fab.style.cursor="grab";
-if(moved){
-savePosition();suppressClick=true;
-setTimeout(()=>{suppressClick=false;},350);
-}
+if(moved){savePosition();suppressClick=true;setTimeout(()=>suppressClick=false,350);}
 }
 fab.addEventListener("pointerup",finishDragging);
 fab.addEventListener("pointercancel",finishDragging);
@@ -776,11 +762,8 @@ if(suppressClick){e.preventDefault();e.stopImmediatePropagation();suppressClick=
 },true);
 window.addEventListener("resize",function(){
 if(fab.style.left&&fab.style.top){
-const rect=fab.getBoundingClientRect();
-const position=keepInsideScreen(rect.left,rect.top);
-fab.style.left=position.left+"px";
-fab.style.top=position.top+"px";
-savePosition();
+const rect=fab.getBoundingClientRect(),position=keepInsideScreen(rect.left,rect.top);
+fab.style.left=position.left+"px";fab.style.top=position.top+"px";savePosition();
 }
 });
 restorePosition();
@@ -797,60 +780,43 @@ messages.scrollTop=messages.scrollHeight;
 }
 function getStudioAIReply(question){
 const q=question.toLowerCase();
-if(/\b(hi|hello|hey|good morning|good afternoon|good evening)\b/.test(q)){
+if(/\b(hi|hello|hey|good morning|good afternoon|good evening)\b/.test(q))
 return "Hello! 👋 Welcome to Studio Flow. I'm here to help you use the app. You can ask me about recording, importing music, beats, mastering, or distribution.";
-}
-if(/who (is|are|owns|created|founded)|owner|founder|made studio flow|created studio flow|who made/.test(q)){
+if(/who (is|are|owns|created|founded)|owner|founder|made studio flow|created studio flow|who made/.test(q))
 return "Studio Flow is owned by Paris, the founder of Studio Flow. Paris created Studio Flow for artists to manage their music projects.";
-}
-if(/about studio|what is studio flow|studio flow/.test(q)){
-return "Studio Flow is a music app for recording songs, importing audio, organising beats, preparing music for mastering, and managing distribution requests. It is owned by Paris, the founder of Studio Flow.";
-}
-if(/record|recording|microphone|mic|sing/.test(q)){
-return "To record a song:\n1. Open the Studio tab or tap Record Your Song.\n2. Tap the microphone button.\n3. Allow microphone permission if your phone asks.\n4. Use Pause and Resume when needed.\n5. Tap Stop & Save when you finish.\n\nYour recording will upload to your Studio Flow account if the upload succeeds.";
-}
-if(/import|upload|phone|file/.test(q)&&/song|music|audio|record/.test(q)){
-return "To import a song:\n1. Open Studio or Recording.\n2. Tap Import Song.\n3. Choose an audio file from your phone.\n4. Wait for the upload confirmation.\n\nYour uploaded song will appear in My Projects and My Songs.";
-}
-if(/pause|resume|continue recording/.test(q)){
+if(/about studio|what is studio flow|studio flow/.test(q))
+return "Studio Flow is a music app for recording songs, importing audio, organising beats, preparing music for mastering, and managing distribution requests. It is owned by Paris.";
+if(/record|recording|microphone|mic|sing/.test(q))
+return "To record a song:\n1. Open the Studio tab or tap Record Your Song.\n2. Tap the microphone button.\n3. Allow microphone permission if your phone asks.\n4. Use Pause and Resume when needed.\n5. Tap Stop & Save when you finish.";
+if(/import|upload|phone|file/.test(q)&&/song|music|audio|record/.test(q))
+return "To import a song, open Studio or Recording, tap Import Song, choose an audio file from your phone and wait for the upload confirmation.";
+if(/pause|resume|continue recording/.test(q))
 return "While recording, tap Pause to pause your recording. Tap Resume to continue. When you are finished, tap Stop & Save.";
-}
-if(/delete|remove|accidentally/.test(q)){
-return "To delete a song or beat, find it in your music list and tap the red ✕ button beside it. The app will ask you to confirm before deleting it from your account.";
-}
-if(/download|save to phone/.test(q)){
-return "To download a song or beat, find it in your music list and tap the download arrow ↓ beside it. Your phone should save the audio in its Downloads folder.";
-}
-if(/beat|generate|matching|match/.test(q)){
-return "To work with beats:\n1. Open the Music tab.\n2. Choose or import your song.\n3. Choose a beat from My Beats, or import a beat from your phone.\n4. Select your song and beat.\n5. Tap Match Beat to My Song.\n\nPlease note: the real AI beat-generation and audio-matching service is not connected yet. The app can currently let you import and select audio files.";
-}
-if(/master|mastering|mastered|credit|free song|bonus/.test(q)){
-return "Studio Flow's planned first-time mastering offer is ₦5,000 for 2 songs in total: one paid song and one free bonus song. The free credit stays available until you use it. After both credits are used, each additional song costs ₦5,000. Payment verification and the real audio-mastering processor still need to be connected before songs can be processed.";
-}
-if(/distribut|spotify|apple music|youtube music|release music/.test(q)){
-return "To start a distribution request, open Distribute Your Music from the Home screen and tap Start Distribution. You can enter your artist name and song title. Payment verification and the authorized distributor connection are not connected yet, so your music is not submitted to platforms yet.";
-}
-if(/private|privacy|secure|storage|bucket/.test(q)){
-return "Studio Flow currently uses its existing private audio storage setup. Your audio files are stored in your account's private storage area. The app's storage privacy settings have not been changed for this update.";
-}
-if(/profile|account|pet avatar|avatar/.test(q)){
-return "Open the Profile tab to view your account details, pet avatar, songs, payment history, distribution status, settings, and the new About Studio Flow section.";
-}
-if(/install|download app|add to home/.test(q)){
-return "To install Studio Flow, use the Install App button on the welcome screen if it is available. If it is not, open the Chrome menu and look for Install app or Add to Home screen.";
-}
-if(/thank|thanks/.test(q)){
-return "You're welcome! 😊 Ask me whenever you need help using Studio Flow.";
-}
-return "I can currently answer questions about using Studio Flow, including recording, importing songs, managing beats, downloading or deleting audio, mastering, distribution, your profile, and who owns the app.\n\nThe general AI service is not connected yet, so I cannot answer every general question at this time.";
+if(/delete|remove|accidentally/.test(q))
+return "To delete a song or beat, find it in your music list and tap the red ✕ button beside it. The app will ask you to confirm before deleting it.";
+if(/download|save to phone/.test(q))
+return "To download an available song or beat, find it in your music list and tap the download arrow ↓. An unmastered song that has completed preparation stays locked until mastered audio is returned.";
+if(/beat|generate|matching|match/.test(q))
+return "To work with beats, open Music, select your song, then select a beat from My Beats or import one from your phone. Tap Analyse to complete the preparation check. Real AI beat generation and audio matching still need the AI audio service connection.";
+if(/master|mastering|mastered|credit|free song|bonus/.test(q))
+return "Complete Analyse first. Then open Mastering, select the prepared song and beat, and tap Pay ₦5,000 and Get Started. Paystack checkout and server payment verification must be connected. The original song remains locked until the mastering processor returns the mastered audio.";
+if(/distribut|spotify|apple music|youtube music|release music/.test(q))
+return "To start a distribution request, open Distribute Your Music and tap Start Distribution. Payment verification and the authorized distributor connection are not connected yet.";
+if(/private|privacy|secure|storage|bucket/.test(q))
+return "Studio Flow uses its existing private audio storage setup. Your audio files are stored in your account's private storage area.";
+if(/profile|account|pet avatar|avatar/.test(q))
+return "Open the Profile tab to view your account details, pet avatar, songs, payment history, distribution status, settings, and About Studio Flow.";
+if(/install|download app|add to home/.test(q))
+return "To install Studio Flow, use the Install App button on the welcome screen if available. Otherwise open Chrome's menu and look for Install app or Add to Home screen.";
+if(/thank|thanks/.test(q))return "You're welcome! 😊 Ask me whenever you need help using Studio Flow.";
+return "I can currently answer questions about using Studio Flow, including recording, importing songs, managing beats, downloading or deleting audio, mastering, distribution, your profile, and who owns the app. The general AI service is not connected yet.";
 }
 function sendStudioAIMessage(){
 const input=document.getElementById("studioAIInput");
 if(!input)return;
 const question=input.value.trim();
 if(!question)return;
-addStudioAIMessage(question,"user");
-input.value="";
+addStudioAIMessage(question,"user");input.value="";
 addStudioAIMessage(getStudioAIReply(question),"bot");
 }
 
@@ -895,13 +861,10 @@ email,password,options:{data:{full_name:name,pet_avatar:signupPet.url,pet_name:s
 if(error)throw error;
 if(data.session){
 currentUser=data.user;
-updateProfile();
-await loadStoredAudio();
-showScreen("home",false);
-showToast("Your account is ready!");
+updateProfile();await loadStoredAudio();loadAnalysisState();
+showScreen("home",false);showToast("Your account is ready!");
 }else{
-showToast("Account created. Sign in to continue.");
-showScreen("signin",false);
+showToast("Account created. Sign in to continue.");showScreen("signin",false);
 }
 }catch(e){showError("signupError",friendlyError(e));}
 finally{setBusy("signupButton",false,"Create Account");}
@@ -917,10 +880,11 @@ requireSupabase();
 const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
 if(error)throw error;
 currentUser=data.user;
-await ensurePetAvatar();
-updateProfile();
-await loadStoredAudio();
-showScreen("home",false);
+await ensurePetAvatar();updateProfile();await loadStoredAudio();loadAnalysisState();
+const params=new URLSearchParams(window.location.search);
+const returned=Boolean(params.get("reference")||params.get("trxref")||getPendingMasteringReference());
+showScreen(returned?"mastering":"home",false);
+if(returned)checkMasteringPaymentReturn();
 showToast("Welcome back!");
 }catch(e){showError("loginError",friendlyError(e));}
 finally{setBusy("loginButton",false,"Sign In");}
@@ -946,22 +910,20 @@ try{
 requireSupabase();
 const {error}=await supabaseClient.auth.updateUser({password});
 if(error)throw error;
-showToast("Password updated successfully.");
-showScreen("signin",false);
+showToast("Password updated successfully.");showScreen("signin",false);
 }catch(e){showError("resetError",friendlyError(e));}
 }
 async function signOut(){
 try{
-requireSupabase();
-stopActiveAudio();
+requireSupabase();stopActiveAudio();
 const {error}=await supabaseClient.auth.signOut();
 if(error)throw error;
 currentUser=null;audioItems=[];beatItems=[];selectedSong=null;selectedBeat=null;pageHistory=[];
 masteringCredits=0;masteringOfferUsed=false;masteringAccountLoaded=false;
-pendingMasteringReference=null;
+pendingMasteringReference=null;analysisComplete=false;analyzedSongPath=null;analyzedBeatPath=null;
 sessionStorage.removeItem(MASTERING_PENDING_KEY);
-showScreen("welcome",false);
-showToast("You have signed out.");
+sessionStorage.removeItem(MASTERING_DETAILS_KEY);
+showScreen("welcome",false);showToast("You have signed out.");
 }catch(e){showToast(friendlyError(e));}
 }
 function updateProfile(){
@@ -995,6 +957,7 @@ if(urlError)throw urlError;
 const item={name:file.name,size:(file.size/1024/1024).toFixed(2)+" MB",url:data.signedUrl,path,type};
 if(type==="beat"){beatItems.unshift(item);selectedBeat=0;}
 else{audioItems.unshift(item);selectedSong=0;}
+clearAnalysisState();
 renderProjects();renderMastering();renderBeatSongs();
 return item;
 }
@@ -1027,6 +990,46 @@ if(audioItems.length)selectedSong=0;
 if(beatItems.length)selectedBeat=0;
 }catch(e){console.log("Could not load music library:",e);}
 renderProjects();renderMastering();renderBeatSongs();
+restorePendingMasteringSelection();
+}
+
+/* PENDING SONG AND BEAT SELECTION */
+function savePendingMasteringDetails(song,beat){
+const details={
+user_id:currentUser?.id||null,
+song_path:song.path,
+song_name:song.name,
+beat_path:beat.path,
+beat_name:beat.name,
+preparation_complete:true,
+prepared_at:new Date().toISOString()
+};
+try{sessionStorage.setItem(MASTERING_DETAILS_KEY,JSON.stringify(details));}
+catch(e){throw new Error("Could not preserve your selected song and beat for payment. Please try again.");}
+return details;
+}
+function getPendingMasteringDetails(){
+try{
+const details=JSON.parse(sessionStorage.getItem(MASTERING_DETAILS_KEY)||"null");
+if(!details||!details.song_path||!details.beat_path||!details.preparation_complete)return null;
+if(currentUser&&details.user_id!==currentUser.id)return null;
+return details;
+}catch(e){return null;}
+}
+function restorePendingMasteringSelection(){
+const details=getPendingMasteringDetails();
+if(!details)return;
+const songIndex=audioItems.findIndex(item=>item.path===details.song_path);
+const beatIndex=beatItems.findIndex(item=>item.path===details.beat_path);
+if(songIndex>=0)selectedSong=songIndex;
+if(beatIndex>=0)selectedBeat=beatIndex;
+if(songIndex>=0&&beatIndex>=0){
+analysisComplete=true;
+analyzedSongPath=details.song_path;
+analyzedBeatPath=details.beat_path;
+saveAnalysisState();
+renderBeatSongs();renderMastering();updatePreparationDisplay();
+}
 }
 
 /* AUDIO DOWNLOAD */
@@ -1034,6 +1037,10 @@ async function downloadAudio(index,type="song"){
 const list=type==="beat"?beatItems:audioItems;
 const item=list[index];
 if(!item)return;
+if(type==="song"&&isSongLocked(item)){
+showToast("This song is locked after preparation. Complete mastering before downloading it.");
+return;
+}
 try{
 showToast("Preparing your download...");
 let downloadUrl=item.url;
@@ -1074,6 +1081,7 @@ if(!currentUser)throw new Error("Please sign in again.");
 stopActiveAudio();
 const {error}=await supabaseClient.storage.from(AUDIO_BUCKET).remove([item.path]);
 if(error)throw error;
+if(item.path===analyzedSongPath||item.path===analyzedBeatPath)clearAnalysisState();
 list.splice(index,1);
 if(type==="song"){
 if(selectedSong===index)selectedSong=null;
@@ -1107,17 +1115,35 @@ if(activeAudio){activeAudio.pause();activeAudio.removeAttribute("src");activeAud
 activeAudio=null;activeAudioType=null;activeAudioIndex=null;
 refreshAllAudioButtons();
 }
-function playAudio(index,type="song"){
+function getPlayableUrl(item,type){
+if(type==="song"&&(item.masteredUrl||item.masteredPath)){
+return item.masteredUrl||item.url;
+}
+return item.url;
+}
+async function playAudio(index,type="song"){
 const list=type==="beat"?beatItems:audioItems;
 const item=list[index];
 if(!item)return;
+if(type==="song"&&isSongLocked(item)){
+showToast("Your original song is locked after preparation. You can listen after mastering is completed.");
+return;
+}
 if(activeAudio&&activeAudioType===type&&activeAudioIndex===index){
 if(activeAudio.paused)activeAudio.play().catch(()=>showToast("Could not resume this audio file."));
 else activeAudio.pause();
 return;
 }
 stopActiveAudio();
-const player=new Audio(item.url);
+let url=getPlayableUrl(item,type);
+if(type==="song"&&item.masteredPath&&!item.masteredUrl){
+try{
+const {data,error}=await supabaseClient.storage.from(AUDIO_BUCKET).createSignedUrl(item.masteredPath,3600);
+if(error)throw error;
+url=data.signedUrl;
+}catch(e){showToast("Could not open the mastered audio.");return;}
+}
+const player=new Audio(url);
 activeAudio=player;activeAudioType=type;activeAudioIndex=index;
 player.addEventListener("play",()=>{if(activeAudio===player)updateAudioButtons(type,index);});
 player.addEventListener("pause",()=>{if(activeAudio===player)updateAudioButtons(type,index);});
@@ -1146,7 +1172,7 @@ return `<div class="audio-actions">
 function renderProjects(){
 const html=audioItems.length?audioItems.map((item,i)=>`
 <div class="project-row">
-<div class="project-info"><strong>${safeText(item.name)}</strong><small>${safeText(item.size)} · My Songs</small></div>
+<div class="project-info"><strong>${safeText(item.name)}</strong><small>${safeText(item.size)} · My Songs${isSongLocked(item)?" · Locked until mastered":""}</small></div>
 ${audioActionButtons(i,"song")}
 </div>`).join(""):`<div class="project-row"><div class="project-info"><strong>No projects yet</strong><small>Record or import a song to begin</small></div></div>`;
 document.getElementById("projectList").innerHTML=html;
@@ -1179,7 +1205,7 @@ if(!songs||!beats)return;
 songs.innerHTML=audioItems.length?audioItems.map((item,i)=>`
 <div class="library-item">
 <input type="radio" name="masterSong" ${selectedSong===i?"checked":""} onchange="selectSong(${i})">
-<span class="item-name">${safeText(item.name)}</span>
+<span class="item-name">${safeText(item.name)}${isSongLocked(item)?" (Locked until mastered)":""}</span>
 ${audioActionButtons(i,"song")}
 </div>`).join(""):`<p class="muted small">No songs yet. Record or import your song.</p>`;
 beats.innerHTML=beatItems.length?beatItems.map((item,i)=>`
@@ -1190,44 +1216,48 @@ ${audioActionButtons(i,"beat")}
 </div>`).join(""):`<p class="muted small">No beats yet. Generate or import a beat.</p>`;
 updateMasteringControls();
 }
-function selectSong(i){selectedSong=i;renderBeatSongs();renderMastering();}
-function selectBeat(i){selectedBeat=i;renderBeatChoices();renderMastering();}
+function selectSong(i){
+if(selectedSong!==i)clearAnalysisState();
+selectedSong=i;
+renderBeatSongs();renderMastering();updatePreparationDisplay();
+}
+function selectBeat(i){
+if(selectedBeat!==i)clearAnalysisState();
+selectedBeat=i;
+renderBeatChoices();renderMastering();updatePreparationDisplay();
+}
 
 /* MASTERING PAYMENT AND CREDIT FLOW */
 function getSelectedMasteringSong(){
-if(selectedSong===null||!audioItems[selectedSong]){
-throw new Error("Please select a song under My Songs before continuing.");
-}
+if(selectedSong===null||!audioItems[selectedSong])throw new Error("Please select a song under My Songs before continuing.");
 return audioItems[selectedSong];
 }
-
+function getSelectedMasteringBeat(){
+if(selectedBeat===null||!beatItems[selectedBeat])throw new Error("Please select a beat under My Beats before continuing.");
+return beatItems[selectedBeat];
+}
+function requireCompletedPreparation(){
+if(!isPreparedSelectionCurrent()){
+throw new Error("Please select your song and beat, then tap Analyse before continuing to payment or mastering.");
+}
+}
 function setMasteringMessage(message){
 const el=document.getElementById("masteringPaymentMessage");
 if(el)el.textContent=message;
 }
-
 function getPendingMasteringReference(){
 if(pendingMasteringReference)return pendingMasteringReference;
-try{
-pendingMasteringReference=sessionStorage.getItem(MASTERING_PENDING_KEY)||null;
-}catch(e){}
+try{pendingMasteringReference=sessionStorage.getItem(MASTERING_PENDING_KEY)||null;}catch(e){}
 return pendingMasteringReference;
 }
-
 function savePendingMasteringReference(reference){
 pendingMasteringReference=reference;
-try{
-sessionStorage.setItem(MASTERING_PENDING_KEY,reference);
-}catch(e){}
+try{sessionStorage.setItem(MASTERING_PENDING_KEY,reference);}catch(e){}
 }
-
 function clearPendingMasteringReference(){
 pendingMasteringReference=null;
-try{
-sessionStorage.removeItem(MASTERING_PENDING_KEY);
-}catch(e){}
+try{sessionStorage.removeItem(MASTERING_PENDING_KEY);}catch(e){}
 }
-
 function updateMasteringControls(){
 const count=document.getElementById("masteringCreditCount");
 const message=document.getElementById("masteringCreditMessage");
@@ -1235,60 +1265,38 @@ const offer=document.getElementById("masteringOfferStatus");
 const pay=document.getElementById("masteringPayButton");
 const verify=document.getElementById("masteringVerifyButton");
 const use=document.getElementById("masteringUseCreditButton");
-
 if(!count||!message||!offer||!pay||!verify||!use)return;
 
 const pending=getPendingMasteringReference();
-
 if(!currentUser){
 count.textContent="Sign in required";
 message.textContent="Sign in to view your mastering credits.";
 offer.textContent="Your first-time offer is available once per account.";
-pay.style.display="none";
-verify.style.display="none";
-use.style.display="none";
+pay.style.display="none";verify.style.display="none";use.style.display="none";
 return;
 }
-
+if(!isPreparedSelectionCurrent()){
+count.textContent=masteringAccountLoaded?masteringCredits+" credits":"Checking...";
+message.textContent="Complete Analyse with a selected song and beat before making a mastering payment.";
+pay.style.display="none";verify.style.display=pending?"block":"none";use.style.display="none";
+return;
+}
 if(!masteringAccountLoaded){
 count.textContent="Checking...";
 message.textContent="Checking your credits with your Studio Flow account.";
-pay.style.display="none";
-verify.style.display=pending?"block":"none";
-use.style.display="none";
+pay.style.display="none";verify.style.display=pending?"block":"none";use.style.display="none";
 return;
 }
-
 count.textContent=masteringCredits+" credit"+(masteringCredits===1?"":"s")+" remaining";
+message.textContent=masteringCredits>0?"You can master "+masteringCredits+" more song"+(masteringCredits===1?"":"s")+" without another payment.":"You have no unused mastering credits. Make a payment to master another song.";
+offer.textContent=masteringOfferUsed?
+"Your first-time offer has already been used. Each additional mastering purchase is ₦5,000 for 1 song.":
+"First-time offer available: pay ₦5,000 for 1 song and receive 1 free bonus song. The bonus credit does not expire.";
 
-if(masteringCredits>0){
-message.textContent="You can master "+masteringCredits+" more song"+(masteringCredits===1?"":"s")+" without another payment.";
-}else{
-message.textContent="You have no unused mastering credits. Make a payment to master another song.";
+if(pending){pay.style.display="none";verify.style.display="block";use.style.display="none";}
+else if(masteringCredits>0){pay.style.display="none";verify.style.display="none";use.style.display="block";}
+else{pay.style.display="block";pay.textContent="Pay ₦5,000 and Get Started";verify.style.display="none";use.style.display="none";}
 }
-
-if(masteringOfferUsed){
-offer.textContent="Your first-time offer has already been used. Each additional mastering purchase is ₦5,000 for 1 song.";
-}else{
-offer.textContent="First-time offer available: pay ₦5,000 for 1 song and receive 1 free bonus song. The bonus credit does not expire.";
-}
-
-if(pending){
-pay.style.display="none";
-verify.style.display="block";
-use.style.display="none";
-}else if(masteringCredits>0){
-pay.style.display="none";
-verify.style.display="none";
-use.style.display="block";
-}else{
-pay.style.display="block";
-pay.textContent="Pay ₦5,000 and Get Started";
-verify.style.display="none";
-use.style.display="none";
-}
-}
-
 async function invokeMasteringFunction(functionName,body){
 requireSupabase();
 if(!currentUser)throw new Error("Please sign in to continue.");
@@ -1297,64 +1305,56 @@ if(error)throw error;
 if(data?.error)throw new Error(data.error);
 return data||{};
 }
-
 async function loadMasteringAccount(){
 if(!currentUser)return;
-masteringAccountLoaded=false;
-updateMasteringControls();
-
+masteringAccountLoaded=false;updateMasteringControls();
 try{
 const data=await invokeMasteringFunction(MASTERING_FUNCTIONS.account,{});
 const credits=Number(data.credits_remaining);
-if(!Number.isInteger(credits)||credits<0){
-throw new Error("The mastering account response is incomplete. Please check the backend setup.");
-}
-masteringCredits=credits;
-masteringOfferUsed=Boolean(data.offer_used);
-masteringAccountLoaded=true;
-updateMasteringControls();
+if(!Number.isInteger(credits)||credits<0)throw new Error("The mastering account response is incomplete. Please check the backend setup.");
+masteringCredits=credits;masteringOfferUsed=Boolean(data.offer_used);
+masteringAccountLoaded=true;updateMasteringControls();
 }catch(e){
 console.error("Mastering account:",e);
-masteringAccountLoaded=false;
-updateMasteringControls();
+masteringAccountLoaded=false;updateMasteringControls();
 setMasteringMessage("Mastering account connection is not set up yet. Connect the Supabase mastering-account function to display your real credits.");
 }
-}
 
+/* After the account has loaded, refresh button visibility for prepared song */
+updateMasteringControls();
+}
 async function beginMasteringPayment(){
 if(masteringBusy)return;
-let song;
+let song,beat,details;
 try{
+requireCompletedPreparation();
 song=getSelectedMasteringSong();
+beat=getSelectedMasteringBeat();
 requireSupabase();
 if(!currentUser)throw new Error("Please sign in first.");
 if(getPendingMasteringReference()){
 showToast("You already have a payment waiting for verification.");
-updateMasteringControls();
-return;
+updateMasteringControls();return;
 }
-}catch(e){
-showToast(e.message||friendlyError(e));
-return;
-}
+details=savePendingMasteringDetails(song,beat);
+}catch(e){showToast(e.message||friendlyError(e));return;}
 
 masteringBusy=true;
 setBusy("masteringPayButton",true,"Connecting to Checkout...");
-setMasteringMessage("Preparing your secure payment. Do not close Studio Flow.");
-
+setMasteringMessage("Preparing your secure Paystack payment. Your song and beat selection are being preserved.");
 try{
 const data=await invokeMasteringFunction(MASTERING_FUNCTIONS.paymentInit,{
 song_path:song.path,
 song_name:song.name,
+beat_path:beat.path,
+beat_name:beat.name,
+preparation_complete:true,
+preparation_details:details,
 return_url:window.location.origin+window.location.pathname+"#mastering"
 });
-
-if(!data.authorization_url||!data.reference){
-throw new Error("The payment service did not return a checkout link and reference.");
-}
-
+if(!data.authorization_url||!data.reference)throw new Error("The payment service did not return a checkout link and reference.");
 savePendingMasteringReference(String(data.reference));
-setMasteringMessage("Opening secure payment checkout...");
+setMasteringMessage("Opening secure Paystack checkout...");
 window.location.href=data.authorization_url;
 }catch(e){
 console.error("Mastering payment initialization:",e);
@@ -1366,46 +1366,44 @@ setBusy("masteringPayButton",false,"Pay ₦5,000 and Get Started");
 updateMasteringControls();
 }
 }
-
 async function verifyMasteringPayment(){
 if(masteringBusy)return;
 const reference=getPendingMasteringReference();
-if(!reference){
-showToast("There is no pending payment to verify.");
-updateMasteringControls();
+if(!reference){showToast("There is no pending payment to verify.");updateMasteringControls();return;}
+const details=getPendingMasteringDetails();
+if(!details){
+showToast("The saved song and beat details could not be found. Please select them and complete Analyse again.");
 return;
 }
-
 masteringBusy=true;
 setBusy("masteringVerifyButton",true,"Verifying Payment...");
-setMasteringMessage("Checking your payment with the secure payment provider. Please wait.");
-
+setMasteringMessage("Checking your payment with Paystack. Please wait.");
 try{
-const result=await invokeMasteringFunction(MASTERING_FUNCTIONS.paymentVerify,{
-reference
-});
-
+const result=await invokeMasteringFunction(MASTERING_FUNCTIONS.paymentVerify,{reference});
 if(result.verified!==true&&result.status!=="success"){
 throw new Error(result.message||"Payment has not been confirmed. No mastering credits have been added.");
 }
-
-clearPendingMasteringReference();
-
 if(Number.isInteger(Number(result.credits_remaining))){
-masteringCredits=Number(result.credits_remaining);
-masteringAccountLoaded=true;
+masteringCredits=Number(result.credits_remaining);masteringAccountLoaded=true;
 }
-if(typeof result.offer_used==="boolean"){
-masteringOfferUsed=result.offer_used;
-}
+if(typeof result.offer_used==="boolean")masteringOfferUsed=result.offer_used;
 
 await loadMasteringAccount();
-updateMasteringControls();
-
-setMasteringMessage("Payment verified. Your mastering credit has been added. Starting your selected song now...");
+setMasteringMessage("Payment verified. Submitting the selected song and beat to mastering...");
 showToast("Payment verified successfully.");
 
-await startMasteringRequest(songForVerifiedPayment());
+const song=audioItems.find(item=>item.path===details.song_path);
+const beat=beatItems.find(item=>item.path===details.beat_path);
+if(!song||!beat)throw new Error("Payment was verified, but the saved song or beat could not be loaded. Your payment reference is preserved.");
+selectedSong=audioItems.indexOf(song);
+selectedBeat=beatItems.indexOf(beat);
+analysisComplete=true;analyzedSongPath=song.path;analyzedBeatPath=beat.path;
+saveAnalysisState();
+renderMastering();renderBeatSongs();updatePreparationDisplay();
+
+await startMasteringRequest(song,beat,details);
+clearPendingMasteringReference();
+sessionStorage.removeItem(MASTERING_DETAILS_KEY);
 }catch(e){
 console.error("Mastering payment verification:",e);
 setMasteringMessage(e.message||"Payment could not be verified. Please try again.");
@@ -1416,69 +1414,74 @@ setBusy("masteringVerifyButton",false,"I Have Paid — Verify Payment");
 updateMasteringControls();
 }
 }
-
-function songForVerifiedPayment(){
-try{return getSelectedMasteringSong();}catch(e){return null;}
-}
-
 async function startMasteringWithCredit(){
 if(masteringBusy)return;
-let song;
+let song,beat;
 try{
+requireCompletedPreparation();
 song=getSelectedMasteringSong();
+beat=getSelectedMasteringBeat();
 if(!masteringAccountLoaded)throw new Error("Please wait while your mastering credits are checked.");
 if(masteringCredits<1)throw new Error("You do not have a mastering credit available. Please make a payment.");
-}catch(e){
-showToast(e.message);
-return;
-}
-
+}catch(e){showToast(e.message);return;}
 masteringBusy=true;
 setBusy("masteringUseCreditButton",true,"Starting Mastering...");
-setMasteringMessage("Submitting your selected song to the secure mastering service.");
-
+setMasteringMessage("Submitting your selected song and beat to the secure mastering service.");
 try{
-await startMasteringRequest(song);
+await startMasteringRequest(song,beat,savePendingMasteringDetails(song,beat));
 }catch(e){
 console.error("Mastering start:",e);
 setMasteringMessage(e.message||"Your mastering request could not be started.");
 showToast("Mastering request: "+friendlyError(e));
 }finally{
-masteringBusy=false;
-updateMasteringControls();
+masteringBusy=false;updateMasteringControls();
 }
 }
-
-async function startMasteringRequest(song){
-if(!song)throw new Error("Please select a song before starting mastering.");
+async function startMasteringRequest(song,beat,details){
+if(!song||!beat)throw new Error("Your selected song and beat are required before starting mastering.");
+if(!details?.preparation_complete)throw new Error("Preparation must be completed before mastering can start.");
 
 const result=await invokeMasteringFunction(MASTERING_FUNCTIONS.start,{
 song_path:song.path,
-song_name:song.name
+song_name:song.name,
+beat_path:beat.path,
+beat_name:beat.name,
+preparation_complete:true,
+preparation_details:details
 });
 
 if(result.credits_remaining!==undefined){
 const remaining=Number(result.credits_remaining);
-if(Number.isInteger(remaining)&&remaining>=0){
-masteringCredits=remaining;
-masteringAccountLoaded=true;
-}
+if(Number.isInteger(remaining)&&remaining>=0){masteringCredits=remaining;masteringAccountLoaded=true;}
 }else{
 await loadMasteringAccount();
 }
 
-updateMasteringControls();
-
-if(result.status==="queued"||result.job_id){
-setMasteringMessage("Your mastering request has been accepted. Your song is waiting for the connected audio-mastering processor.");
-showToast("Mastering request submitted.");
+/* Unlock only when the server actually returns a mastered audio file */
+const masteredPath=result.mastered_path||result.output_path||result.audio_path||null;
+const masteredUrl=result.mastered_url||result.output_url||result.audio_url||null;
+if(masteredPath||masteredUrl){
+song.masteredPath=masteredPath;
+song.masteredUrl=masteredUrl;
+song.masteringStatus="completed";
+renderProjects();renderMastering();
+setMasteringMessage("Your mastered audio is available. You can now play and download the mastered version.");
+showToast("Mastered audio is ready.");
+}else if(result.status==="queued"||result.job_id){
+song.masteringStatus="queued";
+setMasteringMessage("Your mastering request has been accepted and queued. Playback and download will remain locked until the mastering processor returns the completed mastered audio.");
+showToast("Mastering request submitted. Processing is pending.");
+}else if(result.status==="completed"){
+setMasteringMessage("The server marked the job completed but did not return a mastered audio file. Playback and download remain locked until the output file is supplied.");
+showToast("Mastering output is not available yet.");
 }else{
-setMasteringMessage("The server accepted your request. Check your mastering status for updates.");
-showToast("Mastering request submitted.");
+setMasteringMessage("The server responded, but no completed mastered audio was returned. Your original song remains locked.");
+showToast("Mastering request response received.");
 }
+updateMasteringControls();
 }
 
-/* CHECK IF PAYMENT PROVIDER RETURNED TO THIS APP */
+/* CHECK PAYSTACK RETURN */
 function checkMasteringPaymentReturn(){
 const params=new URLSearchParams(window.location.search);
 const reference=params.get("reference")||params.get("trxref");
@@ -1486,28 +1489,42 @@ if(reference){
 savePendingMasteringReference(reference);
 if(document.getElementById("mastering").classList.contains("active")){
 updateMasteringControls();
-setMasteringMessage("Payment checkout returned to Studio Flow. Tap I Have Paid — Verify Payment to confirm your transaction.");
+setMasteringMessage("Paystack has returned to Studio Flow. Tap I Have Paid — Verify Payment to confirm your transaction.");
 }
 }
 }
 
 /* BEAT WORKFLOW */
 function requestBeatGeneration(){
-document.getElementById("beatPercent").textContent="Waiting for AI beat service";
+document.getElementById("beatPercent").textContent="AI beat service not connected";
 document.getElementById("beatProgress").style.width="0%";
-showToast("AI beat generation is not connected yet. Your existing imported beats can still be selected.");
+showToast("AI beat generation is not connected yet. You can still import a beat from your phone and select it under My Beats.");
 }
 function requestBeatAnalysis(){
-if(selectedSong===null||!audioItems[selectedSong]){showToast("Please record or import a song, then select it under My Songs.");return;}
-if(selectedBeat===null||!beatItems[selectedBeat]){showToast("Please generate a beat or import a beat, then select it under My Beats.");return;}
-document.getElementById("beatPercent").textContent="Ready for AI matching service";
-document.getElementById("beatProgress").style.width="0%";
-document.getElementById("detectedStyle").textContent="Awaiting AI service";
-showToast("Your song and beat are selected. Real audio analysis and beat matching need the AI service connection.");
+const song=selectedSong!==null?audioItems[selectedSong]:null;
+const beat=selectedBeat!==null?beatItems[selectedBeat]:null;
+if(!song){showToast("Please record or import a song, then select it under My Songs.");return;}
+if(!beat){showToast("Please import a beat and select it under My Beats.");return;}
+
+analysisComplete=true;
+analyzedSongPath=song.path;
+analyzedBeatPath=beat.path;
+saveAnalysisState();
+stopActiveAudio();
+updatePreparationDisplay();
+renderProjects();
+renderMastering();
+
+document.getElementById("beatPercent").textContent="Preparation Check Complete — 100%";
+document.getElementById("beatProgress").style.width="100%";
+document.getElementById("detectedStyle").textContent="Preparation Complete — Ready for Mastering";
+showToast("Preparation completed. Your original song is now locked until mastering is completed. Continue to Mastering.");
 }
 function continueToMastering(){
-if(selectedSong===null||!audioItems[selectedSong]){showToast("Please select a song first.");return;}
-if(selectedBeat===null||!beatItems[selectedBeat]){showToast("Please select a beat first.");return;}
+if(!isPreparedSelectionCurrent()){
+showToast("Please select your song and beat, then tap Analyse first.");
+return;
+}
 showScreen("mastering");
 }
 
@@ -1684,7 +1701,11 @@ currentUser=data.session.user;
 await ensurePetAvatar();
 updateProfile();
 await loadStoredAudio();
-showScreen("home",false);
+loadAnalysisState();
+const params=new URLSearchParams(window.location.search);
+const returned=Boolean(params.get("reference")||params.get("trxref")||getPendingMasteringReference());
+showScreen(returned?"mastering":"home",false);
+if(returned)checkMasteringPaymentReturn();
 }else{
 showScreen("welcome",false);
 }
@@ -1693,7 +1714,7 @@ currentUser=session?.user||null;
 if(event==="SIGNED_OUT"){
 stopActiveAudio();audioItems=[];beatItems=[];selectedSong=null;selectedBeat=null;pageHistory=[];
 masteringCredits=0;masteringOfferUsed=false;masteringAccountLoaded=false;
-pendingMasteringReference=null;
+pendingMasteringReference=null;analysisComplete=false;analyzedSongPath=null;analyzedBeatPath=null;
 showScreen("welcome",false);
 }else if(event==="PASSWORD_RECOVERY"){
 showScreen("reset",false);
