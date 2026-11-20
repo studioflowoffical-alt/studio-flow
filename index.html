@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -329,28 +330,13 @@ Your first-time offer is available for ₦5,000: 1 paid mastering credit + 1 fre
 </div>
 
 <div class="notice">
-<strong>❗ Payment must be verified</strong><br>
-Pay securely through the payment checkout. Your mastering credits are added only after the payment provider confirms that the transaction was successful.
+<strong>Payment setup not connected yet</strong><br>
+Mastering payments are not available at the moment. No payment will be taken and no credits will be added until an official payment method is connected and verified.
 </div>
 
-<div class="card">
-<div class="header-row">
-<strong>Paystack Secure Payment</strong>
-<strong class="gold">₦5,000</strong>
-</div>
-<p class="muted small">After you tap the payment button, Studio Flow will open Paystack's secure checkout. Your selected song and beat details will be kept for the payment return.</p>
-<div class="platforms" style="font-size:25px;gap:12px">
-<span>💳 Card</span>
-<span>🏦 Bank Transfer</span>
-</div>
-<p class="muted small center">Available payment methods will appear at secure checkout, depending on your Paystack account settings.</p>
-</div>
-
-<button id="masteringPayButton" class="gold-button" onclick="beginMasteringPayment()">Pay ₦5,000 and Get Started</button>
-<button id="masteringVerifyButton" class="dark-button" onclick="verifyMasteringPayment()" style="display:none">I Have Paid — Verify Payment</button>
 <button id="masteringUseCreditButton" class="gold-button" onclick="startMasteringWithCredit()" style="display:none">Master Selected Song Using My Credit</button>
 
-<p id="masteringPaymentMessage" class="center small muted">Complete Analyse first, then select your prepared song and beat here.</p>
+<p id="masteringPaymentMessage" class="center small muted">Complete Analyse first, then select your prepared song and beat here. If you have an available mastering credit, you can use it.</p>
 <p class="center small"><a href="mailto:support@studioflow.com">Need Help? Contact Support</a></p>
 </section>
 
@@ -488,7 +474,6 @@ let activeAudio=null,activeAudioType=null,activeAudioIndex=null;
 let selectedSong=null,selectedBeat=null;
 
 /* PREPARATION AND MASTERING DETAILS */
-const MASTERING_PENDING_KEY="studioFlowPendingMasteringPayment";
 const MASTERING_DETAILS_KEY="studioFlowPendingMasteringDetails";
 const ANALYSIS_STATE_KEY="studioFlowCompletedPreparation";
 let analysisComplete=false;
@@ -498,12 +483,9 @@ let masteringCredits=0;
 let masteringOfferUsed=false;
 let masteringAccountLoaded=false;
 let masteringBusy=false;
-let pendingMasteringReference=null;
 
 const MASTERING_FUNCTIONS={
 account:"mastering-account",
-paymentInit:"mastering-payment-init",
-paymentVerify:"mastering-payment-verify",
 start:"mastering-start"
 };
 
@@ -799,7 +781,7 @@ return "To download an available song or beat, find it in your music list and ta
 if(/beat|generate|matching|match/.test(q))
 return "To work with beats, open Music, select your song, then select a beat from My Beats or import one from your phone. Tap Analyse to complete the preparation check. Real AI beat generation and audio matching still need the AI audio service connection.";
 if(/master|mastering|mastered|credit|free song|bonus/.test(q))
-return "Complete Analyse first. Then open Mastering, select the prepared song and beat, and tap Pay ₦5,000 and Get Started. Paystack checkout and server payment verification must be connected. The original song remains locked until the mastering processor returns the mastered audio.";
+return "Complete Analyse first. Then open Mastering, select the prepared song and beat. If your account has an available mastering credit, tap Master Selected Song Using My Credit. Payment setup is not connected yet, so you cannot purchase new credits in the app right now. The original song remains locked until the mastering processor returns the mastered audio.";
 if(/distribut|spotify|apple music|youtube music|release music/.test(q))
 return "To start a distribution request, open Distribute Your Music and tap Start Distribution. Payment verification and the authorized distributor connection are not connected yet.";
 if(/private|privacy|secure|storage|bucket/.test(q))
@@ -881,10 +863,7 @@ const {data,error}=await supabaseClient.auth.signInWithPassword({email,password}
 if(error)throw error;
 currentUser=data.user;
 await ensurePetAvatar();updateProfile();await loadStoredAudio();loadAnalysisState();
-const params=new URLSearchParams(window.location.search);
-const returned=Boolean(params.get("reference")||params.get("trxref")||getPendingMasteringReference());
-showScreen(returned?"mastering":"home",false);
-if(returned)checkMasteringPaymentReturn();
+showScreen("home",false);
 showToast("Welcome back!");
 }catch(e){showError("loginError",friendlyError(e));}
 finally{setBusy("loginButton",false,"Sign In");}
@@ -920,8 +899,7 @@ const {error}=await supabaseClient.auth.signOut();
 if(error)throw error;
 currentUser=null;audioItems=[];beatItems=[];selectedSong=null;selectedBeat=null;pageHistory=[];
 masteringCredits=0;masteringOfferUsed=false;masteringAccountLoaded=false;
-pendingMasteringReference=null;analysisComplete=false;analyzedSongPath=null;analyzedBeatPath=null;
-sessionStorage.removeItem(MASTERING_PENDING_KEY);
+analysisComplete=false;analyzedSongPath=null;analyzedBeatPath=null;
 sessionStorage.removeItem(MASTERING_DETAILS_KEY);
 showScreen("welcome",false);showToast("You have signed out.");
 }catch(e){showToast(friendlyError(e));}
@@ -1005,7 +983,7 @@ preparation_complete:true,
 prepared_at:new Date().toISOString()
 };
 try{sessionStorage.setItem(MASTERING_DETAILS_KEY,JSON.stringify(details));}
-catch(e){throw new Error("Could not preserve your selected song and beat for payment. Please try again.");}
+catch(e){throw new Error("Could not preserve your selected song and beat. Please try again.");}
 return details;
 }
 function getPendingMasteringDetails(){
@@ -1227,7 +1205,7 @@ selectedBeat=i;
 renderBeatChoices();renderMastering();updatePreparationDisplay();
 }
 
-/* MASTERING PAYMENT AND CREDIT FLOW */
+/* MASTERING CREDIT FLOW */
 function getSelectedMasteringSong(){
 if(selectedSong===null||!audioItems[selectedSong])throw new Error("Please select a song under My Songs before continuing.");
 return audioItems[selectedSong];
@@ -1238,64 +1216,50 @@ return beatItems[selectedBeat];
 }
 function requireCompletedPreparation(){
 if(!isPreparedSelectionCurrent()){
-throw new Error("Please select your song and beat, then tap Analyse before continuing to payment or mastering.");
+throw new Error("Please select your song and beat, then tap Analyse before continuing to mastering.");
 }
 }
 function setMasteringMessage(message){
 const el=document.getElementById("masteringPaymentMessage");
 if(el)el.textContent=message;
 }
-function getPendingMasteringReference(){
-if(pendingMasteringReference)return pendingMasteringReference;
-try{pendingMasteringReference=sessionStorage.getItem(MASTERING_PENDING_KEY)||null;}catch(e){}
-return pendingMasteringReference;
-}
-function savePendingMasteringReference(reference){
-pendingMasteringReference=reference;
-try{sessionStorage.setItem(MASTERING_PENDING_KEY,reference);}catch(e){}
-}
-function clearPendingMasteringReference(){
-pendingMasteringReference=null;
-try{sessionStorage.removeItem(MASTERING_PENDING_KEY);}catch(e){}
-}
 function updateMasteringControls(){
 const count=document.getElementById("masteringCreditCount");
 const message=document.getElementById("masteringCreditMessage");
 const offer=document.getElementById("masteringOfferStatus");
-const pay=document.getElementById("masteringPayButton");
-const verify=document.getElementById("masteringVerifyButton");
 const use=document.getElementById("masteringUseCreditButton");
-if(!count||!message||!offer||!pay||!verify||!use)return;
+if(!count||!message||!offer||!use)return;
 
-const pending=getPendingMasteringReference();
+use.style.display="none";
+
 if(!currentUser){
 count.textContent="Sign in required";
 message.textContent="Sign in to view your mastering credits.";
 offer.textContent="Your first-time offer is available once per account.";
-pay.style.display="none";verify.style.display="none";use.style.display="none";
 return;
 }
-if(!isPreparedSelectionCurrent()){
-count.textContent=masteringAccountLoaded?masteringCredits+" credits":"Checking...";
-message.textContent="Complete Analyse with a selected song and beat before making a mastering payment.";
-pay.style.display="none";verify.style.display=pending?"block":"none";use.style.display="none";
-return;
-}
+
 if(!masteringAccountLoaded){
 count.textContent="Checking...";
 message.textContent="Checking your credits with your Studio Flow account.";
-pay.style.display="none";verify.style.display=pending?"block":"none";use.style.display="none";
+offer.textContent=masteringOfferUsed?
+"Your first-time offer has already been used.":
+"First-time offer available: ₦5,000 for 1 song and 1 free bonus mastering credit.";
 return;
 }
+
 count.textContent=masteringCredits+" credit"+(masteringCredits===1?"":"s")+" remaining";
-message.textContent=masteringCredits>0?"You can master "+masteringCredits+" more song"+(masteringCredits===1?"":"s")+" without another payment.":"You have no unused mastering credits. Make a payment to master another song.";
+message.textContent=masteringCredits>0?
+"You can master "+masteringCredits+" more song"+(masteringCredits===1?"":"s")+" using your available credits.":
+"You have no unused mastering credits. Payment setup is not connected yet.";
+
 offer.textContent=masteringOfferUsed?
 "Your first-time offer has already been used. Each additional mastering purchase is ₦5,000 for 1 song.":
 "First-time offer available: pay ₦5,000 for 1 song and receive 1 free bonus song. The bonus credit does not expire.";
 
-if(pending){pay.style.display="none";verify.style.display="block";use.style.display="none";}
-else if(masteringCredits>0){pay.style.display="none";verify.style.display="none";use.style.display="block";}
-else{pay.style.display="block";pay.textContent="Pay ₦5,000 and Get Started";verify.style.display="none";use.style.display="none";}
+if(isPreparedSelectionCurrent()&&masteringCredits>0){
+use.style.display="block";
+}
 }
 async function invokeMasteringFunction(functionName,body){
 requireSupabase();
@@ -1319,100 +1283,7 @@ console.error("Mastering account:",e);
 masteringAccountLoaded=false;updateMasteringControls();
 setMasteringMessage("Mastering account connection is not set up yet. Connect the Supabase mastering-account function to display your real credits.");
 }
-
-/* After the account has loaded, refresh button visibility for prepared song */
 updateMasteringControls();
-}
-async function beginMasteringPayment(){
-if(masteringBusy)return;
-let song,beat,details;
-try{
-requireCompletedPreparation();
-song=getSelectedMasteringSong();
-beat=getSelectedMasteringBeat();
-requireSupabase();
-if(!currentUser)throw new Error("Please sign in first.");
-if(getPendingMasteringReference()){
-showToast("You already have a payment waiting for verification.");
-updateMasteringControls();return;
-}
-details=savePendingMasteringDetails(song,beat);
-}catch(e){showToast(e.message||friendlyError(e));return;}
-
-masteringBusy=true;
-setBusy("masteringPayButton",true,"Connecting to Checkout...");
-setMasteringMessage("Preparing your secure Paystack payment. Your song and beat selection are being preserved.");
-try{
-const data=await invokeMasteringFunction(MASTERING_FUNCTIONS.paymentInit,{
-song_path:song.path,
-song_name:song.name,
-beat_path:beat.path,
-beat_name:beat.name,
-preparation_complete:true,
-preparation_details:details,
-return_url:window.location.origin+window.location.pathname+"#mastering"
-});
-if(!data.authorization_url||!data.reference)throw new Error("The payment service did not return a checkout link and reference.");
-savePendingMasteringReference(String(data.reference));
-setMasteringMessage("Opening secure Paystack checkout...");
-window.location.href=data.authorization_url;
-}catch(e){
-console.error("Mastering payment initialization:",e);
-setMasteringMessage("Payment checkout is not connected yet. No payment has been taken.");
-showToast("Payment setup is not ready: "+friendlyError(e));
-}finally{
-masteringBusy=false;
-setBusy("masteringPayButton",false,"Pay ₦5,000 and Get Started");
-updateMasteringControls();
-}
-}
-async function verifyMasteringPayment(){
-if(masteringBusy)return;
-const reference=getPendingMasteringReference();
-if(!reference){showToast("There is no pending payment to verify.");updateMasteringControls();return;}
-const details=getPendingMasteringDetails();
-if(!details){
-showToast("The saved song and beat details could not be found. Please select them and complete Analyse again.");
-return;
-}
-masteringBusy=true;
-setBusy("masteringVerifyButton",true,"Verifying Payment...");
-setMasteringMessage("Checking your payment with Paystack. Please wait.");
-try{
-const result=await invokeMasteringFunction(MASTERING_FUNCTIONS.paymentVerify,{reference});
-if(result.verified!==true&&result.status!=="success"){
-throw new Error(result.message||"Payment has not been confirmed. No mastering credits have been added.");
-}
-if(Number.isInteger(Number(result.credits_remaining))){
-masteringCredits=Number(result.credits_remaining);masteringAccountLoaded=true;
-}
-if(typeof result.offer_used==="boolean")masteringOfferUsed=result.offer_used;
-
-await loadMasteringAccount();
-setMasteringMessage("Payment verified. Submitting the selected song and beat to mastering...");
-showToast("Payment verified successfully.");
-
-const song=audioItems.find(item=>item.path===details.song_path);
-const beat=beatItems.find(item=>item.path===details.beat_path);
-if(!song||!beat)throw new Error("Payment was verified, but the saved song or beat could not be loaded. Your payment reference is preserved.");
-selectedSong=audioItems.indexOf(song);
-selectedBeat=beatItems.indexOf(beat);
-analysisComplete=true;analyzedSongPath=song.path;analyzedBeatPath=beat.path;
-saveAnalysisState();
-renderMastering();renderBeatSongs();updatePreparationDisplay();
-
-await startMasteringRequest(song,beat,details);
-clearPendingMasteringReference();
-sessionStorage.removeItem(MASTERING_DETAILS_KEY);
-}catch(e){
-console.error("Mastering payment verification:",e);
-setMasteringMessage(e.message||"Payment could not be verified. Please try again.");
-showToast("Payment verification: "+friendlyError(e));
-}finally{
-masteringBusy=false;
-setBusy("masteringVerifyButton",false,"I Have Paid — Verify Payment");
-updateMasteringControls();
-}
 }
 async function startMasteringWithCredit(){
 if(masteringBusy)return;
@@ -1422,11 +1293,11 @@ requireCompletedPreparation();
 song=getSelectedMasteringSong();
 beat=getSelectedMasteringBeat();
 if(!masteringAccountLoaded)throw new Error("Please wait while your mastering credits are checked.");
-if(masteringCredits<1)throw new Error("You do not have a mastering credit available. Please make a payment.");
+if(masteringCredits<1)throw new Error("You do not have a mastering credit available. Payment setup is not connected yet.");
 }catch(e){showToast(e.message);return;}
 masteringBusy=true;
 setBusy("masteringUseCreditButton",true,"Starting Mastering...");
-setMasteringMessage("Submitting your selected song and beat to the secure mastering service.");
+setMasteringMessage("Submitting your selected song and beat to the mastering service.");
 try{
 await startMasteringRequest(song,beat,savePendingMasteringDetails(song,beat));
 }catch(e){
@@ -1479,19 +1350,6 @@ setMasteringMessage("The server responded, but no completed mastered audio was r
 showToast("Mastering request response received.");
 }
 updateMasteringControls();
-}
-
-/* CHECK PAYSTACK RETURN */
-function checkMasteringPaymentReturn(){
-const params=new URLSearchParams(window.location.search);
-const reference=params.get("reference")||params.get("trxref");
-if(reference){
-savePendingMasteringReference(reference);
-if(document.getElementById("mastering").classList.contains("active")){
-updateMasteringControls();
-setMasteringMessage("Paystack has returned to Studio Flow. Tap I Have Paid — Verify Payment to confirm your transaction.");
-}
-}
 }
 
 /* BEAT WORKFLOW */
@@ -1690,7 +1548,6 @@ makeWave("beatWave",95);
 setSignupPet();
 updateInstallButton();
 updateRecordingControls();
-checkMasteringPaymentReturn();
 
 try{
 initSupabase();
@@ -1702,10 +1559,7 @@ await ensurePetAvatar();
 updateProfile();
 await loadStoredAudio();
 loadAnalysisState();
-const params=new URLSearchParams(window.location.search);
-const returned=Boolean(params.get("reference")||params.get("trxref")||getPendingMasteringReference());
-showScreen(returned?"mastering":"home",false);
-if(returned)checkMasteringPaymentReturn();
+showScreen("home",false);
 }else{
 showScreen("welcome",false);
 }
@@ -1714,7 +1568,7 @@ currentUser=session?.user||null;
 if(event==="SIGNED_OUT"){
 stopActiveAudio();audioItems=[];beatItems=[];selectedSong=null;selectedBeat=null;pageHistory=[];
 masteringCredits=0;masteringOfferUsed=false;masteringAccountLoaded=false;
-pendingMasteringReference=null;analysisComplete=false;analyzedSongPath=null;analyzedBeatPath=null;
+analysisComplete=false;analyzedSongPath=null;analyzedBeatPath=null;
 showScreen("welcome",false);
 }else if(event==="PASSWORD_RECOVERY"){
 showScreen("reset",false);
