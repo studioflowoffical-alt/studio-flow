@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -130,11 +129,22 @@ a{color:var(--gold)}
 .ai-send-button{height:52px;min-width:55px;border:0;border-radius:12px;background:var(--gold);color:#111;font-size:20px;font-weight:900}
 .about-mark{font-size:48px;text-align:center;color:var(--gold);margin:8px 0}
 .about-title{text-align:center;font-size:22px;font-weight:800;margin:5px 0}
+
+/* AI BEAT GENERATOR ADDITIONS */
+.beat-library{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.beat-genre{min-height:94px;border:1px solid #484848;border-radius:14px;padding:12px 8px;background:linear-gradient(145deg,#242424,#101010);color:white;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:7px;font-weight:800}
+.beat-genre .genre-icon{font-size:27px}
+.beat-genre.selected{border:2px solid var(--gold);background:linear-gradient(145deg,#49351e,#17120d)}
+.beat-search{width:100%;height:48px;background:#202020;color:white;border:1px solid #555;border-radius:12px;padding:0 13px;margin:8px 0}
+.beat-search:focus{outline:none;border-color:var(--gold)}
+.beat-status{background:#171717;border:1px solid #444;border-radius:13px;padding:13px;margin:12px 0;font-size:13px;line-height:1.6;color:#ddd}
+.beat-status strong{color:var(--gold)}
 @media(max-width:380px){
 .audio-actions{gap:3px}
 .audio-action{min-width:30px;height:32px;padding:0 5px;font-size:11px}
 .project-row{gap:7px;padding:9px}
 .beat-choice{font-size:13px;min-height:105px}
+.beat-genre{min-height:85px}
 }
 @media(min-width:600px){.app{border-left:1px solid #222;border-right:1px solid #222}}
 </style>
@@ -255,7 +265,8 @@ a{color:var(--gold)}
 <div class="topbar"><button class="back" onclick="goBack()">‹</button><h2>AI Beat Generator</h2><span></span></div>
 <div class="wave" id="beatWave" style="height:90px;margin-top:12px"></div>
 <h3 class="center">Create Your Matching Beat</h3>
-<p class="center muted">Choose or record your song, then choose how you want to get your beat. Studio Flow will match the selected beat to your song.</p>
+<p class="center muted">Choose your song and music style, then select or import a beat. Studio Flow will check that your selected files are ready for the next step.</p>
+
 <div class="card">
 <div class="beat-section-title">1. Choose Your Song</div>
 <div class="beat-choice-grid">
@@ -264,22 +275,49 @@ a{color:var(--gold)}
 </div>
 <div class="selected-audio-card"><strong>My Songs</strong><div id="beatSongList"></div></div>
 </div>
+
 <div class="card">
-<div class="beat-section-title">2. Choose Your Beat</div>
-<div class="beat-choice-grid">
-<button class="beat-choice" onclick="requestBeatGeneration()"><span class="symbol">✨</span><span>Generate Beat for Me</span></button>
-<button class="beat-choice" onclick="document.getElementById('beatImport2').click()"><span class="symbol">♫</span><span>Import Beat From Phone</span></button>
+<div class="beat-section-title">2. Choose Your Beat Style</div>
+<p class="muted small">Choose the music style you want for your beat.</p>
+
+<div class="beat-library">
+<button class="beat-genre selected" onclick="selectBeatGenre('Afrobeat',this)"><span class="genre-icon">🥁</span>Afrobeat</button>
+<button class="beat-genre" onclick="selectBeatGenre('Amapiano',this)"><span class="genre-icon">🎹</span>Amapiano</button>
+<button class="beat-genre" onclick="selectBeatGenre('Hip-hop',this)"><span class="genre-icon">🎧</span>Hip-hop</button>
+<button class="beat-genre" onclick="selectBeatGenre('Gospel',this)"><span class="genre-icon">🙏</span>Gospel</button>
+<button class="beat-genre" onclick="selectBeatGenre('Rap',this)"><span class="genre-icon">🎤</span>Rap</button>
+<button class="beat-genre" onclick="selectBeatGenre('R&B',this)"><span class="genre-icon">🎷</span>R&B</button>
+<button class="beat-genre" onclick="selectBeatGenre('Dancehall',this)"><span class="genre-icon">🔥</span>Dancehall</button>
+<button class="beat-genre" onclick="selectBeatGenre('Highlife',this)"><span class="genre-icon">🎸</span>Highlife</button>
+<button class="beat-genre" onclick="selectBeatGenre('Reggae',this)"><span class="genre-icon">🌴</span>Reggae</button>
+<button class="beat-genre" onclick="selectBeatGenre('Pop',this)"><span class="genre-icon">🎼</span>Pop</button>
 </div>
-<div class="selected-audio-card"><strong>My Beats</strong><div id="beatChoiceList"></div></div>
+
+<div class="beat-section-title">Generate or Import a Beat</div>
+<button class="gold-button" onclick="requestBeatGeneration()">✨ Generate Beat Automatically</button>
+<button class="dark-button" onclick="document.getElementById('beatImport2').click()">♫ Import Beat From Phone</button>
+<button class="dark-button" onclick="refreshBeatSelection()">↻ Refresh My Beats</button>
+
 <input id="beatImport2" type="file" accept="audio/*" hidden onchange="importAudio(event,'beat')">
+
+<div class="beat-status" id="beatGenerationStatus">
+<strong>Selected style:</strong> Afrobeat<br>
+Choose Generate Beat Automatically to prepare your request. Automatic generation requires the AI audio service connection.
 </div>
+
+<div class="beat-section-title">My Beats</div>
+<input id="beatSearch" class="beat-search" type="search" placeholder="Search your saved beats..." oninput="renderBeatChoices()">
+<div class="selected-audio-card"><div id="beatChoiceList"></div></div>
+</div>
+
 <div class="card">
-<div class="beat-section-title">3. Match Beat to My Song</div>
-<p class="muted small">Select your song and beat, then complete the preparation check before going to mastering. Your real voice must remain unchanged.</p>
-<button class="gold-button match-button" onclick="requestBeatAnalysis()">Analyse</button>
+<div class="beat-section-title">3. Prepare Song and Beat</div>
+<p class="muted small">Select one song and one beat. Studio Flow will check that both audio files are available. This check does not change your real voice.</p>
+<button class="gold-button match-button" onclick="requestBeatAnalysis()">Check My Song and Beat</button>
 <div class="progress"><div id="beatProgress"></div></div>
 <p class="center small" id="beatPercent">Ready</p>
 </div>
+
 <div class="card">
 <strong>Preparation Checklist</strong>
 <div class="checklist">
@@ -290,8 +328,9 @@ a{color:var(--gold)}
 </div>
 <strong>Preparation Status:</strong>
 <div class="gold" style="font-size:20px;font-weight:bold;margin-top:8px" id="detectedStyle">Awaiting preparation</div>
-<p class="small muted">This check confirms that your selected song and beat are ready to submit. Real AI audio analysis, beat generation and matching require the AI audio service connection.</p>
+<p class="small muted">This is a file preparation check only. Real AI beat generation, audio analysis and beat matching require a connected AI audio service.</p>
 </div>
+
 <button class="gold-button" onclick="continueToMastering()">Continue to Mastering</button>
 </section>
 
@@ -472,6 +511,7 @@ let recordingState="idle",recordingSeconds=0,recordingInterval=null;
 let deferredInstallPrompt=null;
 let activeAudio=null,activeAudioType=null,activeAudioIndex=null;
 let selectedSong=null,selectedBeat=null;
+let selectedBeatGenre="Afrobeat";
 
 /* PREPARATION AND MASTERING DETAILS */
 const MASTERING_DETAILS_KEY="studioFlowPendingMasteringDetails";
@@ -601,9 +641,9 @@ if(beatCheck)beatCheck.textContent=beat?"✓ Beat selected":"○ Beat selected";
 if(filesCheck)filesCheck.textContent=song&&beat?"✓ Both files ready":"○ Both files ready";
 if(masterCheck)masterCheck.textContent=valid?"✓ Ready for mastering":"○ Ready for mastering";
 
-if(percent)percent.textContent=valid?"Preparation Check Complete — 100%":(analysisComplete?"Selection changed — Analyse again":"Ready");
+if(percent)percent.textContent=valid?"File Preparation Check Complete — 100%":(analysisComplete?"Selection changed — Check again":"Ready");
 if(progress)progress.style.width=valid?"100%":"0%";
-if(style)style.textContent=valid?"Preparation Complete — Ready for Mastering":"Awaiting preparation";
+if(style)style.textContent=valid?"Files Ready — AI Matching Not Connected":"Awaiting preparation";
 }
 
 /* NAVIGATION */
@@ -777,11 +817,11 @@ return "While recording, tap Pause to pause your recording. Tap Resume to contin
 if(/delete|remove|accidentally/.test(q))
 return "To delete a song or beat, find it in your music list and tap the red ✕ button beside it. The app will ask you to confirm before deleting it.";
 if(/download|save to phone/.test(q))
-return "A song remains locked until mastering is completed and the mastered audio is returned. Once it is available, use the download arrow ↓ to save the finished version.";
+return "A song remains locked for download until mastering is completed and the mastered audio is returned. You can preview your original song and beat before mastering.";
 if(/beat|generate|matching|match/.test(q))
-return "To work with beats, open Music, select your song, then select a beat from My Beats or import one from your phone. Tap Analyse to complete the preparation check. Real AI beat generation and audio matching still need the AI audio service connection. Beat previews are not available before mastering.";
+return "Open Music, select your song, choose a music style, then select a beat from My Beats or import one from your phone. Tap Check My Song and Beat to confirm both files are ready. This is a file preparation check, not AI matching. Automatic generation and AI matching need the AI audio service connection. You can preview your original song and beat before mastering.";
 if(/master|mastering|mastered|credit|free song|bonus/.test(q))
-return "Complete Analyse first. Then open Mastering, select the prepared song and beat. If your account has an available mastering credit, tap Master Selected Song Using My Credit. Payment setup is not connected yet, so you cannot purchase new credits in the app right now. The original song remains locked until the mastering processor returns the mastered audio.";
+return "Complete the file preparation check first. Then open Mastering and select the prepared song and beat. If your account has an available mastering credit, tap Master Selected Song Using My Credit. Payment setup is not connected yet. Original songs and beats can be previewed; downloading an original song remains restricted until a mastered version is returned.";
 if(/distribut|spotify|apple music|youtube music|release music/.test(q))
 return "To start a distribution request, open Distribute Your Music and tap Start Distribution. Payment verification and the authorized distributor connection are not connected yet.";
 if(/private|privacy|secure|storage|bucket/.test(q))
@@ -791,7 +831,7 @@ return "Open the Profile tab to view your account details, pet avatar, songs, pa
 if(/install|download app|add to home/.test(q))
 return "To install Studio Flow, use the Install App button on the welcome screen if available. Otherwise open Chrome's menu and look for Install app or Add to Home screen.";
 if(/thank|thanks/.test(q))return "You're welcome! 😊 Ask me whenever you need help using Studio Flow.";
-return "I can currently answer questions about using Studio Flow, including recording, importing songs, managing beats, downloading or deleting audio, mastering, distribution, your profile, and who owns the app. The general AI service is not connected yet.";
+return "I can currently answer questions about using Studio Flow, including recording, importing songs, managing beats, previewing audio, downloading or deleting audio, mastering, distribution, your profile, and who owns the app. The general AI service is not connected yet.";
 }
 function sendStudioAIMessage(){
 const input=document.getElementById("studioAIInput");
@@ -1110,20 +1150,12 @@ const list=type==="beat"?beatItems:audioItems;
 const item=list[index];
 if(!item)return;
 
-/* Do not allow previews of original songs or beats. */
-if(type==="beat"){
-showToast("Beat previews are unavailable. Only completed mastered songs can be played.");
-return;
-}
-if(isSongLocked(item)){
-showToast("Your original song is locked. You can listen only after mastering is completed.");
-return;
-}
 if(activeAudio&&activeAudioType===type&&activeAudioIndex===index){
 if(activeAudio.paused)activeAudio.play().catch(()=>showToast("Could not resume this audio file."));
 else activeAudio.pause();
 return;
 }
+
 stopActiveAudio();
 let url=getPlayableUrl(item,type);
 if(type==="song"&&item.masteredPath&&!item.masteredUrl){
@@ -1182,12 +1214,16 @@ renderBeatChoices();
 function renderBeatChoices(){
 const el=document.getElementById("beatChoiceList");
 if(!el)return;
-el.innerHTML=beatItems.length?beatItems.map((item,i)=>`
+const search=(document.getElementById("beatSearch")?.value||"").trim().toLowerCase();
+const matches=beatItems.map((item,index)=>({item,index}))
+.filter(({item})=>item.name.toLowerCase().includes(search));
+
+el.innerHTML=matches.length?matches.map(({item,index})=>`
 <div class="library-item">
-<input type="radio" name="analysisBeat" ${selectedBeat===i?"checked":""} onchange="selectBeat(${i})">
+<input type="radio" name="analysisBeat" ${selectedBeat===index?"checked":""} onchange="selectBeat(${index})">
 <span class="item-name">${safeText(item.name)}</span>
-${audioActionButtons(i,"beat")}
-</div>`).join(""):`<p class="muted small">No beats yet. Generate a beat or import a beat from your phone.</p>`;
+${audioActionButtons(index,"beat")}
+</div>`).join(""):`<p class="muted small">${search?"No beats match your search.":"No beats yet. Import a beat from your phone."}</p>`;
 }
 function renderMastering(){
 const songs=document.getElementById("masteringSongs"),beats=document.getElementById("masteringBeats");
@@ -1203,7 +1239,7 @@ beats.innerHTML=beatItems.length?beatItems.map((item,i)=>`
 <input type="radio" name="masterBeat" ${selectedBeat===i?"checked":""} onchange="selectBeat(${i})">
 <span class="item-name">${safeText(item.name)}</span>
 ${audioActionButtons(i,"beat")}
-</div>`).join(""):`<p class="muted small">No beats yet. Generate or import a beat.</p>`;
+</div>`).join(""):`<p class="muted small">No beats yet. Import a beat.</p>`;
 updateMasteringControls();
 }
 function selectSong(i){
@@ -1340,7 +1376,6 @@ if(Number.isInteger(remaining)&&remaining>=0){masteringCredits=remaining;masteri
 await loadMasteringAccount();
 }
 
-/* Unlock only when the server actually returns a mastered audio file */
 const masteredPath=result.mastered_path||result.output_path||result.audio_path||null;
 const masteredUrl=result.mastered_url||result.output_url||result.audio_url||null;
 if(masteredPath||masteredUrl){
@@ -1358,37 +1393,75 @@ showToast("Mastering request submitted. Processing is pending.");
 setMasteringMessage("The server marked the job completed but did not return a mastered audio file. Playback and download remain locked until the output file is supplied.");
 showToast("Mastering output is not available yet.");
 }else{
-setMasteringMessage("The server responded, but no completed mastered audio was returned. Your original song remains locked.");
+setMasteringMessage("The server responded, but no completed mastered audio was returned. Your original song remains locked for download.");
 showToast("Mastering request response received.");
 }
 updateMasteringControls();
 }
 
-/* BEAT WORKFLOW */
+/* AI BEAT WORKFLOW */
+function selectBeatGenre(genre,button){
+selectedBeatGenre=genre;
+document.querySelectorAll(".beat-genre").forEach(el=>el.classList.remove("selected"));
+if(button)button.classList.add("selected");
+const status=document.getElementById("beatGenerationStatus");
+if(status){
+status.innerHTML="<strong>Selected style:</strong> "+safeText(genre)+
+"<br>Your selected music style is ready. Automatic beat generation still requires the AI audio service connection.";
+}
+}
+function refreshBeatSelection(){
+const search=document.getElementById("beatSearch");
+if(search)search.value="";
+renderBeatChoices();
+const status=document.getElementById("beatGenerationStatus");
+if(status){
+status.innerHTML="<strong>Beat list refreshed.</strong><br>Your saved beats have been reloaded from the current list.";
+}
+showToast("Your beat list has been refreshed.");
+}
 function requestBeatGeneration(){
-document.getElementById("beatPercent").textContent="AI beat service not connected";
-document.getElementById("beatProgress").style.width="0%";
-showToast("AI beat generation is not connected yet. You can still import a beat from your phone and select it under My Beats.");
+const status=document.getElementById("beatGenerationStatus");
+if(status){
+status.innerHTML="<strong>Generation request prepared.</strong><br>Selected style: "+
+safeText(selectedBeatGenre)+
+". Automatic AI beat generation is not active because the AI audio service has not been connected. No beat has been generated yet.";
+}
+showToast("AI beat generation needs the AI audio service connection. You can import a beat from your phone.");
 }
 function requestBeatAnalysis(){
 const song=selectedSong!==null?audioItems[selectedSong]:null;
 const beat=selectedBeat!==null?beatItems[selectedBeat]:null;
-if(!song){showToast("Please record or import a song, then select it under My Songs.");return;}
-if(!beat){showToast("Please import a beat and select it under My Beats.");return;}
+
+if(!song){
+showToast("Please record or import a song, then select it under My Songs.");
+return;
+}
+if(!beat){
+showToast("Please import a beat and select it under My Beats.");
+return;
+}
+if(!song.path||!beat.path||!song.url||!beat.url){
+showToast("One of your selected audio files is not ready. Please upload it again.");
+return;
+}
 
 analysisComplete=true;
 analyzedSongPath=song.path;
 analyzedBeatPath=beat.path;
 saveAnalysisState();
-stopActiveAudio();
 updatePreparationDisplay();
 renderProjects();
 renderMastering();
 
-document.getElementById("beatPercent").textContent="Preparation Check Complete — 100%";
+const status=document.getElementById("beatGenerationStatus");
+if(status){
+status.innerHTML="<strong>Files checked successfully.</strong><br>Your selected song and beat are available. Actual AI audio analysis and beat matching have not been performed.";
+}
+document.getElementById("beatPercent").textContent="File Preparation Check Complete — 100%";
 document.getElementById("beatProgress").style.width="100%";
-document.getElementById("detectedStyle").textContent="Preparation Complete — Ready for Mastering";
-showToast("Preparation completed. Your original song is now locked until mastering is completed. Continue to Mastering.");
+document.getElementById("detectedStyle").textContent="Files Ready — AI Matching Pending";
+showToast("Your song and beat passed the file preparation check. Your original audio remains available to preview.");
 }
 function continueToMastering(){
 if(!isPreparedSelectionCurrent()){
