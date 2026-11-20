@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -576,7 +575,7 @@ saveAnalysisState();
 updatePreparationDisplay();
 }
 function isSongLocked(item){
-return Boolean(item&&analysisComplete&&item.path===analyzedSongPath&&!item.masteredUrl&&!item.masteredPath);
+return Boolean(item&&!item.masteredUrl&&!item.masteredPath);
 }
 function isPreparedSelectionCurrent(){
 const song=selectedSong!==null?audioItems[selectedSong]:null;
@@ -777,9 +776,9 @@ return "While recording, tap Pause to pause your recording. Tap Resume to contin
 if(/delete|remove|accidentally/.test(q))
 return "To delete a song or beat, find it in your music list and tap the red ✕ button beside it. The app will ask you to confirm before deleting it.";
 if(/download|save to phone/.test(q))
-return "To download an available song or beat, find it in your music list and tap the download arrow ↓. An unmastered song that has completed preparation stays locked until mastered audio is returned.";
+return "A song remains locked until mastering is completed and the mastered audio is returned. Once it is available, use the download arrow ↓ to save the finished version.";
 if(/beat|generate|matching|match/.test(q))
-return "To work with beats, open Music, select your song, then select a beat from My Beats or import one from your phone. Tap Analyse to complete the preparation check. Real AI beat generation and audio matching still need the AI audio service connection.";
+return "To work with beats, open Music, select your song, then select a beat from My Beats or import one from your phone. Tap Analyse to complete the preparation check. Real AI beat generation and audio matching still need the AI audio service connection. Beat previews are not available before mastering.";
 if(/master|mastering|mastered|credit|free song|bonus/.test(q))
 return "Complete Analyse first. Then open Mastering, select the prepared song and beat. If your account has an available mastering credit, tap Master Selected Song Using My Credit. Payment setup is not connected yet, so you cannot purchase new credits in the app right now. The original song remains locked until the mastering processor returns the mastered audio.";
 if(/distribut|spotify|apple music|youtube music|release music/.test(q))
@@ -1015,8 +1014,14 @@ async function downloadAudio(index,type="song"){
 const list=type==="beat"?beatItems:audioItems;
 const item=list[index];
 if(!item)return;
-if(type==="song"&&isSongLocked(item)){
-showToast("This song is locked after preparation. Complete mastering before downloading it.");
+
+/* Only completed mastered songs can be downloaded. */
+if(type==="beat"){
+showToast("Beat downloads are unavailable before a completed mastered song is returned.");
+return;
+}
+if(isSongLocked(item)){
+showToast("Your original song is locked. Only the completed mastered version can be downloaded.");
 return;
 }
 try{
@@ -1103,8 +1108,14 @@ async function playAudio(index,type="song"){
 const list=type==="beat"?beatItems:audioItems;
 const item=list[index];
 if(!item)return;
-if(type==="song"&&isSongLocked(item)){
-showToast("Your original song is locked after preparation. You can listen after mastering is completed.");
+
+/* Do not allow previews of original songs or beats. */
+if(type==="beat"){
+showToast("Beat previews are unavailable. Only completed mastered songs can be played.");
+return;
+}
+if(isSongLocked(item)){
+showToast("Your original song is locked. You can listen only after mastering is completed.");
 return;
 }
 if(activeAudio&&activeAudioType===type&&activeAudioIndex===index){
